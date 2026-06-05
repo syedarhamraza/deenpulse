@@ -37,6 +37,8 @@ import { motion, AnimatePresence } from 'motion/react';
 
 import mainAppImg from './assets/main_app.jpeg';
 import wearosImg from './assets/wearos.jpeg';
+import backgroundImg from './assets/backgound.png';
+import iconImg from './assets/icon.png';
 
 // Types for prayer calculation engine simulator
 type Location = 'Mecca' | 'Karachi' | 'London' | 'New York' | 'Cairo' | 'Jakarta' | 'Dubai';
@@ -105,11 +107,50 @@ export default function App() {
 
   useEffect(() => {
     const fetchLatestRelease = async () => {
+      const CACHE_KEY = 'deenpulse_release_cache';
+      const CACHE_DURATION = 4 * 60 * 60 * 1000; // 4 hours
+
+      // 1. Try loading cached details from localStorage
+      let cachedData: any = null;
+      try {
+        const rawCache = localStorage.getItem(CACHE_KEY);
+        if (rawCache) {
+          cachedData = JSON.parse(rawCache);
+        }
+      } catch (e) {
+        console.warn('Failed to read release cache:', e);
+      }
+
+      if (cachedData) {
+        setReleaseInfo(prev => ({
+          ...prev,
+          version: cachedData.version,
+          publishedAt: cachedData.publishedAt,
+          mobileUrl: cachedData.mobileUrl,
+          mobileSize: cachedData.mobileSize,
+          mobileName: cachedData.mobileName,
+          watchUrl: cachedData.watchUrl,
+          watchSize: cachedData.watchSize,
+          watchName: cachedData.watchName,
+          loading: false,
+        }));
+
+        // If the cache is still fresh, bypass network request completely
+        if (Date.now() - cachedData.timestamp < CACHE_DURATION) {
+          return;
+        }
+      }
+
       try {
         const res = await fetch('https://api.github.com/repos/syedarhamraza/deen-pulse/releases/latest', {
           headers: { 'Accept': 'application/vnd.github.v3+json' }
         });
         if (!res.ok) {
+          // If rate limited or offline, but we have cached values, keep using them
+          if (cachedData) {
+            setReleaseInfo(prev => ({ ...prev, loading: false }));
+            return;
+          }
           setReleaseInfo({
             version: null,
             publishedAt: null,
@@ -145,7 +186,7 @@ export default function App() {
           a !== mobileAsset
         );
 
-        setReleaseInfo({
+        const freshDetails = {
           version: `v${latestVersion}`,
           publishedAt: release.published_at ? new Date(release.published_at).toLocaleDateString() : null,
           mobileUrl: mobileAsset?.browser_download_url || `https://github.com/syedarhamraza/deen-pulse/releases/download/v${latestVersion}/${mobileAsset?.name || 'deen-pulse-mobile.apk'}`,
@@ -156,9 +197,25 @@ export default function App() {
           watchName: watchAsset?.name || 'deen-pulse-wear.apk',
           loading: false,
           error: false
-        });
+        };
+
+        setReleaseInfo(freshDetails);
+
+        // Store new data in localStorage cache with timestamp
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            ...freshDetails,
+            timestamp: Date.now()
+          }));
+        } catch (e) {
+          console.warn('Failed to save release cache:', e);
+        }
       } catch (e) {
         console.warn('Update check failed:', e);
+        if (cachedData) {
+          setReleaseInfo(prev => ({ ...prev, loading: false }));
+          return;
+        }
         setReleaseInfo({
           version: null,
           publishedAt: null,
@@ -638,7 +695,13 @@ class WearDataSyncService : WearableListenerService() {
   };
 
   return (
-    <div className="min-h-screen bg-[#030606] text-[#A6B2B2] selection:bg-[#00F29D]/30 selection:text-[#00F29D] font-sans antialiased relative pb-16">
+    <div className="min-h-screen bg-[#030606] text-[#A6B2B2] selection:bg-[#00F29D]/30 selection:text-[#00F29D] font-sans antialiased relative pb-16 overflow-x-hidden">
+      
+      {/* Custom Background Image Overlay */}
+      <div 
+        className="absolute inset-0 bg-cover bg-top bg-no-repeat pointer-events-none opacity-[0.05] mix-blend-screen -z-10" 
+        style={{ backgroundImage: `url(${backgroundImg})` }} 
+      />
       
       {/* Premium subtle mesh grid and floating lights */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,242,157,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,242,157,0.015)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
@@ -649,9 +712,9 @@ class WearDataSyncService : WearableListenerService() {
       <div className="fixed top-4 inset-x-0 z-50 px-6 flex justify-center pointer-events-none">
         <header className={`pointer-events-auto h-16 w-full max-w-5xl rounded-2xl flex items-center justify-between px-6 border transition-all duration-500 ${scrolled ? 'bg-[#060A0A]/85 backdrop-blur-xl border-white/[0.08] shadow-[0_10px_40px_rgba(0,0,0,0.5)]' : 'bg-transparent border-transparent'}`}>
           <a href="#" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#00F29D] to-[#3DD1C4] p-[1px] shadow-[0_0_15px_rgba(0,242,157,0.15)] group-hover:shadow-[0_0_20px_rgba(0,242,157,0.3)] transition-all">
-              <div className="w-full h-full bg-[#030606] rounded-[11px] flex items-center justify-center">
-                <Compass className="w-4 h-4 text-[#00F29D] animate-spin-slow" />
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#00F29D] to-[#3DD1C4] p-[1px] shadow-[0_0_15px_rgba(0,242,157,0.15)] group-hover:shadow-[0_0_20px_rgba(0,242,157,0.3)] transition-all overflow-hidden">
+              <div className="w-full h-full bg-[#030606] rounded-[11px] flex items-center justify-center overflow-hidden p-1.5">
+                <img src={iconImg} alt="DeenPulse Logo" className="w-full h-full object-contain" />
               </div>
             </div>
             <span className="font-heading font-extrabold text-xl tracking-tight text-white group-hover:text-[#00F29D] transition-colors">
@@ -1461,8 +1524,7 @@ class WearDataSyncService : WearableListenerService() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* File explorer panel tree (Col-span-4) */}
-          <div className="lg:col-span-4 bg-[#0c1212]/90 rounded-3xl border border-white/[0.06] p-5 shadow-2xl text-left">
+          <div className="lg:col-span-4 bg-[#0c1212]/90 rounded-3xl border border-white/[0.06] p-5 shadow-2xl text-left overflow-hidden">
             <div className="flex items-center gap-2 mb-6 pb-4 border-b border-white/[0.05]">
               <div className="w-3 h-3 rounded-full bg-white/10" />
               <div className="w-3 h-3 rounded-full bg-white/10" />
@@ -1728,13 +1790,17 @@ class WearDataSyncService : WearableListenerService() {
           
           <div className="flex flex-col items-center md:items-start gap-3">
             <div className="flex items-center gap-2">
-              <Compass className="w-5 h-5 text-[#00F29D] animate-spin-slow" />
+              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#00F29D] to-[#3DD1C4] p-[1px] overflow-hidden shadow-[0_0_10px_rgba(0,242,157,0.1)]">
+                <div className="w-full h-full bg-[#030606] rounded-[5px] flex items-center justify-center overflow-hidden p-1">
+                  <img src={iconImg} alt="DeenPulse Logo" className="w-full h-full object-contain" />
+                </div>
+              </div>
               <span className="font-heading font-extrabold text-xl text-white tracking-tight">
                 Deen<span className="text-[#00F29D]">Pulse</span>
               </span>
             </div>
-            <p className="text-slate-500 text-xs text-center md:text-left max-w-sm font-mono uppercase tracking-wider">
-              Privacy-First Islamic prayer utility designed with 3-Tier OEM background battery alarm models.
+            <p className="text-slate-400 text-sm text-center md:text-left max-w-sm leading-relaxed mt-2">
+              An offline prayer companion designed to bypass aggressive OEM background limits and sync complications natively with Wear OS.
             </p>
           </div>
 
