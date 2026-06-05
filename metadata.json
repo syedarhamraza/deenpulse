@@ -1,0 +1,6 @@
+{
+  "name": "DeenPulse",
+  "description": "Privacy-First Islamic Prayer Utilities for Android & Wear OS. Offline prayer times tracker, Live Status Bar Capsule overlay, and Wear OS companion.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
