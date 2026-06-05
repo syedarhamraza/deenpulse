@@ -26,6 +26,7 @@ h1, h2, h3, h4, .font-heading {
 /* Custom scrollbars for a premium dark feel */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: #060a0a;
@@ -36,5 +37,44 @@ h1, h2, h3, h4, .font-heading {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #2c3c3c;
+}
+
+/* Firefox scrollbar compatibility */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1c2626 #060a0a;
+}
+
+/* Specific styling for custom scrollbars inside panels */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #050808;
+  border-radius: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #1c2626;
+  border-radius: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #00F29D;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #1c2626 #050808;
+}
+
+/* Force nested code viewer elements to not render default scrollbars */
+.custom-scrollbar pre, 
+.custom-scrollbar code {
+  overflow: visible !important;
+  scrollbar-width: none !important;
+}
+.custom-scrollbar pre::-webkit-scrollbar,
+.custom-scrollbar code::-webkit-scrollbar {
+  display: none !important;
 }
 

@@ -501,12 +501,12 @@ export function getPrayerStatus(prayer: PrayerTime, nextPrayer: NextPrayerInfo, 
 }`
     },
     'deviceProfiles.ts': {
-      desc: 'OEM battery optimization tier mapping. Formulates settings to bypass custom process-killing policies on modern defensive Android skins.',
+      desc: 'OEM layout and style mapping. Maps devices into specific categories to handle brand-specific status bar Live Capsules and fallback notifications.',
       lang: 'typescript',
       code: `export interface DeviceProfile {
   brand: string;            // 'oppo', 'oneplus', 'vivo', 'samsung', etc.
   manufacturer: string;
-  category: 1 | 2 | 3;      // OEM battery optimization tier
+  category: 1 | 2 | 3;      // Style category (1: Capsule + Expanded, 2: Vivo partially optimized layout, 3: Default fallback)
 }
 
 export const OEM_CATEGORIES: Record<string, 1 | 2 | 3> = {
@@ -843,9 +843,9 @@ class WearDataSyncService : WearableListenerService() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[1.05] max-w-5xl"
         >
-          Devotion uninterrupted.<br />
+          Bring Live Prayer Alerts<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00F29D] via-[#2CE1A6] to-[#3DD1C4]">
-            Bypassing OEM limits.
+            to your Android status bar.
           </span>
         </motion.h1>
 
@@ -856,7 +856,7 @@ class WearDataSyncService : WearableListenerService() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-slate-400 text-lg sm:text-xl leading-relaxed max-w-3xl font-sans"
         >
-          A privacy-focused Islamic prayer companion for Android & Wear OS. Built with Kotlin and React Native, utilizing a local-first caching architecture that runs completely offline—without location tracking, cloud queries, or telemetry.
+          DeenPulse turns your static notifications into glanceable Live Prayer Alerts for ongoing status, upcoming countdowns, and Wear OS syncs. Built around native Android APIs and tuned to bypass aggressive OEM battery limits.
         </motion.p>
 
         {/* Clean, Premium Call-to-actions */}
@@ -917,10 +917,10 @@ class WearDataSyncService : WearableListenerService() {
       <section id="downloads" className="py-24 px-6 max-w-7xl mx-auto relative z-10 scroll-mt-20">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="font-heading text-4xl sm:text-5xl font-black text-white mb-4">
-            Direct Release Payloads
+            Direct Releases
           </h2>
           <p className="text-slate-400 text-lg">
-            DeenPulse remains fully isolated from Play Store tracking frameworks. Clean, untampered binaries available directly.
+            Download verified, telemetry-free builds directly. DeenPulse does not use Google Play SDKs for tracking or analytics.
           </p>
         </div>
 
@@ -938,7 +938,7 @@ class WearDataSyncService : WearableListenerService() {
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
               </div>
               <span className="text-slate-400 text-sm">
-                {releaseInfo.loading ? 'Fetching release details...' : releaseInfo.publishedAt ? `Published on ${releaseInfo.publishedAt}. Verified integrity check.` : 'Direct clean APK payloads. Sideload ready.'}
+                {releaseInfo.loading ? 'Fetching release details...' : releaseInfo.publishedAt ? `Released on ${releaseInfo.publishedAt}. Verified build.` : 'Direct APK builds. Sideload ready.'}
               </span>
             </div>
           </div>
@@ -974,21 +974,21 @@ class WearDataSyncService : WearableListenerService() {
 
               <h3 className="font-heading text-2xl font-bold text-white mb-2">Mobile Application</h3>
               <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                Primary prayer time utility for Android. Uses low-power geolocation to cache monthly calendars locally, schedules background notifications, and runs a status bar capsule overlay.
+                A clean React Native app for Android. It uses a single-shot, low-power GPS request to calculate your local coordinates, generates a month of prayer times, and schedules local alarms.
               </p>
 
               <div className="space-y-3 mb-8 border-t border-white/[0.05] pt-6 text-xs text-slate-300">
                 <div className="flex items-center gap-2.5">
                   <CheckCircle2 className="w-4.5 h-4.5 text-[#00F29D] flex-shrink-0" />
-                  <span>3-Tier OEM battery optimization profiles integrated</span>
+                  <span>Integrated OEM background battery profiles</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <CheckCircle2 className="w-4.5 h-4.5 text-[#00F29D] flex-shrink-0" />
-                  <span>Supports persistent status capsule or standard alarm schedules</span>
+                  <span>Persistent status bar capsule or local alarm notifications</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <CheckCircle2 className="w-4.5 h-4.5 text-[#00F29D] flex-shrink-0" />
-                  <span>Privacy-first architecture with zero tracking coordinates</span>
+                  <span>Zero continuous tracking or external coordinate sharing</span>
                 </div>
               </div>
             </div>
@@ -1030,23 +1030,23 @@ class WearDataSyncService : WearableListenerService() {
                 </div>
               </div>
 
-              <h3 className="font-heading text-2xl font-bold text-white mb-2">Wear OS companion</h3>
+              <h3 className="font-heading text-2xl font-bold text-white mb-2">Wear OS Companion</h3>
               <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                Native smartwatch client module. Syncs prayer schedules silently over the Google Play Services DataClient to update circular komplikation complications and tiles.
+                A native Wear OS app built in Kotlin. It syncs settings and prayer times from your phone over the Wearable DataClient API to display complications and tiles.
               </p>
 
               <div className="space-y-3 mb-8 border-t border-white/[0.05] pt-6 text-xs text-slate-300">
                 <div className="flex items-center gap-2.5">
                   <CheckCircle2 className="w-4.5 h-4.5 text-[#3DD1C4] flex-shrink-0" />
-                  <span>Supports standalone or synced complication feeds</span>
+                  <span>Standalone mode or auto-synced complication feeds</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <CheckCircle2 className="w-4.5 h-4.5 text-[#3DD1C4] flex-shrink-0" />
-                  <span>Optimized layout ratios for circular smartwatch models</span>
+                  <span>Lightweight layouts designed for circular watches</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <CheckCircle2 className="w-4.5 h-4.5 text-[#3DD1C4] flex-shrink-0" />
-                  <span>Low-overhead data syncing to minimize bluetooth wakes</span>
+                  <span>Minimal data sync frequency to preserve watch battery</span>
                 </div>
               </div>
             </div>
@@ -1076,10 +1076,10 @@ class WearDataSyncService : WearableListenerService() {
       <section id="features" className="py-24 px-6 max-w-7xl mx-auto relative z-10 scroll-mt-20">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="font-heading text-4xl sm:text-5xl font-black text-white tracking-tight mb-4">
-            Engineered for quiet resilience.
+            Designed for Android background limits.
           </h2>
           <p className="text-slate-400 text-lg leading-relaxed">
-            DeenPulse solves the background reliability problem natively, ensuring your status updates are exact and your watch stays synced without cloud polling or telemetry logs.
+            Android OEM skins aggressively kill background tasks. DeenPulse works around these constraints using local foreground services and specific alarm profiles, keeping your device synced without battery drain.
           </p>
         </div>
 
@@ -1103,7 +1103,7 @@ class WearDataSyncService : WearableListenerService() {
               </div>
               
               <p className="text-slate-400 text-sm leading-relaxed mb-6 text-left">
-                Maintains a live countdown capsule on custom manufacturer skins (ColorOS/Funtouch OS) and standard Android 16+ devices using ongoing notification chips. Standard devices on older releases fall back to standard, non-pill notifications.
+                Displays a persistent countdown capsule in the status bar on supported custom skins (ColorOS, OOS) and Android 16+ using ongoing notification chips. Falls back to standard notifications on older Android builds.
               </p>
             </div>
 
@@ -1168,7 +1168,7 @@ class WearDataSyncService : WearableListenerService() {
               </div>
               
               <p className="text-slate-400 text-sm leading-relaxed mb-6 text-left">
-                Pushes monthly timing databases and settings over Bluetooth using Wearable `DataClient` APIs. Circular complications and Tiles read directly from the watch's local cache.
+                Synchronizes monthly prayer schedules and preferences using the Wearable DataClient API. Complications and tiles run directly off the watch's local database, avoiding radio wakes.
               </p>
             </div>
 
@@ -1210,15 +1210,15 @@ class WearDataSyncService : WearableListenerService() {
                   <Activity className="w-5 h-5" />
                 </div>
                 <div className="text-left">
-                  <h3 className="font-heading text-xl font-extrabold text-white">OEM Optimization Handling</h3>
+                  <h3 className="font-heading text-xl font-extrabold text-white">OEM Custom Styles Handling</h3>
                   <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 uppercase tracking-widest">
-                    wakeLock mappings
+                    Notification style mappings
                   </span>
                 </div>
               </div>
               
               <p className="text-slate-400 text-sm leading-relaxed mb-6 text-left">
-                Defeats non-standard background executors inside custom brand modifications. Maps target device manufacturers into three distinct behavioral categories.
+                Adapts status bar layouts based on the device manufacturer. Mapped into three compatibility tiers to support native capsules where possible and prevent UI alignment bugs on strict skins like Funtouch OS.
               </p>
             </div>
 
@@ -1238,27 +1238,27 @@ class WearDataSyncService : WearableListenerService() {
 
               <div className="space-y-3 font-mono text-xs border-t border-white/[0.05] pt-4">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Device Tier:</span>
+                  <span className="text-slate-500">Category Mapping:</span>
                   <span className="text-white font-bold">
-                    {selectedOemProfile === 'oppo' ? 'Category 1 (Aggressive)' : selectedOemProfile === 'vivo' ? 'Category 2 (Moderate)' : 'Category 3 (AOSP Compliant)'}
+                    {selectedOemProfile === 'oppo' ? 'Category 1 (Oppo / OnePlus)' : selectedOemProfile === 'vivo' ? 'Category 2 (Vivo / iQOO)' : 'Category 3 (General Fallback)'}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Service Model:</span>
+                  <span className="text-slate-500">Notification Style:</span>
                   <span className="text-white">
-                    {selectedOemProfile === 'oppo' ? 'Foreground capsule service overlay' : selectedOemProfile === 'vivo' ? 'Foreground clock hook service' : 'AlarmManager scheduling (default)'}
+                    {selectedOemProfile === 'oppo' ? 'Live Capsule + Expanded View' : selectedOemProfile === 'vivo' ? 'Modified Ticker (Partially Optimized)' : 'Standard System Alert'}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">wakeLockTimeout:</span>
+                  <span className="text-slate-500">Alert Dispatch:</span>
                   <span className="text-amber-400 font-bold">
-                    {selectedOemProfile === 'oppo' ? '15 minutes' : selectedOemProfile === 'vivo' ? '20 minutes' : 'Disabled (exact alarms)'}
+                    {selectedOemProfile === 'oppo' ? 'Real-time countdown capsule' : selectedOemProfile === 'vivo' ? 'Real-time modified capsule' : '15 min before prayer'}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Live Capsule Compatibility:</span>
+                  <span className="text-slate-500">Layout Reason:</span>
                   <span className="text-emerald-400">
-                    {selectedOemProfile === 'samsung' ? 'Android 16+ (Standard notifications prior)' : 'Cat 1 & 2 OEM skins / Android 16+'}
+                    {selectedOemProfile === 'oppo' ? 'Fits expanded status bar overlay' : selectedOemProfile === 'vivo' ? 'Simplified layout (partially optimized) to avoid Funtouch OS alignment issues' : 'Simplified standard alerts (not optimized)'}
                   </span>
                 </div>
               </div>
@@ -1283,7 +1283,7 @@ class WearDataSyncService : WearableListenerService() {
               </div>
               
               <p className="text-slate-400 text-sm leading-relaxed mb-6 text-left">
-                A location routine that queries cell-tower coordinates for just 500ms once a month and instantly frees the system GPS lock. Completely avoids the continuous tracking cycles common in generic apps.
+                Queries coordinates for less than a second once a month to establish the calculation seed, then immediately releases the GPS hardware lock. Eliminates background battery drain and tracking concerns.
               </p>
             </div>
 
@@ -1327,14 +1327,14 @@ class WearDataSyncService : WearableListenerService() {
           <div className="lg:col-span-6 text-left">
             <div className="inline-flex items-center gap-2 bg-[#00F29D]/10 text-[#00F29D] font-bold text-xs uppercase px-3 py-1.5 rounded-full mb-6 border border-[#00F29D]/20 font-mono">
               <Compass className="w-3.5 h-3.5 animate-spin-slow" />
-              <span>Offline Engine telemetry</span>
+              <span>Offline Calculation Engine</span>
             </div>
             
             <h2 className="font-heading text-4xl sm:text-5xl font-black text-white mb-4 tracking-tight">
-              Offline Telemetry Simulator
+              Offline Calculation Simulator
             </h2>
             <p className="text-slate-400 text-base leading-relaxed mb-8">
-              Play with the configurations below to see how DeenPulse re-aligns cached timetables, formats countdown ticks, shifts Asr timelines based on juristic rules, and translates timezone offsets locally on-device.
+              Test how the offline engine calculates prayer times, adjusts for the Hanafi juristic method, and updates coordinates locally.
             </p>
 
             {/* Custom Control Hub Dashboard */}
@@ -1418,7 +1418,7 @@ class WearDataSyncService : WearableListenerService() {
               <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/[0.05]">
                 <div className="flex items-center gap-2.5">
                   <Cpu className="text-[#00F29D] w-5 h-5 animate-pulse" />
-                  <span className="font-heading font-bold text-lg text-white">Local CPU Timetable</span>
+                  <span className="font-heading font-bold text-lg text-white">On-Device Timetable</span>
                 </div>
                 <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 uppercase tracking-widest">
                   100% Offline
@@ -1515,24 +1515,24 @@ class WearDataSyncService : WearableListenerService() {
       <section id="structure" className="py-24 px-6 max-w-7xl mx-auto relative z-10 scroll-mt-20">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="font-heading text-4xl sm:text-5xl font-black text-white tracking-tight mb-4">
-            Production-grade architecture.
+            Source Code Structure
           </h2>
           <p className="text-slate-400 text-lg leading-relaxed">
-            DeenPulse architecture is cleanly modularized into a React Native core, a standalone Kotlin Wear OS engine, and shared database interfaces.
+            Browse the core modules responsible for calculating offline prayer times, handling Wear OS synchronization, and managing background notifications.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          <div className="lg:col-span-4 bg-[#0c1212]/90 rounded-3xl border border-white/[0.06] p-5 shadow-2xl text-left overflow-hidden">
-            <div className="flex items-center gap-2 mb-6 pb-4 border-b border-white/[0.05]">
+          <div className="lg:col-span-4 bg-[#0c1212]/90 rounded-3xl border border-white/[0.06] p-5 shadow-2xl text-left flex flex-col h-[520px] overflow-hidden">
+            <div className="flex items-center gap-2 mb-6 pb-4 border-b border-white/[0.05] flex-shrink-0">
               <div className="w-3 h-3 rounded-full bg-white/10" />
               <div className="w-3 h-3 rounded-full bg-white/10" />
               <div className="w-3 h-3 rounded-full bg-white/10" />
               <span className="text-[11px] font-mono text-slate-500 ml-2">deen-pulse-app{releaseInfo.version ? `-${releaseInfo.version}` : ''}</span>
             </div>
 
-            <div className="space-y-2 font-mono text-xs text-slate-400 select-none">
+            <div className="flex-1 overflow-y-auto pr-1 space-y-2 font-mono text-xs text-slate-400 select-none custom-scrollbar">
               
               {/* node: android */}
               <div>
@@ -1695,7 +1695,7 @@ class WearDataSyncService : WearableListenerService() {
             </div>
 
             {/* Code lines container */}
-            <div className="flex-1 overflow-auto p-5 text-left font-mono text-xs leading-relaxed text-slate-300 bg-[#090D0D]/40 scrollbar-thin flex">
+            <div className="flex-1 overflow-auto p-5 text-left font-mono text-xs leading-relaxed text-slate-300 bg-[#090D0D]/40 custom-scrollbar flex">
               
               {/* Fake line numbers */}
               <div className="pr-4 border-r border-white/[0.04] text-slate-600 text-right select-none space-y-0.5">
@@ -1719,37 +1719,37 @@ class WearDataSyncService : WearableListenerService() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 bg-[#3DD1C4]/10 text-[#3DD1C4] font-bold text-xs uppercase px-3 py-1.5 rounded-full mb-4 border border-[#3DD1C4]/20 font-mono">
             <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Common Queries</span>
+            <span>FAQ</span>
           </div>
           <h2 className="font-heading text-4xl sm:text-5xl font-black text-white mb-4 tracking-tight">
             Frequently Asked Questions
           </h2>
           <p className="text-slate-400 text-lg">
-            Everything you need to know about the DeenPulse offline model, sleep optimization bypasses, and releases.
+            Technical details on background tasks, offline calculation, and platform compatibility.
           </p>
         </div>
 
         <div className="space-y-4">
           {[
             {
-              q: "Is DeenPulse really 100% offline?",
-              a: "DeenPulse uses a local-first cache design. It retrieves coordinates via a low-power one-shot GPS query and fetches a monthly prayer calendar from the Aladhan API. Once cached, it runs 100% offline. The app performs zero network calls during daily use, and has a fallback mechanism to use any previously cached calendar if it cannot connect to the internet at the start of a new month."
+              q: "Is DeenPulse completely offline?",
+              a: "Yes. DeenPulse only requires network access once a month to download the calculation calendar based on your coordinates. All daily calculations, countdowns, and background alarms run locally on-device without making any network calls."
             },
             {
               q: "Why is direct APK installation recommended?",
-              a: "Installing the APKs directly from GitHub releases ensures you get the clean, untampered binaries with zero analytics, tracking, or telemetry libraries. It keeps the utility lightweight and isolated from Play Store background services."
+              a: "Installing the APK directly from GitHub ensures you are running a build that contains no proprietary tracking libraries, Google Play SDKs, or telemetry tools. This keeps the application small, fast, and private."
             },
             {
-              q: "How do custom OEM battery profiles work?",
-              a: "Many manufacturers (like OPPO, OnePlus, Vivo, Xiaomi, and Samsung) use aggressive background task managers that kill long-running background services. DeenPulse maps devices into three optimization tiers. Category 1 (OPPO/OnePlus/Realme) and Category 2 (Vivo/iQOO) use custom Android notification APIs (setRequestPromotedOngoing) to keep the service active. Category 3 (Samsung, Xiaomi, Pixel) utilizes standard exact alarms on older Android versions, or standard notifications. The ongoing Live Capsule is supported natively on standard AOSP devices starting with Android 16+ using Google's new ongoing status bar chips, and on supported ColorOS/Funtouch OS OEM overlays."
+              q: "How are custom OEM notification styles managed?",
+              a: "To handle non-standard status bar behaviors on manufacturer-specific Android skins, DeenPulse uses three category profiles. Category 1 (OPPO/OnePlus/Realme) leverages native status bar ongoing chips. Category 2 (Vivo/iQOO) uses a simplified layout to avoid UI alignment errors on Funtouch OS. Category 3 (others) uses standard alarm notifications scheduled 15 minutes before prayer times."
             },
             {
-              q: "Does the Wear OS synchronization drain the watch battery?",
-              a: "No. The companion watch app uses the Google Play Services Wearable Data Layer. Instead of constant polling, it pushes configuration updates and prayer timetables only when settings change or fresh monthly calendars are loaded. The watch reads directly from its local data client cache, resulting in zero idle background battery usage."
+              q: "Does Wear OS sync impact watch battery life?",
+              a: "No. Communication relies on the Wearable DataClient API, which pushes updates only when settings change or a new month's calendar is cached. The watch does not run a continuous listener or make network calls, saving battery."
             },
             {
-              q: "How is my location data handled?",
-              a: "Location coordinates are cached locally on your device in secure AsyncStorage. They are only used to query the monthly calendar and are never shared or sent to any telemetry or cloud databases."
+              q: "How is location data handled?",
+              a: "Your location is saved locally in private AsyncStorage to run the calculation engine. It is never transmitted to external servers, and GPS is queried only once a month for a maximum of 500ms."
             }
           ].map((item, idx) => (
             <div 
@@ -1800,7 +1800,7 @@ class WearDataSyncService : WearableListenerService() {
               </span>
             </div>
             <p className="text-slate-400 text-sm text-center md:text-left max-w-sm leading-relaxed mt-2">
-              An offline prayer companion designed to bypass aggressive OEM background limits and sync complications natively with Wear OS.
+              An offline prayer utility for Android designed to work around aggressive OEM battery limits and sync complications with Wear OS.
             </p>
           </div>
 
