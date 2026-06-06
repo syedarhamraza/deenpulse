@@ -82,4 +82,4 @@ deenpulse/
 
 ## License
 
-This project is open-source and available under the **MIT License**. Created by [Syed Arham Raza](https://github.com/syedarhamraza).
+This project is open-source and available under the **GNU GPL v3 License**. Created by [Syed Arham Raza](https://github.com/syedarhamraza).
