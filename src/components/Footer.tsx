@@ -28,13 +28,13 @@ export function Footer({ isDocsPage = false }: { isDocsPage?: boolean }) {
           <p className="text-[10px] text-slate-500 font-mono">
             Copyright © 2026 DeenPulse. All rights reserved.
           </p>
-          <div className="flex gap-4 mt-2">
+          <div className="flex flex-wrap justify-center md:justify-end gap-x-4 gap-y-2 mt-2">
             <a href="https://github.com/syedarhamraza/deen-pulse" target="_blank" rel="noreferrer" className="text-xs text-slate-500 hover:text-[#00F29D] transition-all">GitHub Repo</a>
-            <span className="text-white/10">•</span>
+            <span className="hidden sm:inline text-white/10">•</span>
             <a href="#docs" className="text-xs text-slate-500 hover:text-[#00F29D] transition-all">Documentation</a>
-            <span className="text-white/10">•</span>
+            <span className="hidden sm:inline text-white/10">•</span>
             <a href="#downloads" className="text-xs text-slate-500 hover:text-[#00F29D] transition-all">Download Binaries</a>
-            <span className="text-white/10">•</span>
+            <span className="hidden sm:inline text-white/10">•</span>
             <a href="#privacy" className="text-xs text-slate-500 hover:text-[#00F29D] transition-all">Privacy Agreement</a>
           </div>
         </div>

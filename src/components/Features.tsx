@@ -58,13 +58,13 @@ export function Features({
             <p className="text-xs font-mono text-slate-500 text-left uppercase tracking-wider">Interactive Pill Preview</p>
             
             {/* Mock Status Bar */}
-            <div className="w-full h-12 bg-black rounded-full border border-white/10 px-6 flex items-center justify-between relative overflow-hidden">
-              <span className="text-xs text-white font-semibold font-mono">08:00</span>
+            <div className="w-full h-12 bg-black rounded-full border border-white/10 px-3 sm:px-6 flex items-center justify-between relative overflow-hidden">
+              <span className="text-[10px] sm:text-xs text-white font-semibold font-mono">08:00</span>
               
               {/* Simulated Notch / Dynamic Capsule Pill */}
-              <div className="absolute left-1/2 -translate-x-1/2 bg-[#0c1212] border border-white/15 h-8 px-4 rounded-full flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,242,157,0.1)] transition-all duration-500">
-                <Compass className="w-3.5 h-3.5 text-[#00F29D] animate-spin-slow" />
-                <span className="text-xs font-bold text-white font-mono flex items-center gap-1.5">
+              <div className="absolute left-1/2 -translate-x-1/2 bg-[#0c1212] border border-white/15 h-7 sm:h-8 px-2.5 sm:px-4 rounded-full flex items-center justify-center gap-1.5 sm:gap-2 shadow-[0_0_15px_rgba(0,242,157,0.1)] transition-all duration-500">
+                <Compass className="w-3.5 h-3.5 text-[#00F29D] animate-spin-slow flex-shrink-0" />
+                <span className="text-[10px] sm:text-xs font-bold text-white font-mono whitespace-nowrap">
                   {simCapsuleFormat === 'name' && 'Fajr'}
                   {simCapsuleFormat === 'name_time' && 'Fajr at 04:15 AM'}
                   {simCapsuleFormat === 'time' && '04:15 AM'}
@@ -72,7 +72,7 @@ export function Features({
                 </span>
               </div>
 
-              <div className="flex items-center gap-1.5 text-white/50 text-xs">
+              <div className="flex items-center gap-1 sm:gap-1.5 text-white/50 text-[10px] sm:text-xs">
                 <WifiOff className="w-3.5 h-3.5 text-white/30" />
                 <span className="font-mono">82%</span>
               </div>
@@ -183,27 +183,27 @@ export function Features({
             </div>
 
             <div className="space-y-3 font-mono text-xs border-t border-white/[0.05] pt-4">
-              <div className="flex justify-between">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                 <span className="text-slate-500">Category Mapping:</span>
-                <span className="text-white font-bold">
+                <span className="text-white font-bold sm:text-right">
                   {selectedOemProfile === 'oppo' ? 'Category 1 (Oppo / OnePlus)' : selectedOemProfile === 'vivo' ? 'Category 2 (Vivo / iQOO)' : 'Category 3 (General Fallback)'}
                 </span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                 <span className="text-slate-500">Notification Style:</span>
-                <span className="text-white">
+                <span className="text-white sm:text-right">
                   {selectedOemProfile === 'oppo' ? 'Live Capsule + Expanded View' : selectedOemProfile === 'vivo' ? 'Modified Ticker (Partially Optimized)' : 'Standard System Alert'}
                 </span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                 <span className="text-slate-500">Alert Dispatch:</span>
-                <span className="text-amber-400 font-bold">
+                <span className="text-amber-400 font-bold sm:text-right">
                   {selectedOemProfile === 'oppo' ? 'Real-time countdown capsule' : selectedOemProfile === 'vivo' ? 'Real-time modified capsule' : '15 min before prayer'}
                 </span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                 <span className="text-slate-500">Layout Reason:</span>
-                <span className="text-emerald-400">
+                <span className="text-emerald-400 sm:text-right">
                   {selectedOemProfile === 'oppo' ? 'Fits expanded status bar overlay' : selectedOemProfile === 'vivo' ? 'Simplified layout (partially optimized) to avoid Funtouch OS alignment issues' : 'Simplified standard alerts (not optimized)'}
                 </span>
               </div>

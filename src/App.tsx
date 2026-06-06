@@ -26,7 +26,7 @@ export default function App() {
   const [copied, setCopied] = useState(false);
   const [isDocsPage, setIsDocsPage] = useState(window.location.hash.startsWith('#docs'));
   const [isPrivacyPage, setIsPrivacyPage] = useState(window.location.hash.startsWith('#privacy'));
-  
+
   // Interactive Bento states
   const [simCapsuleFormat, setSimCapsuleFormat] = useState<'name' | 'name_time' | 'time' | 'name_countdown'>('name_countdown');
   const [selectedOemProfile, setSelectedOemProfile] = useState<'oppo' | 'vivo' | 'samsung'>('oppo');
@@ -91,14 +91,14 @@ export default function App() {
 
   // Dynamic SEO Meta Tag updates on page changes
   useEffect(() => {
-    let title = "DeenPulse | Privacy-First Islamic Prayer Utilities for Android & Wear OS";
-    let desc = "DeenPulse is a premium, privacy-focused Islamic prayer utility with a status bar live pill capsule overlay, low-power GPS triangulation, local monthly caching, and a native Wear OS companion watch client sync.";
+    let title = "DeenPulse | Islamic Prayer Utility App for Android & Wear OS";
+    let desc = "DeenPulse is a Islamic prayer utility with a status bar live pill capsule overlay, low-power GPS triangulation, local monthly caching, and a native Wear OS companion watch client sync.";
 
     if (isDocsPage) {
       title = "Documentation | DeenPulse - Setup & Installation Guide";
       desc = "Learn how to install DeenPulse, sideload the Wear OS watch companion using wireless debugging (Wi-Fi ADB) or Geminiman, and configure background optimizations.";
     } else if (isPrivacyPage) {
-      title = "Privacy Agreement | DeenPulse - Zero-Telemetry Commitment";
+      title = "Privacy Agreement | DeenPulse";
       desc = "DeenPulse is built from the ground up for data sovereignty. Learn about our local geolocation calculations, zero-tracking framework, and ad-free experience.";
     }
 
@@ -146,22 +146,22 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#030606] text-[#A6B2B2] selection:bg-[#00F29D]/30 selection:text-[#00F29D] font-sans antialiased relative pb-16 overflow-x-hidden">
-      
+
       {/* Custom Background Image Overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-top bg-no-repeat pointer-events-none opacity-[0.05] mix-blend-screen -z-10" 
-        style={{ backgroundImage: `url(${backgroundImg})` }} 
+      <div
+        className="absolute inset-0 bg-cover bg-top bg-no-repeat pointer-events-none opacity-[0.05] mix-blend-screen -z-10"
+        style={{ backgroundImage: `url(${backgroundImg})` }}
       />
-      
+
       {/* Premium subtle mesh grid and floating lights */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,242,157,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,242,157,0.015)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
       <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-gradient-to-br from-[#00F29D]/5 to-[#3DD1C4]/5 rounded-full filter blur-[150px] pointer-events-none" />
       <div className="absolute bottom-0 right-[-10%] w-[60%] h-[60%] bg-gradient-to-br from-[#3DD1C4]/5 to-[#00F29D]/5 rounded-full filter blur-[150px] pointer-events-none" />
 
-      <Navbar 
-        scrolled={scrolled} 
-        mobileMenuOpen={mobileMenuOpen} 
-        setMobileMenuOpen={setMobileMenuOpen} 
+      <Navbar
+        scrolled={scrolled}
+        mobileMenuOpen={mobileMenuOpen}
+        setMobileMenuOpen={setMobileMenuOpen}
         isDocsPage={isDocsPage}
       />
 
@@ -175,7 +175,7 @@ export default function App() {
 
           <Downloads releaseInfo={releaseInfo} />
 
-          <Features 
+          <Features
             simCapsuleFormat={simCapsuleFormat}
             setSimCapsuleFormat={setSimCapsuleFormat}
             selectedOemProfile={selectedOemProfile}
@@ -185,7 +185,7 @@ export default function App() {
             countdown={countdown}
           />
 
-          <Simulator 
+          <Simulator
             selectedLocation={selectedLocation}
             setSelectedLocation={setSelectedLocation}
             juristicMethod={juristicMethod}
@@ -199,7 +199,7 @@ export default function App() {
             parseSimulatedTime={parseSimulatedTime}
           />
 
-          <CodeBrowser 
+          <CodeBrowser
             activeFile={activeFile}
             setActiveFile={setActiveFile}
             expandedNodes={expandedNodes}
