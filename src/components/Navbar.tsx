@@ -6,9 +6,10 @@ interface NavbarProps {
   scrolled: boolean;
   mobileMenuOpen: boolean;
   setMobileMenuOpen: (open: boolean) => void;
+  isDocsPage?: boolean;
 }
 
-export function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen }: NavbarProps) {
+export function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen, isDocsPage = false }: NavbarProps) {
   return (
     <>
       {/* FLOATING GLASS PILL NAVBAR */}
@@ -31,6 +32,14 @@ export function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen }: NavbarPr
             <a href="#simulator" className="text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white transition-colors">Local Simulator</a>
             <a href="#structure" className="text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white transition-colors">Architecture</a>
             <a href="#faq" className="text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white transition-colors">FAQ</a>
+            <a 
+              href="#docs" 
+              className={`text-xs font-semibold uppercase tracking-wider transition-colors ${
+                isDocsPage ? 'text-[#00F29D] font-bold' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Docs
+            </a>
           </nav>
 
           {/* Download CTAs */}
@@ -99,6 +108,15 @@ export function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen }: NavbarPr
               className="text-sm font-semibold uppercase tracking-wider text-slate-200 hover:text-[#00F29D]"
             >
               FAQ
+            </a>
+            <a 
+              href="#docs" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className={`text-sm font-semibold uppercase tracking-wider ${
+                isDocsPage ? 'text-[#00F29D] font-bold' : 'text-slate-200 hover:text-[#00F29D]'
+              }`}
+            >
+              Docs
             </a>
             <div className="h-px bg-white/[0.08] my-2" />
             <div className="flex gap-4">

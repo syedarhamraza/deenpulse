@@ -11,6 +11,8 @@ import { Simulator } from './components/Simulator';
 import { CodeBrowser } from './components/CodeBrowser';
 import { FAQ } from './components/FAQ';
 import { Footer } from './components/Footer';
+import { Docs } from './components/Docs';
+import { PrivacyAgreement } from './components/Privacy';
 
 import backgroundImg from './assets/backgound.png';
 
@@ -22,6 +24,8 @@ export default function App() {
   const [activeFile, setActiveFile] = useState<string>('prayerEngine.ts');
   const [scrolled, setScrolled] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isDocsPage, setIsDocsPage] = useState(window.location.hash.startsWith('#docs'));
+  const [isPrivacyPage, setIsPrivacyPage] = useState(window.location.hash.startsWith('#privacy'));
   
   // Interactive Bento states
   const [simCapsuleFormat, setSimCapsuleFormat] = useState<'name' | 'name_time' | 'time' | 'name_countdown'>('name_countdown');
@@ -51,13 +55,38 @@ export default function App() {
     parseSimulatedTime
   } = usePrayerSimulator(selectedLocation, juristicMethod, calcMethod);
 
-  // Monitor scroll for navbar styles
+  // Monitor scroll for navbar styles and listen to hash change for routing
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    const handleHashChange = () => {
+      const onDocs = window.location.hash.startsWith('#docs');
+      const onPrivacy = window.location.hash.startsWith('#privacy');
+      setIsDocsPage(onDocs);
+      setIsPrivacyPage(onPrivacy);
+
+      if (onDocs || onPrivacy) {
+        window.scrollTo(0, 0);
+      } else if (window.location.hash) {
+        // Transition from subpage back to home sections
+        const targetId = window.location.hash.substring(1);
+        setTimeout(() => {
+          const element = document.getElementById(targetId);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('hashchange', handleHashChange);
+    };
   }, []);
 
   // Sync simulation logging
@@ -100,49 +129,58 @@ export default function App() {
         scrolled={scrolled} 
         mobileMenuOpen={mobileMenuOpen} 
         setMobileMenuOpen={setMobileMenuOpen} 
+        isDocsPage={isDocsPage}
       />
 
-      <Hero releaseInfo={releaseInfo} />
+      {isDocsPage ? (
+        <Docs />
+      ) : isPrivacyPage ? (
+        <PrivacyAgreement />
+      ) : (
+        <>
+          <Hero releaseInfo={releaseInfo} />
 
-      <Downloads releaseInfo={releaseInfo} />
+          <Downloads releaseInfo={releaseInfo} />
 
-      <Features 
-        simCapsuleFormat={simCapsuleFormat}
-        setSimCapsuleFormat={setSimCapsuleFormat}
-        selectedOemProfile={selectedOemProfile}
-        setSelectedOemProfile={setSelectedOemProfile}
-        syncLogs={syncLogs}
-        triggerMockSync={triggerMockSync}
-        countdown={countdown}
-      />
+          <Features 
+            simCapsuleFormat={simCapsuleFormat}
+            setSimCapsuleFormat={setSimCapsuleFormat}
+            selectedOemProfile={selectedOemProfile}
+            setSelectedOemProfile={setSelectedOemProfile}
+            syncLogs={syncLogs}
+            triggerMockSync={triggerMockSync}
+            countdown={countdown}
+          />
 
-      <Simulator 
-        selectedLocation={selectedLocation}
-        setSelectedLocation={setSelectedLocation}
-        juristicMethod={juristicMethod}
-        setJuristicMethod={setJuristicMethod}
-        calcMethod={calcMethod}
-        setCalcMethod={setCalcMethod}
-        calculatedTimes={calculatedTimes}
-        nextPrayerName={nextPrayerName}
-        activePrayerName={activePrayerName}
-        countdown={countdown}
-        parseSimulatedTime={parseSimulatedTime}
-      />
+          <Simulator 
+            selectedLocation={selectedLocation}
+            setSelectedLocation={setSelectedLocation}
+            juristicMethod={juristicMethod}
+            setJuristicMethod={setJuristicMethod}
+            calcMethod={calcMethod}
+            setCalcMethod={setCalcMethod}
+            calculatedTimes={calculatedTimes}
+            nextPrayerName={nextPrayerName}
+            activePrayerName={activePrayerName}
+            countdown={countdown}
+            parseSimulatedTime={parseSimulatedTime}
+          />
 
-      <CodeBrowser 
-        activeFile={activeFile}
-        setActiveFile={setActiveFile}
-        expandedNodes={expandedNodes}
-        toggleNode={toggleNode}
-        releaseInfo={releaseInfo}
-        copied={copied}
-        copyToClipboard={copyToClipboard}
-      />
+          <CodeBrowser 
+            activeFile={activeFile}
+            setActiveFile={setActiveFile}
+            expandedNodes={expandedNodes}
+            toggleNode={toggleNode}
+            releaseInfo={releaseInfo}
+            copied={copied}
+            copyToClipboard={copyToClipboard}
+          />
 
-      <FAQ openFaq={openFaq} setOpenFaq={setOpenFaq} />
+          <FAQ openFaq={openFaq} setOpenFaq={setOpenFaq} />
+        </>
+      )}
 
-      <Footer />
+      <Footer isDocsPage={isDocsPage} />
 
     </div>
   );

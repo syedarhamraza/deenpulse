@@ -1,6 +1,6 @@
 import iconImg from '../assets/icon.png';
 
-export function Footer() {
+export function Footer({ isDocsPage = false }: { isDocsPage?: boolean }) {
   return (
     <footer className="bg-[#0c1212]/30 border-t border-white/[0.06] relative z-10 pt-16 pb-12 px-6 mt-12">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
@@ -26,14 +26,16 @@ export function Footer() {
             Created under the GNU GPL v3 License by <span className="font-bold text-white">Syed Arham Raza</span>
           </p>
           <p className="text-[10px] text-slate-500 font-mono">
-            Copyright © 2026 DeenPulse App Project. All rights reserved.
+            Copyright © 2026 DeenPulse. All rights reserved.
           </p>
           <div className="flex gap-4 mt-2">
             <a href="https://github.com/syedarhamraza/deen-pulse" target="_blank" rel="noreferrer" className="text-xs text-slate-500 hover:text-[#00F29D] transition-all">GitHub Repo</a>
             <span className="text-white/10">•</span>
+            <a href="#docs" className="text-xs text-slate-500 hover:text-[#00F29D] transition-all">Documentation</a>
+            <span className="text-white/10">•</span>
             <a href="#downloads" className="text-xs text-slate-500 hover:text-[#00F29D] transition-all">Download Binaries</a>
             <span className="text-white/10">•</span>
-            <a href="#" className="text-xs text-slate-500 hover:text-[#00F29D] transition-all">Privacy Agreement</a>
+            <a href="#privacy" className="text-xs text-slate-500 hover:text-[#00F29D] transition-all">Privacy Agreement</a>
           </div>
         </div>
 
