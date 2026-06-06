@@ -89,6 +89,39 @@ export default function App() {
     };
   }, []);
 
+  // Dynamic SEO Meta Tag updates on page changes
+  useEffect(() => {
+    let title = "DeenPulse | Privacy-First Islamic Prayer Utilities for Android & Wear OS";
+    let desc = "DeenPulse is a premium, privacy-focused Islamic prayer utility with a status bar live pill capsule overlay, low-power GPS triangulation, local monthly caching, and a native Wear OS companion watch client sync.";
+
+    if (isDocsPage) {
+      title = "Documentation | DeenPulse - Setup & Installation Guide";
+      desc = "Learn how to install DeenPulse, sideload the Wear OS watch companion using wireless debugging (Wi-Fi ADB) or Geminiman, and configure background optimizations.";
+    } else if (isPrivacyPage) {
+      title = "Privacy Agreement | DeenPulse - Zero-Telemetry Commitment";
+      desc = "DeenPulse is built from the ground up for data sovereignty. Learn about our local geolocation calculations, zero-tracking framework, and ad-free experience.";
+    }
+
+    // Set page title
+    document.title = title;
+
+    // Set meta description
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', desc);
+
+    // Set Open Graph & Twitter meta tags
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', title);
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', desc);
+
+    const twTitle = document.querySelector('meta[property="twitter:title"]');
+    if (twTitle) twTitle.setAttribute('content', title);
+    const twDesc = document.querySelector('meta[property="twitter:description"]');
+    if (twDesc) twDesc.setAttribute('content', desc);
+  }, [isDocsPage, isPrivacyPage]);
+
+
   // Sync simulation logging
   const triggerMockSync = () => {
     const time = new Date().toLocaleTimeString();
