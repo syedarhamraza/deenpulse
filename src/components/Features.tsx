@@ -1,4 +1,6 @@
+import { useEffect, useRef } from 'react';
 import { Bell, Compass, WifiOff, Layers, Activity, RefreshCw } from 'lucide-react';
+import { gsap } from 'gsap';
 
 interface FeaturesProps {
   simCapsuleFormat: 'name' | 'name_time' | 'time' | 'name_countdown';
@@ -19,9 +21,143 @@ export function Features({
   triggerMockSync,
   countdown
 }: FeaturesProps) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const capsuleRef = useRef<HTMLDivElement>(null);
+  const capsuleTextRef = useRef<HTMLSpanElement>(null);
+  const oemDetailsRef = useRef<HTMLDivElement>(null);
+
+  // Transition the status capsule on format change
+  useEffect(() => {
+    if (!capsuleRef.current) return;
+    
+    gsap.fromTo(capsuleRef.current,
+      { scale: 0.85, opacity: 0.7 },
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 0.45,
+        ease: 'elastic.out(1.2, 0.5)',
+        overwrite: 'auto'
+      }
+    );
+
+    if (capsuleTextRef.current) {
+      gsap.fromTo(capsuleTextRef.current,
+        { y: 4, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.35,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        }
+      );
+    }
+  }, [simCapsuleFormat]);
+
+  // Stagger details list inside the OEM Profile box on selection change
+  useEffect(() => {
+    if (!oemDetailsRef.current) return;
+    gsap.fromTo(oemDetailsRef.current.children,
+      { opacity: 0, x: -10 },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.35,
+        stagger: 0.05,
+        ease: 'power2.out',
+        overwrite: 'auto'
+      }
+    );
+  }, [selectedOemProfile]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header block reveal
+      gsap.fromTo('.features-header-reveal',
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.features-header-reveal',
+            start: 'top 85%'
+          }
+        }
+      );
+
+      // Staggered bento cards entrance
+      gsap.fromTo('.feature-card',
+        { y: 40, opacity: 0, scale: 0.96 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.75,
+          stagger: 0.1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.feature-card',
+            start: 'top 85%'
+          }
+        }
+      );
+
+      const cards = gsap.utils.toArray('.feature-card') as HTMLElement[];
+
+      cards.forEach((card) => {
+        const handleMouseMove = (e: MouseEvent) => {
+          if (window.innerWidth < 1024) return;
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          const rotateX = ((y - centerY) / centerY) * -6; // 6 degrees max tilt
+          const rotateY = ((x - centerX) / centerX) * 6;
+
+          gsap.to(card, {
+            rotateX: rotateX,
+            rotateY: rotateY,
+            scale: 1.015,
+            transformPerspective: 1000,
+            ease: 'power2.out',
+            duration: 0.3,
+            overwrite: 'auto'
+          });
+        };
+
+        const handleMouseLeave = () => {
+          gsap.to(card, {
+            rotateX: 0,
+            rotateY: 0,
+            scale: 1,
+            ease: 'power3.out',
+            duration: 0.5,
+            overwrite: 'auto'
+          });
+        };
+
+        card.addEventListener('mousemove', handleMouseMove);
+        card.addEventListener('mouseleave', handleMouseLeave);
+
+        return () => {
+          card.removeEventListener('mousemove', handleMouseMove);
+          card.removeEventListener('mouseleave', handleMouseLeave);
+        };
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="features" className="py-24 px-6 max-w-7xl mx-auto relative z-10 scroll-mt-20">
-      <div className="text-center max-w-3xl mx-auto mb-16">
+    <section id="features" ref={sectionRef} className="py-24 px-6 max-w-7xl mx-auto relative z-10 scroll-mt-20">
+      <div className="features-header-reveal text-center max-w-3xl mx-auto mb-16">
         <h2 className="font-heading text-4xl sm:text-5xl font-black text-white tracking-tight mb-4">
           Designed for Android background limits.
         </h2>
@@ -32,7 +168,7 @@ export function Features({
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* Card 1: Interactive Status Capsule Simulator (Col 7) */}
-        <div className="md:col-span-7 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-all duration-300 group">
+        <div className="feature-card md:col-span-7 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-colors duration-300 group">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#00F29D]/5 to-transparent rounded-tr-3xl pointer-events-none" />
           
           <div>
@@ -62,9 +198,9 @@ export function Features({
               <span className="text-[10px] sm:text-xs text-white font-semibold font-mono">08:00</span>
               
               {/* Simulated Notch / Dynamic Capsule Pill */}
-              <div className="absolute left-1/2 -translate-x-1/2 bg-[#0c1212] border border-white/15 h-7 sm:h-8 px-2.5 sm:px-4 rounded-full flex items-center justify-center gap-1.5 sm:gap-2 shadow-[0_0_15px_rgba(0,242,157,0.1)] transition-all duration-500">
+              <div ref={capsuleRef} className="absolute left-1/2 -translate-x-1/2 bg-[#0c1212] border border-white/15 h-7 sm:h-8 px-2.5 sm:px-4 rounded-full flex items-center justify-center gap-1.5 sm:gap-2 shadow-[0_0_15px_rgba(0,242,157,0.1)]">
                 <Compass className="w-3.5 h-3.5 text-[#00F29D] animate-spin-slow flex-shrink-0" />
-                <span className="text-[10px] sm:text-xs font-bold text-white font-mono whitespace-nowrap">
+                <span ref={capsuleTextRef} className="text-[10px] sm:text-xs font-bold text-white font-mono whitespace-nowrap inline-block">
                   {simCapsuleFormat === 'name' && 'Fajr'}
                   {simCapsuleFormat === 'name_time' && 'Fajr at 04:15 AM'}
                   {simCapsuleFormat === 'time' && '04:15 AM'}
@@ -84,7 +220,7 @@ export function Features({
                 <button
                   key={fmt}
                   onClick={() => setSimCapsuleFormat(fmt)}
-                  className={`px-3 py-1.5 rounded-lg text-[10px] font-mono font-bold border transition-all ${simCapsuleFormat === fmt ? 'bg-[#00F29D]/10 text-[#00F29D] border-[#00F29D]/30' : 'bg-white/[0.02] text-slate-400 border-white/[0.05] hover:text-white'}`}
+                  className={`btn-hover px-3 py-1.5 rounded-lg text-[10px] font-mono font-bold border transition-colors ${simCapsuleFormat === fmt ? 'bg-[#00F29D]/10 text-[#00F29D] border-[#00F29D]/30' : 'bg-white/[0.02] text-slate-400 border-white/[0.05] hover:text-white'}`}
                 >
                   {fmt === 'name' && 'Name Only'}
                   {fmt === 'name_time' && 'Name + Time'}
@@ -97,7 +233,7 @@ export function Features({
         </div>
 
         {/* Card 2: WearSync Data Layer Terminal (Col 5) */}
-        <div className="md:col-span-5 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-all duration-300 group">
+        <div className="feature-card md:col-span-5 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-colors duration-300 group">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#3DD1C4]/5 to-transparent rounded-tr-3xl pointer-events-none" />
           
           <div>
@@ -138,7 +274,7 @@ export function Features({
 
             <button
               onClick={triggerMockSync}
-              className="w-full mt-2 py-2 bg-[#0c1212] hover:bg-[#3DD1C4]/10 hover:text-[#3DD1C4] border border-white/[0.05] hover:border-[#3DD1C4]/30 text-slate-300 font-bold rounded-lg transition-all flex items-center justify-center gap-2 text-xs"
+              className="btn-hover w-full mt-2 py-2 bg-[#0c1212] hover:bg-[#3DD1C4]/10 hover:text-[#3DD1C4] border border-white/[0.05] hover:border-[#3DD1C4]/30 text-slate-300 font-bold rounded-lg transition-colors flex items-center justify-center gap-2 text-xs"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               <span>Simulate Sync Broadcast</span>
@@ -147,7 +283,7 @@ export function Features({
         </div>
 
         {/* Card 3: OEM Battery Tier Profiler (Col 6) */}
-        <div className="md:col-span-6 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-all duration-300 group">
+        <div className="feature-card md:col-span-6 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-colors duration-300 group">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-500/5 to-transparent rounded-tr-3xl pointer-events-none" />
           
           <div>
@@ -175,14 +311,14 @@ export function Features({
                 <button
                   key={oem}
                   onClick={() => setSelectedOemProfile(oem)}
-                  className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-all uppercase ${selectedOemProfile === oem ? 'bg-amber-400/10 text-amber-400 border-amber-400/30' : 'bg-white/[0.02] text-slate-400 border-white/[0.05] hover:text-white'}`}
+                  className={`btn-hover flex-1 py-2 rounded-lg text-xs font-bold border transition-colors uppercase ${selectedOemProfile === oem ? 'bg-amber-400/10 text-amber-400 border-amber-400/30' : 'bg-white/[0.02] text-slate-400 border-white/[0.05] hover:text-white'}`}
                 >
                   {oem === 'oppo' ? 'Oppo/1+' : oem === 'vivo' ? 'Vivo/iQOO' : 'Samsung/Pixel'}
                 </button>
               ))}
             </div>
 
-            <div className="space-y-3 font-mono text-xs border-t border-white/[0.05] pt-4">
+            <div ref={oemDetailsRef} className="space-y-3 font-mono text-xs border-t border-white/[0.05] pt-4">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                 <span className="text-slate-500">Category Mapping:</span>
                 <span className="text-white font-bold sm:text-right">
@@ -212,7 +348,7 @@ export function Features({
         </div>
 
         {/* Card 4: Geolocation Fetch & Kill (Col 6) */}
-        <div className="md:col-span-6 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-all duration-300 group">
+        <div className="feature-card md:col-span-6 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-colors duration-300 group">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#00F29D]/5 to-transparent rounded-tr-3xl pointer-events-none" />
           
           <div>

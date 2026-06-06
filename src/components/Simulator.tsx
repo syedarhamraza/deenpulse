@@ -1,4 +1,6 @@
+import { useEffect, useRef } from 'react';
 import { Compass, Cpu } from 'lucide-react';
+import { gsap } from 'gsap';
 import { Location, JuristicMethod, CalcMethod, PrayerTimes } from '../types';
 import { locationData } from '../constants';
 
@@ -29,11 +31,71 @@ export function Simulator({
   countdown,
   parseSimulatedTime
 }: SimulatorProps) {
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo('.simulator-row',
+        { 
+          opacity: 0.3, 
+          x: -15 
+        },
+        { 
+          opacity: 1, 
+          x: 0, 
+          duration: 0.5, 
+          stagger: 0.06, 
+          ease: 'power2.out',
+          overwrite: 'auto'
+        }
+      );
+    }, timelineRef);
+
+    return () => ctx.revert();
+  }, [selectedLocation, juristicMethod, calcMethod]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Left side controls entrance
+      gsap.fromTo('.simulator-left-reveal',
+        { x: -35, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.simulator-left-reveal',
+            start: 'top 85%'
+          }
+        }
+      );
+
+      // Right side card entrance
+      gsap.fromTo('.simulator-right-reveal',
+        { x: 35, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.simulator-right-reveal',
+            start: 'top 85%'
+          }
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="simulator" className="py-24 px-6 max-w-7xl mx-auto relative z-10 scroll-mt-20">
+    <section ref={sectionRef} id="simulator" className="py-24 px-6 max-w-7xl mx-auto relative z-10 scroll-mt-20">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         
-        <div className="lg:col-span-6 text-left">
+        <div className="simulator-left-reveal lg:col-span-6 text-left">
           <div className="inline-flex items-center gap-2 bg-[#00F29D]/10 text-[#00F29D] font-bold text-xs uppercase px-3 py-1.5 rounded-full mb-6 border border-[#00F29D]/20 font-mono">
             <Compass className="w-3.5 h-3.5 animate-spin-slow" />
             <span>Offline Calculation Engine</span>
@@ -120,7 +182,7 @@ export function Simulator({
         </div>
 
         {/* Right Side: Telemetry Response timeline */}
-        <div className="lg:col-span-6 flex items-center justify-center">
+        <div className="simulator-right-reveal lg:col-span-6 flex items-center justify-center">
           <div className="w-full max-w-md bg-[#0c1212]/80 rounded-3xl border border-white/[0.06] p-6 sm:p-8 relative overflow-hidden shadow-2xl">
             <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#00F29D]/5 to-transparent rounded-tr-3xl" />
             
@@ -135,7 +197,7 @@ export function Simulator({
             </div>
 
             {/* Dynamic Timeline Layout */}
-            <div className="relative pl-6 border-l border-white/[0.05] space-y-6 text-left">
+            <div ref={timelineRef} className="relative pl-6 border-l border-white/[0.05] space-y-6 text-left">
               
               {(['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'] as const).map((name) => {
                 const time = calculatedTimes[name];
@@ -187,7 +249,7 @@ export function Simulator({
                 };
 
                 return (
-                  <div key={name} className="relative group/time">
+                  <div key={name} className="simulator-row relative group/time">
                     
                     {/* Left Dot on the border line */}
                     <div className={`absolute -left-[31px] top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full z-10 transition-all duration-300 ${timelineDotClass}`} />

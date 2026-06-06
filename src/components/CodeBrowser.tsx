@@ -1,4 +1,6 @@
+import { useEffect, useRef } from 'react';
 import { ChevronDown, ChevronRight, Code, Copy, Check } from 'lucide-react';
+import { gsap } from 'gsap';
 import { highlightCode } from '../utils/codeHighlighter';
 import { fileContents } from '../constants';
 import { ReleaseInfo } from '../types';
@@ -22,9 +24,82 @@ export function CodeBrowser({
   copied,
   copyToClipboard
 }: CodeBrowserProps) {
+  const codeContainerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!codeContainerRef.current) return;
+    
+    // Reset scroll positions to top-left on active file switch
+    codeContainerRef.current.scrollTop = 0;
+    codeContainerRef.current.scrollLeft = 0;
+
+    gsap.fromTo(codeContainerRef.current,
+      { x: 15, opacity: 0 },
+      {
+        x: 0,
+        opacity: 1,
+        duration: 0.45,
+        ease: 'power2.out',
+        overwrite: 'auto'
+      }
+    );
+  }, [activeFile]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header block entrance
+      gsap.fromTo('.code-browser-header-reveal',
+        { y: 35, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.code-browser-header-reveal',
+            start: 'top 85%'
+          }
+        }
+      );
+
+      // Left explorer entrance
+      gsap.fromTo('.code-browser-explorer-reveal',
+        { x: -30, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.code-browser-explorer-reveal',
+            start: 'top 85%'
+          }
+        }
+      );
+
+      // Right editor card entrance
+      gsap.fromTo('.code-browser-editor-reveal',
+        { x: 30, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.code-browser-editor-reveal',
+            start: 'top 85%'
+          }
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="structure" className="py-24 px-6 max-w-7xl mx-auto relative z-10 scroll-mt-20">
-      <div className="text-center max-w-3xl mx-auto mb-16">
+    <section ref={sectionRef} id="structure" className="py-24 px-6 max-w-7xl mx-auto relative z-10 scroll-mt-20">
+      <div className="code-browser-header-reveal text-center max-w-3xl mx-auto mb-16">
         <h2 className="font-heading text-4xl sm:text-5xl font-black text-white tracking-tight mb-4">
           Source Code Structure
         </h2>
@@ -35,7 +110,7 @@ export function CodeBrowser({
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        <div className="lg:col-span-4 bg-[#0c1212]/90 rounded-3xl border border-white/[0.06] p-5 shadow-2xl text-left flex flex-col h-[520px] overflow-hidden">
+        <div className="code-browser-explorer-reveal lg:col-span-4 bg-[#0c1212]/90 rounded-3xl border border-white/[0.06] p-5 shadow-2xl text-left flex flex-col h-[520px] overflow-hidden">
           <div className="flex items-center gap-2 mb-6 pb-4 border-b border-white/[0.05] flex-shrink-0">
             <div className="w-3 h-3 rounded-full bg-white/10" />
             <div className="w-3 h-3 rounded-full bg-white/10" />
@@ -74,14 +149,14 @@ export function CodeBrowser({
                       <div className="pl-4 border-l border-white/[0.05] ml-3 mt-1 space-y-1">
                         <div 
                           onClick={() => setActiveFile('PrayerCapsuleForegroundService.kt')}
-                          className={`flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-all ${activeFile === 'PrayerCapsuleForegroundService.kt' ? 'bg-[#3DD1C4]/10 text-[#3DD1C4]' : 'hover:bg-white/[0.02] text-slate-500'}`}
+                          className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'PrayerCapsuleForegroundService.kt' ? 'bg-[#3DD1C4]/10 text-[#3DD1C4]' : 'hover:bg-white/[0.02] text-slate-500'}`}
                         >
                           <span className="text-[#3DD1C4] text-[10px] font-bold">KT</span>
                           <span>PrayerCapsuleForegroundService.kt</span>
                         </div>
                         <div 
                           onClick={() => setActiveFile('WearDataSyncService.kt')}
-                          className={`flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-all ${activeFile === 'WearDataSyncService.kt' ? 'bg-[#3DD1C4]/10 text-[#3DD1C4]' : 'hover:bg-white/[0.02] text-slate-500'}`}
+                          className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'WearDataSyncService.kt' ? 'bg-[#3DD1C4]/10 text-[#3DD1C4]' : 'hover:bg-white/[0.02] text-slate-500'}`}
                         >
                           <span className="text-[#3DD1C4] text-[10px] font-bold">KT</span>
                           <span>WearDataSyncService.kt</span>
@@ -121,14 +196,14 @@ export function CodeBrowser({
                       <div className="pl-4 border-l border-white/[0.05] ml-3 mt-1 space-y-1">
                         <div 
                           onClick={() => setActiveFile('usePrayerTimes.ts')}
-                          className={`flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-all ${activeFile === 'usePrayerTimes.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
+                          className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'usePrayerTimes.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
                         >
                           <span className="text-[#00F29D] text-[10px] font-bold">TS</span>
                           <span>usePrayerTimes.ts</span>
                         </div>
                         <div 
                           onClick={() => setActiveFile('usePrayerCountdown.ts')}
-                          className={`flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-all ${activeFile === 'usePrayerCountdown.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
+                          className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'usePrayerCountdown.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
                         >
                           <span className="text-[#00F29D] text-[10px] font-bold">TS</span>
                           <span>usePrayerCountdown.ts</span>
@@ -151,14 +226,14 @@ export function CodeBrowser({
                       <div className="pl-4 border-l border-white/[0.05] ml-3 mt-1 space-y-1">
                         <div 
                           onClick={() => setActiveFile('prayerEngine.ts')}
-                          className={`flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-all ${activeFile === 'prayerEngine.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
+                          className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'prayerEngine.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
                         >
                           <span className="text-[#00F29D] text-[10px] font-bold">TS</span>
                           <span>prayerEngine.ts</span>
                         </div>
                         <div 
                           onClick={() => setActiveFile('deviceProfiles.ts')}
-                          className={`flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-all ${activeFile === 'deviceProfiles.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
+                          className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'deviceProfiles.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
                         >
                           <span className="text-[#00F29D] text-[10px] font-bold">TS</span>
                           <span>deviceProfiles.ts</span>
@@ -175,7 +250,7 @@ export function CodeBrowser({
         </div>
 
         {/* IDE-like Code Editor Panel (Col-span-8) */}
-        <div className="lg:col-span-8 bg-[#090D0D] rounded-3xl border border-white/[0.06] overflow-hidden shadow-2xl flex flex-col h-[520px]">
+        <div className="code-browser-editor-reveal lg:col-span-8 bg-[#090D0D] rounded-3xl border border-white/[0.06] overflow-hidden shadow-2xl flex flex-col h-[520px]">
           
           {/* Editor Tabs bar */}
           <div className="bg-[#050808]/70 px-4 border-b border-white/[0.05] flex items-center justify-between h-12">
@@ -189,7 +264,7 @@ export function CodeBrowser({
             <div className="flex items-center gap-3">
               <button
                 onClick={copyToClipboard}
-                className="px-2.5 py-1 bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.05] text-slate-400 hover:text-white rounded-lg flex items-center gap-1.5 text-[10px] font-mono transition-all uppercase font-semibold"
+                className="btn-hover px-2.5 py-1 bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.05] text-slate-400 hover:text-white rounded-lg flex items-center gap-1.5 text-[10px] font-mono transition-colors uppercase font-semibold"
               >
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                 <span>{copied ? 'Copied' : 'Copy'}</span>
@@ -206,7 +281,7 @@ export function CodeBrowser({
           </div>
 
           {/* Code lines container */}
-          <div className="flex-1 overflow-auto p-5 text-left font-mono text-xs leading-relaxed text-slate-300 bg-[#090D0D]/40 custom-scrollbar flex">
+          <div ref={codeContainerRef} className="flex-1 overflow-auto p-5 text-left font-mono text-xs leading-relaxed text-slate-300 bg-[#090D0D]/40 custom-scrollbar flex">
             
             {/* Fake line numbers */}
             <div className="pr-4 border-r border-white/[0.04] text-slate-600 text-right select-none space-y-0.5">

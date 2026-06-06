@@ -1,11 +1,51 @@
+import { useEffect, useRef } from 'react';
 import iconImg from '../assets/icon.png';
+import { gsap } from 'gsap';
 
 export function Footer({ isDocsPage = false }: { isDocsPage?: boolean }) {
+  const footerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Left logo block entrance
+      gsap.fromTo('.footer-logo-block',
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: 'top 95%'
+          }
+        }
+      );
+
+      // Right links block entrance
+      gsap.fromTo('.footer-links-block',
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: 'top 95%'
+          }
+        }
+      );
+    }, footerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <footer className="bg-[#0c1212]/30 border-t border-white/[0.06] relative z-10 pt-16 pb-12 px-6 mt-12">
+    <footer ref={footerRef} className="bg-[#0c1212]/30 border-t border-white/[0.06] relative z-10 pt-16 pb-12 px-6 mt-12">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
 
-        <div className="flex flex-col items-center md:items-start gap-3">
+        <div className="footer-logo-block flex flex-col items-center md:items-start gap-3">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#00F29D] to-[#3DD1C4] p-[1px] overflow-hidden shadow-[0_0_10px_rgba(0,242,157,0.1)]">
               <div className="w-full h-full bg-[#030606] rounded-[5px] flex items-center justify-center overflow-hidden p-1">
@@ -21,7 +61,7 @@ export function Footer({ isDocsPage = false }: { isDocsPage?: boolean }) {
           </p>
         </div>
 
-        <div className="flex flex-col items-center md:items-end gap-3 text-center md:text-right">
+        <div className="footer-links-block flex flex-col items-center md:items-end gap-3 text-center md:text-right">
           <p className="text-xs text-slate-400">
             Created under the GNU GPL v3 License by <span className="font-bold text-white">Syed Arham Raza</span>
           </p>
@@ -29,13 +69,13 @@ export function Footer({ isDocsPage = false }: { isDocsPage?: boolean }) {
             Copyright © 2026 DeenPulse. All rights reserved.
           </p>
           <div className="flex flex-wrap justify-center md:justify-end gap-x-4 gap-y-2 mt-2">
-            <a href="https://github.com/syedarhamraza/deen-pulse" target="_blank" rel="noreferrer" className="text-xs text-slate-500 hover:text-[#00F29D] transition-all">GitHub Repo</a>
+            <a href="https://github.com/syedarhamraza/deen-pulse" target="_blank" rel="noreferrer" className="text-xs text-slate-500 hover:text-[#00F29D] transition-colors">GitHub Repo</a>
             <span className="hidden sm:inline text-white/10">•</span>
-            <a href="#docs" className="text-xs text-slate-500 hover:text-[#00F29D] transition-all">Documentation</a>
+            <a href="#docs" className="text-xs text-slate-500 hover:text-[#00F29D] transition-colors">Documentation</a>
             <span className="hidden sm:inline text-white/10">•</span>
-            <a href="#downloads" className="text-xs text-slate-500 hover:text-[#00F29D] transition-all">Download Binaries</a>
+            <a href="#downloads" className="text-xs text-slate-500 hover:text-[#00F29D] transition-colors">Download Binaries</a>
             <span className="hidden sm:inline text-white/10">•</span>
-            <a href="#privacy" className="text-xs text-slate-500 hover:text-[#00F29D] transition-all">Privacy Agreement</a>
+            <a href="#privacy" className="text-xs text-slate-500 hover:text-[#00F29D] transition-colors">Privacy Agreement</a>
           </div>
         </div>
 

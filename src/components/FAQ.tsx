@@ -1,5 +1,7 @@
+import { useEffect, useRef } from 'react';
 import { CheckCircle2, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { gsap } from 'gsap';
 
 interface FAQProps {
   openFaq: number | null;
@@ -7,9 +9,48 @@ interface FAQProps {
 }
 
 export function FAQ({ openFaq, setOpenFaq }: FAQProps) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header block reveal
+      gsap.fromTo('.faq-header-reveal',
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 95%' // Trigger earlier
+          }
+        }
+      );
+
+      // Accordion rows stagger reveal
+      gsap.fromTo('.faq-row-reveal',
+        { y: 25, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.65,
+          stagger: 0.08,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 90%' // Trigger earlier
+          }
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="faq" className="py-24 px-6 max-w-4xl mx-auto relative z-10 scroll-mt-20 text-left">
-      <div className="text-center max-w-3xl mx-auto mb-16">
+    <section ref={sectionRef} id="faq" className="py-24 px-6 max-w-4xl mx-auto relative z-10 scroll-mt-20 text-left">
+      <div className="faq-header-reveal text-center max-w-3xl mx-auto mb-16">
         <div className="inline-flex items-center gap-2 bg-[#3DD1C4]/10 text-[#3DD1C4] font-bold text-xs uppercase px-3 py-1.5 rounded-full mb-4 border border-[#3DD1C4]/20 font-mono">
           <CheckCircle2 className="w-3.5 h-3.5" />
           <span>FAQ</span>
@@ -47,7 +88,7 @@ export function FAQ({ openFaq, setOpenFaq }: FAQProps) {
         ].map((item, idx) => (
           <div 
             key={idx} 
-            className={`bg-[#0c1212]/60 border rounded-2xl transition-all duration-300 overflow-hidden ${openFaq === idx ? 'border-[#00F29D]/40 shadow-[0_8px_30px_rgba(0,242,157,0.03)]' : 'border-white/[0.06] hover:border-white/[0.12]'}`}
+            className={`faq-row-reveal bg-[#0c1212]/60 border rounded-2xl transition-all duration-300 overflow-hidden ${openFaq === idx ? 'border-[#00F29D]/40 shadow-[0_8px_30px_rgba(0,242,157,0.03)]' : 'border-white/[0.06] hover:border-white/[0.12]'}`}
           >
             <button
               onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
@@ -64,7 +105,7 @@ export function FAQ({ openFaq, setOpenFaq }: FAQProps) {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.25, ease: 'easeInOut' }}
+                  transition={{ type: 'spring', stiffness: 220, damping: 22 }}
                 >
                   <div className="px-6 pb-6 text-slate-400 text-sm leading-relaxed border-t border-white/[0.04] pt-4">
                     {item.a}

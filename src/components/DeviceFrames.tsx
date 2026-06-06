@@ -3,7 +3,7 @@ import wearosImg from '../assets/wearos.jpeg';
 
 export function MobilePhoneFrame() {
   return (
-    <div className="w-[280px] h-[550px] bg-[#0c1212] rounded-[44px] border-[6px] border-white/[0.08] p-1 relative shadow-[0_25px_60px_rgba(0,10,10,0.9),0_0_1px_1px_rgba(255,255,255,0.05),inset_0_2px_4px_rgba(255,255,255,0.2)] flex flex-col overflow-hidden transition-all duration-300 select-none">
+    <div className="w-[280px] h-[550px] bg-[#0c1212] rounded-[44px] border-[6px] border-white/[0.08] p-1 relative shadow-[0_25px_60px_rgba(0,10,10,0.9),0_0_1px_1px_rgba(255,255,255,0.05),inset_0_2px_4px_rgba(255,255,255,0.2)] flex flex-col overflow-hidden select-none">
       {/* Top Speaker grill & Bezel Detail */}
       <div className="absolute top-2 left-1/2 -translate-x-1/2 w-14 h-1.5 bg-black rounded-full z-30" />
 

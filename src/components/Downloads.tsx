@@ -1,15 +1,93 @@
+import { useEffect, useRef } from 'react';
 import { Download, Smartphone, Watch, CheckCircle2 } from 'lucide-react';
 import { ReleaseInfo } from '../types';
+import { gsap } from 'gsap';
 
 interface DownloadsProps {
   releaseInfo: ReleaseInfo;
 }
 
 export function Downloads({ releaseInfo }: DownloadsProps) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header block entrance
+      gsap.fromTo('.downloads-header-reveal',
+        { y: 35, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.downloads-header-reveal',
+            start: 'top 85%'
+          }
+        }
+      );
+
+      // Stats banner spring pop
+      gsap.fromTo('.downloads-banner-reveal',
+        { scale: 0.95, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.85,
+          ease: 'back.out(1.3)',
+          scrollTrigger: {
+            trigger: '.downloads-banner-reveal',
+            start: 'top 85%'
+          }
+        }
+      );
+
+      // Mobile APK card slides in from left (restored layout sliding)
+      gsap.fromTo('.downloads-card-mobile-reveal',
+        { x: -50, opacity: 0, rotate: -1 },
+        {
+          x: 0,
+          opacity: 1,
+          rotate: 0,
+          duration: 0.75,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.downloads-cards-grid',
+            start: 'top 95%', // Trigger sooner to eliminate delay
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+
+      // Watch companion card slides in from right
+      gsap.fromTo('.downloads-card-watch-reveal',
+        { x: 50, opacity: 0, rotate: 1 },
+        {
+          x: 0,
+          opacity: 1,
+          rotate: 0,
+          duration: 0.75,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.downloads-cards-grid',
+            start: 'top 95%', // Trigger sooner to eliminate delay
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="downloads" className="py-24 px-6 max-w-7xl mx-auto relative z-10 scroll-mt-20">
-      <div className="text-center max-w-3xl mx-auto mb-16">
-        <h2 className="font-heading text-4xl sm:text-5xl font-black text-white mb-4">
+    <section ref={sectionRef} id="downloads" className="py-24 px-6 max-w-7xl mx-auto relative z-10 scroll-mt-20">
+      <div className="downloads-header-reveal text-center max-w-3xl mx-auto mb-16">
+        <div className="inline-flex items-center gap-2 bg-[#00F29D]/10 text-[#00F29D] font-bold text-xs uppercase px-3 py-1.5 rounded-full mb-4 border border-[#00F29D]/20 font-mono">
+          <Download className="w-3.5 h-3.5" />
+          <span>Direct Downloads</span>
+        </div>
+        <h2 className="font-heading text-4xl sm:text-5xl font-black text-white mb-4 tracking-tight">
           Direct Releases
         </h2>
         <p className="text-slate-400 text-lg">
@@ -18,11 +96,11 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
       </div>
 
       {/* Release Stats Banner */}
-      <div className="bg-[#0c1212]/75 border border-white/[0.06] rounded-3xl p-6 sm:p-8 mb-12 flex flex-col md:flex-row justify-between items-center gap-6 shadow-2xl relative overflow-hidden group">
+      <div className="downloads-banner-reveal bg-[#0c1212]/90 border border-white/[0.05] rounded-3xl p-6 sm:p-8 mb-12 flex flex-col md:flex-row justify-between items-center gap-6 shadow-2xl relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#00F29D]/5 to-transparent rounded-tr-3xl pointer-events-none" />
         
         <div className="flex items-center gap-4 flex-1 text-left">
-          <div className="w-12 h-12 rounded-2xl bg-[#00F29D]/10 border border-[#00F29D]/20 flex items-center justify-center text-[#00F29D] flex-shrink-0 shadow-[0_0_15px_rgba(0,242,157,0.1)]">
+          <div className="w-12 h-12 rounded-2xl bg-[#00F29D]/10 border border-[#00F29D]/20 flex items-center justify-center text-[#00F29D] flex-shrink-0 shadow-[0_0_15px_rgba(0,242,157,0.15)]">
             <CheckCircle2 className="w-6 h-6" />
           </div>
           <div className="flex flex-col gap-1">
@@ -44,9 +122,9 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="downloads-cards-grid grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Card 1: Mobile Client APK */}
-        <div className="bg-[#0c1212]/70 rounded-3xl border border-white/[0.06] hover:border-[#00F29D]/30 transition-all duration-300 p-6 sm:p-8 flex flex-col justify-between relative group shadow-2xl">
+        <div className="downloads-card-mobile-reveal bg-[#0c1212]/90 rounded-3xl border border-white/[0.05] hover:border-[#00F29D]/30 transition-all duration-300 p-6 sm:p-8 flex flex-col justify-between relative group shadow-2xl">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#00F29D]/5 to-transparent rounded-tr-3xl pointer-events-none" />
           
           <div className="text-left">
@@ -89,7 +167,7 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
             <a 
               href={releaseInfo.mobileUrl}
               download={releaseInfo.mobileName}
-              className="w-full py-4 bg-gradient-to-r from-[#00F29D]/10 to-[#3DD1C4]/10 hover:from-[#00F29D] hover:to-[#3DD1C4] hover:text-[#060a0a] border border-[#00F29D]/25 hover:border-transparent font-extrabold text-sm rounded-xl text-white transition-all flex items-center justify-center gap-2.5 shadow-md active:scale-[0.98]"
+              className="btn-hover w-full py-4 bg-gradient-to-r from-[#00F29D]/10 to-[#3DD1C4]/10 hover:from-[#00F29D] hover:to-[#3DD1C4] hover:text-[#060a0a] border border-[#00F29D]/25 hover:border-transparent font-extrabold text-sm rounded-xl text-white transition-colors flex items-center justify-center gap-2.5 shadow-md active:scale-[0.98]"
             >
               <Download className="w-4.5 h-4.5" />
               <span>Download Mobile APK</span>
@@ -104,7 +182,7 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
         </div>
 
         {/* Card 2: Wear OS Client APK */}
-        <div className="bg-[#0c1212]/70 rounded-3xl border border-white/[0.06] hover:border-[#3DD1C4]/30 transition-all duration-300 p-6 sm:p-8 flex flex-col justify-between relative group shadow-2xl text-left">
+        <div className="downloads-card-watch-reveal bg-[#0c1212]/90 rounded-3xl border border-white/[0.05] hover:border-[#3DD1C4]/30 transition-all duration-300 p-6 sm:p-8 flex flex-col justify-between relative group shadow-2xl text-left">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#3DD1C4]/5 to-transparent rounded-tr-3xl pointer-events-none" />
           
           <div>
@@ -147,7 +225,7 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
             <a 
               href={releaseInfo.watchUrl}
               download={releaseInfo.watchName}
-              className="w-full py-4 bg-gradient-to-r from-[#3DD1C4]/10 to-[#00F29D]/10 hover:from-[#3DD1C4] hover:to-[#00F29D] hover:text-[#060a0a] border border-[#3DD1C4]/25 hover:border-transparent font-extrabold text-sm rounded-xl text-white transition-all flex items-center justify-center gap-2.5 shadow-md active:scale-[0.98]"
+              className="btn-hover w-full py-4 bg-gradient-to-r from-[#3DD1C4]/10 to-[#00F29D]/10 hover:from-[#3DD1C4] hover:to-[#00F29D] hover:text-[#060a0a] border border-[#3DD1C4]/25 hover:border-transparent font-extrabold text-sm rounded-xl text-white transition-colors flex items-center justify-center gap-2.5 shadow-md active:scale-[0.98]"
             >
               <Download className="w-4.5 h-4.5" />
               <span>Download Watch APK</span>
