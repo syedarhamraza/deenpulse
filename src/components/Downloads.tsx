@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Download, Smartphone, Watch, CheckCircle2 } from 'lucide-react';
 import { ReleaseInfo } from '../types';
 import { gsap } from 'gsap';
+import { PremiumButton } from './ui/PremiumButton';
 
 interface DownloadsProps {
   releaseInfo: ReleaseInfo;
@@ -164,14 +165,15 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
           </div>
 
           <div className="space-y-4">
-            <a 
+            <PremiumButton
+              variant="primary"
               href={releaseInfo.mobileUrl}
               download={releaseInfo.mobileName}
-              className="btn-hover w-full py-4 bg-gradient-to-r from-[#00F29D]/10 to-[#3DD1C4]/10 hover:from-[#00F29D] hover:to-[#3DD1C4] hover:text-[#060a0a] border border-[#00F29D]/25 hover:border-transparent font-extrabold text-sm rounded-xl text-white transition-colors flex items-center justify-center gap-2.5 shadow-md active:scale-[0.98]"
+              icon="phone-download"
+              fullWidth
             >
-              <Download className="w-4.5 h-4.5" />
-              <span>Download Mobile APK</span>
-            </a>
+              Download Mobile APK
+            </PremiumButton>
             <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 px-1">
               <span>SHA-256 Checksum:</span>
               <span className="hover:text-white transition-colors cursor-pointer" title="Double click to copy">
@@ -222,14 +224,15 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
           </div>
 
           <div className="space-y-4">
-            <a 
+            <PremiumButton
+              variant="secondary"
               href={releaseInfo.watchUrl}
               download={releaseInfo.watchName}
-              className="btn-hover w-full py-4 bg-gradient-to-r from-[#3DD1C4]/10 to-[#00F29D]/10 hover:from-[#3DD1C4] hover:to-[#00F29D] hover:text-[#060a0a] border border-[#3DD1C4]/25 hover:border-transparent font-extrabold text-sm rounded-xl text-white transition-colors flex items-center justify-center gap-2.5 shadow-md active:scale-[0.98]"
+              icon="watch-sync"
+              fullWidth
             >
-              <Download className="w-4.5 h-4.5" />
-              <span>Download Watch APK</span>
-            </a>
+              Download Watch APK
+            </PremiumButton>
             <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 px-1">
               <span>SHA-256 Checksum:</span>
               <span className="hover:text-white transition-colors cursor-pointer" title="Double click to copy">

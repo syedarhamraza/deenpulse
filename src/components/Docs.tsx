@@ -7,15 +7,15 @@ import {
   Watch, 
   Settings, 
   Terminal, 
-  ExternalLink, 
   AlertTriangle, 
   CheckCircle, 
-  Copy, 
   Check, 
   Info, 
   Cpu, 
   Lock 
 } from 'lucide-react';
+import { IconButton } from './ui/IconButton';
+import { PremiumButton } from './ui/PremiumButton';
 
 type SectionId = 'app-guide' | 'installation' | 'wireless-debugging' | 'geminiman';
 
@@ -303,13 +303,20 @@ export function Docs() {
                     {/* Command Box */}
                     <div className="bg-[#030606] border border-white/[0.05] rounded-xl p-3.5 flex items-center justify-between font-mono text-xs text-slate-300 select-all relative group">
                       <span className="overflow-x-auto whitespace-nowrap pr-4">adb pair 192.168.1.100:41235 123456</span>
-                      <button 
-                        onClick={() => handleCopy('adb pair 192.168.1.100:41235 123456', 'pair')}
-                        className="p-1.5 bg-white/5 hover:bg-[#00F29D] border border-white/10 hover:border-transparent text-slate-400 hover:text-black rounded-lg transition-all absolute right-3"
-                        title="Copy Command"
-                      >
-                        {copiedText === 'pair' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                      </button>
+                      <div className="absolute right-3">
+                        {copiedText === 'pair' ? (
+                          <span className="flex w-9 h-9 items-center justify-center text-[#00F29D]">
+                            <Check className="w-3.5 h-3.5" />
+                          </span>
+                        ) : (
+                          <IconButton
+                            onClick={() => handleCopy('adb pair 192.168.1.100:41235 123456', 'pair')}
+                            icon="copy"
+                            size="sm"
+                            title="Copy Command"
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -324,13 +331,20 @@ export function Docs() {
                     {/* Command Box */}
                     <div className="bg-[#030606] border border-white/[0.05] rounded-xl p-3.5 flex items-center justify-between font-mono text-xs text-slate-300 select-all relative group">
                       <span className="overflow-x-auto whitespace-nowrap pr-4">adb connect 192.168.1.100:34567</span>
-                      <button 
-                        onClick={() => handleCopy('adb connect 192.168.1.100:34567', 'connect')}
-                        className="p-1.5 bg-white/5 hover:bg-[#00F29D] border border-white/10 hover:border-transparent text-slate-400 hover:text-black rounded-lg transition-all absolute right-3"
-                        title="Copy Command"
-                      >
-                        {copiedText === 'connect' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                      </button>
+                      <div className="absolute right-3">
+                        {copiedText === 'connect' ? (
+                          <span className="flex w-9 h-9 items-center justify-center text-[#00F29D]">
+                            <Check className="w-3.5 h-3.5" />
+                          </span>
+                        ) : (
+                          <IconButton
+                            onClick={() => handleCopy('adb connect 192.168.1.100:34567', 'connect')}
+                            icon="copy"
+                            size="sm"
+                            title="Copy Command"
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -344,13 +358,20 @@ export function Docs() {
                     {/* Command Box */}
                     <div className="bg-[#030606] border border-white/[0.05] rounded-xl p-3.5 flex items-center justify-between font-mono text-xs text-slate-300 select-all relative group">
                       <span className="overflow-x-auto whitespace-nowrap pr-4">adb install wear-release.apk</span>
-                      <button 
-                        onClick={() => handleCopy('adb install wear-release.apk', 'install')}
-                        className="p-1.5 bg-white/5 hover:bg-[#00F29D] border border-white/10 hover:border-transparent text-slate-400 hover:text-black rounded-lg transition-all absolute right-3"
-                        title="Copy Command"
-                      >
-                        {copiedText === 'install' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                      </button>
+                      <div className="absolute right-3">
+                        {copiedText === 'install' ? (
+                          <span className="flex w-9 h-9 items-center justify-center text-[#00F29D]">
+                            <Check className="w-3.5 h-3.5" />
+                          </span>
+                        ) : (
+                          <IconButton
+                            onClick={() => handleCopy('adb install wear-release.apk', 'install')}
+                            icon="copy"
+                            size="sm"
+                            title="Copy Command"
+                          />
+                        )}
+                      </div>
                     </div>
 
                     <p className="text-emerald-400 font-semibold flex items-center gap-1.5 text-xs pt-1.5">
@@ -397,15 +418,17 @@ export function Docs() {
                     <p className="text-slate-400 text-xs md:text-sm leading-relaxed">
                       Download the watch companion package <code className="font-mono text-xs text-[#3DD1C4] bg-white/5 px-1 py-0.5 rounded">wear-release.apk</code> onto your phone's downloads folder. Then, search and install <strong className="text-white">Geminiman WearOS Manager</strong> from the Google Play Store on your smartphone.
                     </p>
-                    <a 
-                      href="https://play.google.com/store/apps/details?id=com.geminiman.wearosmanager" 
-                      target="_blank" 
-                      rel="noreferrer" 
-                      className="inline-flex items-center gap-1.5 text-xs text-[#00F29D] hover:underline pt-1"
+                    <PremiumButton
+                      variant="secondary"
+                      href="https://play.google.com/store/apps/details?id=com.geminiman.wearosmanager"
+                      target="_blank"
+                      rel="noreferrer"
+                      icon="external"
+                      size="sm"
+                      className="inline-block mt-2"
                     >
-                      <span>Get Geminiman on Play Store</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
+                      Get Geminiman on Play Store
+                    </PremiumButton>
                   </div>
                 </div>
 

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { Bell, Compass, WifiOff, Layers, Activity, RefreshCw } from 'lucide-react';
+import { Bell, Compass, WifiOff, Layers, Activity } from 'lucide-react';
 import { gsap } from 'gsap';
+import { PremiumButton } from './ui/PremiumButton';
 
 interface FeaturesProps {
   simCapsuleFormat: 'name' | 'name_time' | 'time' | 'name_countdown';
@@ -272,13 +273,16 @@ export function Features({
               ))}
             </div>
 
-            <button
+            <PremiumButton
+              variant="secondary"
               onClick={triggerMockSync}
-              className="btn-hover w-full mt-2 py-2 bg-[#0c1212] hover:bg-[#3DD1C4]/10 hover:text-[#3DD1C4] border border-white/[0.05] hover:border-[#3DD1C4]/30 text-slate-300 font-bold rounded-lg transition-colors flex items-center justify-center gap-2 text-xs"
+              icon="sync"
+              size="sm"
+              fullWidth
+              className="mt-2"
             >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>Simulate Sync Broadcast</span>
-            </button>
+              Simulate Sync Broadcast
+            </PremiumButton>
           </div>
         </div>
 

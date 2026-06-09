@@ -1,9 +1,10 @@
 import { Shield, Lock, EyeOff, FileText, Cpu, Globe } from 'lucide-react';
+import { PremiumButton } from './ui/PremiumButton';
 
 export function PrivacyAgreement() {
   return (
     <div className="max-w-4xl mx-auto px-6 pt-28 pb-16 relative z-10 min-h-screen">
-      
+
       {/* Header */}
       <div className="mb-12 text-center md:text-left">
         <h1 className="font-heading font-extrabold text-4xl md:text-5xl text-white tracking-tight leading-tight">
@@ -19,7 +20,7 @@ export function PrivacyAgreement() {
 
       {/* Content Container */}
       <div className="bg-[#060a0a]/40 backdrop-blur-md border border-white/[0.05] rounded-2xl p-6 md:p-8 shadow-[0_15px_45px_rgba(0,0,0,0.4)] space-y-8">
-        
+
         {/* Intro */}
         <div className="flex gap-4 items-start">
           <div className="w-10 h-10 rounded-xl bg-[#00F29D]/10 flex items-center justify-center text-[#00F29D] shrink-0">
@@ -95,15 +96,17 @@ export function PrivacyAgreement() {
           <p className="text-slate-300 text-sm leading-relaxed">
             As open-source software licensed under the <strong className="text-white">GNU GPL v3 License</strong>, you can fully audit the security and data-handling features of DeenPulse by checking our public repository:
           </p>
-          <a 
-            href="https://github.com/syedarhamraza/deen-pulse" 
-            target="_blank" 
-            rel="noreferrer" 
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-white/[0.03] hover:bg-[#00F29D] text-slate-300 hover:text-black border border-white/[0.05] hover:border-transparent text-xs font-bold uppercase tracking-wider rounded-xl transition-all"
+          <PremiumButton
+            variant="primary"
+            href="https://github.com/syedarhamraza/deen-pulse"
+            target="_blank"
+            rel="noreferrer"
+            icon="github"
+            size="sm"
+            className="inline-block uppercase tracking-wider"
           >
-            <span>Verify Source Code on GitHub</span>
-            <Globe className="w-3.5 h-3.5" />
-          </a>
+            Verify Source Code on GitHub
+          </PremiumButton>
         </div>
 
       </div>
