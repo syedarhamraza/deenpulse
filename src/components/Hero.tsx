@@ -69,6 +69,10 @@ export function Hero({ releaseInfo }: HeroProps) {
 
       const handleMouseMove = (e: MouseEvent) => {
         if (window.innerWidth < 768) return;
+        const phone = document.querySelector('.hero-phone');
+        const watch = document.querySelector('.hero-watch');
+        if (!phone || !watch) return;
+
         const { clientX, clientY } = e;
         const width = window.innerWidth;
         const height = window.innerHeight;
@@ -76,7 +80,7 @@ export function Hero({ releaseInfo }: HeroProps) {
         const xOffset = (clientX / width) - 0.5;
         const yOffset = (clientY / height) - 0.5;
 
-        gsap.to('.hero-phone', {
+        gsap.to(phone, {
           x: xOffset * 20,
           y: yOffset * 20,
           duration: 0.8,
@@ -84,7 +88,7 @@ export function Hero({ releaseInfo }: HeroProps) {
           overwrite: 'auto'
         });
 
-        gsap.to('.hero-watch', {
+        gsap.to(watch, {
           x: xOffset * -35,
           y: yOffset * -35,
           duration: 1,

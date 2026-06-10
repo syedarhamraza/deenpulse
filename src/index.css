@@ -87,4 +87,16 @@ h1, h2, h3, h4, .font-heading {
   scrollbar-width: none; /* Firefox */
 }
 
+/* Custom Cursor Hiding on Desktops with fine pointers */
+@media (hover: hover) and (pointer: fine) {
+  body, 
+  a, 
+  button, 
+  [role="button"],
+  .btn-hover,
+  .interactive-hover {
+    cursor: none !important;
+  }
+}
+
 

@@ -53,7 +53,7 @@ export function usePremiumButtonAnimation(
     if (rotateTarget) {
       watchTween = gsap.to(rotateTarget, {
         rotation: 360,
-        transformOrigin: '12px 12px',
+        svgOrigin: '12 12',
         duration: icon === 'sync' ? 1.4 : 2,
         ease: 'none',
         repeat: -1,
@@ -115,7 +115,7 @@ export function usePremiumButtonAnimation(
       if (watchSyncGroup) {
         watchPremiumTl.to(watchSyncGroup, {
           rotation: 360,
-          transformOrigin: '12px 12px',
+          svgOrigin: '12 12',
           duration: 1.5,
           ease: 'none'
         }, 0);
@@ -123,7 +123,7 @@ export function usePremiumButtonAnimation(
       if (watchCenter) {
         watchPremiumTl.fromTo(watchCenter,
           { scale: 1, opacity: 1 },
-          { scale: 1.6, opacity: 0.4, duration: 0.75, yoyo: true, repeat: 1, transformOrigin: '12px 12px', ease: 'sine.inOut' },
+          { scale: 1.6, opacity: 0.4, duration: 0.75, yoyo: true, repeat: 1, transformOrigin: '50% 50%', ease: 'sine.inOut' },
           0
         );
       }
@@ -199,11 +199,12 @@ export function usePremiumButtonAnimation(
       if (watchTween && rotateTarget) {
         gsap.to(rotateTarget, {
           rotation: '+=35',
+          svgOrigin: '12 12',
           duration: 0.7,
           ease: 'power2.out',
           onComplete: () => {
             watchTween?.pause();
-            gsap.set(rotateTarget, { rotation: 0 });
+            gsap.set(rotateTarget, { rotation: 0, svgOrigin: '12 12' });
           },
         });
       }
@@ -230,11 +231,12 @@ export function usePremiumButtonAnimation(
         if (watchSyncGroup) {
           gsap.to(watchSyncGroup, {
             rotation: '+=45',
+            svgOrigin: '12 12',
             duration: 0.6,
             ease: 'power2.out',
             onComplete: () => {
               watchPremiumTl?.pause();
-              gsap.set(watchSyncGroup, { rotation: 0 });
+              gsap.set(watchSyncGroup, { rotation: 0, svgOrigin: '12 12' });
             }
           });
         } else {

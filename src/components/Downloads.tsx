@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DownloadArrowIcon, SmartphoneIcon, WatchIcon, CheckCircleIcon } from './ui/icons';
-import { ReleaseInfo } from '../types';
+import { ReleaseInfo, GitHubRelease } from '../types';
 import { gsap } from 'gsap';
 import { PremiumButton } from './ui/PremiumButton';
 
@@ -80,6 +80,64 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
 
     return () => ctx.revert();
   }, []);
+
+  // Changelog card entrance animated only when loaded and rendered
+  useEffect(() => {
+    if (releaseInfo.loading) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo('.downloads-changelog-reveal',
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.downloads-changelog-reveal',
+            start: 'top 95%'
+          }
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [releaseInfo.loading]);
+
+  const parseChangelog = (body: string | null | undefined) => {
+    if (!body) return [];
+    const lines = body
+      .split('\n')
+      .map(line => line.trim())
+      .filter(Boolean);
+      
+    const bulletLines = lines
+      .filter(line => line.startsWith('*') || line.startsWith('-') || line.startsWith('•'))
+      .map(line => line.replace(/^[\*\-•]\s*/, ''))
+      .map(line => line.replace(/\*\*([^*]+)\*\*/g, '$1'))
+      .map(line => line.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'))
+      .map(line => line.replace(/`([^`]+)`/g, '$1'));
+      
+    if (bulletLines.length > 0) return bulletLines;
+    
+    return lines
+      .filter(line => !line.startsWith('#'))
+      .slice(0, 8)
+      .map(line => line.replace(/\*\*([^*]+)\*\*/g, '$1'))
+      .map(line => line.replace(/`([^`]+)`/g, '$1'));
+  };
+
+  const latestVersion = releaseInfo.version || 'v2.0.3';
+  const latestDate = releaseInfo.publishedAt || '2026-06-06';
+  const latestBody = releaseInfo.body || `-Back Gesture Animations\n-some bug fixes`;
+  const latestMobileUrl = releaseInfo.mobileUrl;
+  const latestMobileSize = releaseInfo.mobileSize || '72.6 MB';
+  const latestMobileName = releaseInfo.mobileName || 'DeenPulse-Phone-v2.0.3.apk';
+  const latestWatchUrl = releaseInfo.watchUrl;
+  const latestWatchSize = releaseInfo.watchSize || '3.68 MB';
+  const latestWatchName = releaseInfo.watchName || 'DeenPulse-WearOS-v2.0.3.apk';
+
+  const changelogItems = parseChangelog(latestBody).slice(0, 8);
 
   return (
     <section ref={sectionRef} id="downloads" className="py-24 px-6 max-w-7xl mx-auto relative z-10 scroll-mt-20">
@@ -242,6 +300,73 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
           </div>
         </div>
       </div>
+
+      {/* Release Logs (What's New in Latest Release) */}
+      {!releaseInfo.loading && (
+        <div className="downloads-changelog-reveal mt-16 bg-[#0c1212]/30 backdrop-blur-md border border-white/[0.05] rounded-3xl p-6 sm:p-8 text-left shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[#00F29D]/5 to-transparent rounded-tr-3xl pointer-events-none -z-10" />
+          
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-white/[0.06] pb-6 mb-8">
+            <div>
+              <div className="flex items-center gap-3 flex-wrap">
+                <h3 className="font-heading text-2xl font-black text-white flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#00F29D] shadow-[0_0_10px_#00F29D]" />
+                  What's New in {latestVersion}
+                </h3>
+                <span className="text-[10px] font-mono font-bold text-[#00F29D] bg-[#00F29D]/10 px-2.5 py-0.5 rounded-full border border-[#00F29D]/20 uppercase tracking-widest">
+                  Latest Release
+                </span>
+              </div>
+              <p className="text-slate-500 text-xs mt-1.5 font-mono">
+                Released on {latestDate}
+              </p>
+            </div>
+
+            {/* Quick Archive Downloads */}
+            <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+              <a
+                href={latestMobileUrl}
+                download={latestMobileName}
+                className="btn-hover text-[11px] font-mono font-bold bg-[#050808]/80 border border-white/[0.06] hover:border-[#00F29D]/30 hover:text-white text-slate-300 px-4 py-2.5 rounded-xl flex items-center gap-2 transition-colors cursor-pointer"
+                title="Download Mobile APK"
+              >
+                <SmartphoneIcon className="w-4 h-4 text-[#00F29D]" />
+                <span>Phone APK {latestMobileSize ? `(${latestMobileSize})` : ''}</span>
+              </a>
+              <a
+                href={latestWatchUrl}
+                download={latestWatchName}
+                className="btn-hover text-[11px] font-mono font-bold bg-[#050808]/80 border border-white/[0.06] hover:border-[#3DD1C4]/30 hover:text-white text-slate-300 px-4 py-2.5 rounded-xl flex items-center gap-2 transition-colors cursor-pointer"
+                title="Download Wear OS APK"
+              >
+                <WatchIcon className="w-4 h-4 text-[#3DD1C4]" />
+                <span>Watch APK {latestWatchSize ? `(${latestWatchSize})` : ''}</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Changelog Bullet Points */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">
+              Changelog Details
+            </h4>
+            <ul className="space-y-3.5 text-slate-300 text-sm pl-0.5">
+              {changelogItems.length > 0 ? (
+                changelogItems.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <span className="text-[#00F29D] font-black mt-0.5 select-none shrink-0">•</span>
+                    <span className="leading-relaxed">{item}</span>
+                  </li>
+                ))
+              ) : (
+                <li className="text-slate-500 italic text-xs">
+                  No release logs provided for this build.
+                </li>
+              )}
+            </ul>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

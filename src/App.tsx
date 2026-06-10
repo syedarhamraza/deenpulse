@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
+gsap.config({ nullTargetWarn: false });
 import { useLatestRelease } from './hooks/useLatestRelease';
 import { usePrayerSimulator } from './hooks/usePrayerSimulator';
 import { Location, JuristicMethod, CalcMethod } from './types';
@@ -20,6 +21,7 @@ import { PrivacyAgreement } from './components/Privacy';
 import { ScrollToTop } from './components/ScrollToTop';
 
 import backgroundImg from './assets/backgound.png';
+import iconImg from './assets/icon.png';
 
 export default function App() {
   const [selectedLocation, setSelectedLocation] = useState<Location>('Karachi');
@@ -31,6 +33,262 @@ export default function App() {
   const [copied, setCopied] = useState(false);
   const [isDocsPage, setIsDocsPage] = useState(window.location.hash.startsWith('#docs'));
   const [isPrivacyPage, setIsPrivacyPage] = useState(window.location.hash.startsWith('#privacy'));
+  const [showSplash, setShowSplash] = useState(() => {
+    try {
+      const hasSplashed = sessionStorage.getItem('deenpulse_splashed');
+      return !hasSplashed;
+    } catch (e) {
+      return true;
+    }
+  });
+
+  // Premium Custom Cursor
+  useEffect(() => {
+    if (window.matchMedia('(hover: none)').matches) return;
+
+    const cursorDot = document.querySelector('.custom-cursor-dot') as HTMLElement;
+    const cursorRing = document.querySelector('.custom-cursor-ring') as HTMLElement;
+
+    if (!cursorDot || !cursorRing) return;
+
+    gsap.set([cursorDot, cursorRing], { xPercent: -50, yPercent: -50, opacity: 0 });
+
+    const pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    const mouse = { x: pos.x, y: pos.y };
+
+    const setCursorDotX = gsap.quickSetter(cursorDot, 'x', 'px');
+    const setCursorDotY = gsap.quickSetter(cursorDot, 'y', 'px');
+    const setCursorRingX = gsap.quickSetter(cursorRing, 'x', 'px');
+    const setCursorRingY = gsap.quickSetter(cursorRing, 'y', 'px');
+
+    const onMouseMove = (e: MouseEvent) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      gsap.to([cursorDot, cursorRing], { opacity: 1, duration: 0.2, overwrite: 'auto' });
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+
+    const ticker = gsap.ticker.add(() => {
+      const dt = 1.0 - Math.pow(1.0 - 0.2, gsap.ticker.deltaRatio());
+      pos.x += (mouse.x - pos.x) * dt;
+      pos.y += (mouse.y - pos.y) * dt;
+
+      setCursorDotX(mouse.x);
+      setCursorDotY(mouse.y);
+      setCursorRingX(pos.x);
+      setCursorRingY(pos.y);
+    });
+
+    const onMouseOver = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest(
+        'button, a, .btn-hover, .interactive-hover, [role="button"]'
+      );
+      if (target) {
+        gsap.to(cursorRing, {
+          scale: 1.6,
+          backgroundColor: 'rgba(0, 242, 157, 0.08)',
+          borderColor: '#00F29D',
+          boxShadow: '0 0 15px rgba(0, 242, 157, 0.45)',
+          duration: 0.3,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        });
+        gsap.to(cursorDot, {
+          scale: 1.4,
+          backgroundColor: '#3DD1C4',
+          boxShadow: '0 0 8px rgba(61, 209, 196, 0.7)',
+          duration: 0.3,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        });
+      }
+    };
+
+    const onMouseOut = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest(
+        'button, a, .btn-hover, .interactive-hover, [role="button"]'
+      );
+      if (target) {
+        gsap.to(cursorRing, {
+          scale: 1,
+          backgroundColor: 'transparent',
+          borderColor: 'rgba(0, 242, 157, 0.4)',
+          boxShadow: 'none',
+          duration: 0.3,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        });
+        gsap.to(cursorDot, {
+          scale: 1,
+          backgroundColor: '#00F29D',
+          boxShadow: 'none',
+          duration: 0.3,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        });
+      }
+    };
+
+    const onMouseDown = () => {
+      gsap.to(cursorRing, {
+        scale: 0.75,
+        backgroundColor: 'rgba(0, 242, 157, 0.25)',
+        borderColor: '#00F29D',
+        boxShadow: '0 0 8px rgba(0, 242, 157, 0.2)',
+        duration: 0.15,
+        ease: 'power2.out',
+        overwrite: 'auto'
+      });
+      gsap.to(cursorDot, {
+        scale: 0.6,
+        backgroundColor: '#3DD1C4',
+        duration: 0.15,
+        ease: 'power2.out',
+        overwrite: 'auto'
+      });
+    };
+
+    const onMouseUp = () => {
+      const hoveredEl = document.querySelector(':hover');
+      const isOverInteractive = hoveredEl?.closest('button, a, .btn-hover, .interactive-hover, [role="button"]');
+      
+      gsap.to(cursorRing, {
+        scale: isOverInteractive ? 1.6 : 1,
+        backgroundColor: isOverInteractive ? 'rgba(0, 242, 157, 0.08)' : 'transparent',
+        borderColor: isOverInteractive ? '#00F29D' : 'rgba(0, 242, 157, 0.4)',
+        boxShadow: isOverInteractive ? '0 0 15px rgba(0, 242, 157, 0.45)' : 'none',
+        duration: 0.25,
+        ease: 'back.out(1.5)',
+        overwrite: 'auto'
+      });
+      gsap.to(cursorDot, {
+        scale: isOverInteractive ? 1.4 : 1,
+        backgroundColor: isOverInteractive ? '#3DD1C4' : '#00F29D',
+        boxShadow: isOverInteractive ? '0 0 8px rgba(61, 209, 196, 0.7)' : 'none',
+        duration: 0.25,
+        ease: 'back.out(1.5)',
+        overwrite: 'auto'
+      });
+    };
+
+    const onMouseLeave = () => {
+      gsap.to([cursorDot, cursorRing], { opacity: 0, duration: 0.25, overwrite: 'auto' });
+    };
+
+    window.addEventListener('mouseover', onMouseOver);
+    window.addEventListener('mouseout', onMouseOut);
+    window.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mouseleave', onMouseLeave);
+
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseover', onMouseOver);
+      window.removeEventListener('mouseout', onMouseOut);
+      window.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mouseleave', onMouseLeave);
+      gsap.ticker.remove(ticker);
+    };
+  }, []);
+
+  // Immersive Splash Screen Animation Timeline
+  useEffect(() => {
+    if (!showSplash) return;
+
+    const cursorDot = document.querySelector('.custom-cursor-dot') as HTMLElement;
+    const cursorRing = document.querySelector('.custom-cursor-ring') as HTMLElement;
+    if (cursorDot && cursorRing) {
+      gsap.set([cursorDot, cursorRing], { display: 'none' });
+    }
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        try {
+          sessionStorage.setItem('deenpulse_splashed', 'true');
+        } catch (e) {}
+        setShowSplash(false);
+        if (cursorDot && cursorRing) {
+          gsap.set([cursorDot, cursorRing], { display: 'block' });
+        }
+      }
+    });
+
+    tl.fromTo('.splash-logo-container',
+      { scale: 0.6, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.9, ease: 'elastic.out(1.1, 0.75)' }
+    );
+
+    tl.fromTo('.splash-title',
+      { y: 15, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.55, ease: 'power2.out' },
+      '-=0.45'
+    );
+
+    tl.fromTo('.splash-progress-container',
+      { opacity: 0 },
+      { opacity: 1, duration: 0.35 },
+      '-=0.3'
+    );
+
+    const statusMessages = [
+      'Registering astronomical computation algorithms...',
+      'Loading local coordinate cache...',
+      'Synchronizing Wear OS Data Client...',
+      'Initializing status bar Live Capsule overlays...',
+      'System ready. Launching DeenPulse...'
+    ];
+
+    const progressObj = { value: 0 };
+    const bar = document.querySelector('.splash-progress-bar') as HTMLElement;
+    const percentEl = document.querySelector('.splash-progress-percent') as HTMLElement;
+    const statusEl = document.querySelector('.splash-progress-status') as HTMLElement;
+    let currentMsgIdx = -1;
+
+    tl.to(progressObj, {
+      value: 100,
+      duration: 2.0,
+      ease: 'power1.inOut',
+      onUpdate: () => {
+        const val = Math.floor(progressObj.value);
+        if (bar) bar.style.width = `${val}%`;
+        if (percentEl) percentEl.textContent = `${val}%`;
+        
+        if (statusEl) {
+          let msgIdx = 0;
+          if (val >= 25 && val < 50) msgIdx = 1;
+          else if (val >= 50 && val < 75) msgIdx = 2;
+          else if (val >= 75 && val < 95) msgIdx = 3;
+          else if (val >= 95) msgIdx = 4;
+          
+          if (currentMsgIdx !== msgIdx) {
+            currentMsgIdx = msgIdx;
+            gsap.timeline()
+              .to(statusEl, { opacity: 0, y: -6, duration: 0.15, ease: 'power2.in' })
+              .call(() => {
+                statusEl.textContent = statusMessages[msgIdx];
+                gsap.set(statusEl, { y: 6 });
+              })
+              .to(statusEl, { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' });
+          }
+        }
+      }
+    });
+
+    tl.to('.splash-logo-container', {
+      scale: 0.9,
+      duration: 0.3,
+      ease: 'power2.in'
+    }, '+=0.15');
+
+    tl.to('.splash-screen', {
+      y: '-100%',
+      duration: 0.65,
+      ease: 'power3.inOut'
+    }, '-=0.1');
+
+  }, [showSplash]);
 
   // Interactive Bento states
   const [simCapsuleFormat, setSimCapsuleFormat] = useState<'name' | 'name_time' | 'time' | 'name_countdown'>('name_countdown');
@@ -357,6 +615,53 @@ export default function App() {
       <Footer key={isDocsPage ? 'docs' : isPrivacyPage ? 'privacy' : 'main'} isDocsPage={isDocsPage} />
 
       <ScrollToTop />
+
+      {/* Custom Cursor elements */}
+      <div className="custom-cursor-dot fixed w-2 h-2 bg-[#00F29D] rounded-full pointer-events-none z-[99999] opacity-0 hidden md:block left-0 top-0 shadow-[0_0_4px_#00F29D]" />
+      <div className="custom-cursor-ring fixed w-7 h-7 border border-[#00F29D]/40 rounded-full pointer-events-none z-[99999] opacity-0 hidden md:block left-0 top-0 backdrop-blur-[0.5px]" />
+
+      {/* Immersive Splash Screen */}
+      {showSplash && (
+        <div className="splash-screen fixed inset-0 bg-[#030606] z-[99999] flex flex-col items-center justify-center select-none">
+          {/* Ambient Glowing Backgrounds */}
+          <div className="absolute top-[20%] left-[20%] w-[60%] h-[60%] bg-[#00F29D]/5 rounded-full filter blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-[20%] right-[20%] w-[60%] h-[60%] bg-[#3DD1C4]/5 rounded-full filter blur-[120px] pointer-events-none" />
+          
+          <div className="flex flex-col items-center gap-6 text-center max-w-sm px-6">
+            {/* Animated Logo Container */}
+            <div className="splash-logo-container w-24 h-24 rounded-3xl bg-gradient-to-br from-[#00F29D] to-[#3DD1C4] p-[1.5px] shadow-[0_0_50px_rgba(0,242,157,0.25)] relative">
+              <div className="w-full h-full bg-[#030606] rounded-[22px] flex items-center justify-center p-4">
+                <img src={iconImg} alt="DeenPulse Logo" className="splash-logo w-full h-full object-contain" />
+              </div>
+            </div>
+            
+            {/* App Name */}
+            <div className="splash-title opacity-0 mt-2">
+              <span className="font-heading font-black text-3xl tracking-tight text-white">
+                Deen<span className="text-[#00F29D]">Pulse</span>
+              </span>
+              <p className="text-slate-500 text-[10px] font-semibold uppercase tracking-widest mt-1.5 font-mono">
+                Prayer Utility
+              </p>
+            </div>
+
+            {/* Progress Bar & Status Text */}
+            <div className="splash-progress-container w-64 mt-6 space-y-3 opacity-0">
+              <div className="w-full h-1 bg-white/[0.04] rounded-full overflow-hidden relative border border-white/[0.02]">
+                <div className="splash-progress-bar absolute left-0 top-0 h-full bg-gradient-to-r from-[#00F29D] to-[#3DD1C4] rounded-full" style={{ width: '0%' }} />
+              </div>
+              <div className="flex flex-col items-center justify-center gap-1.5 min-h-[30px]">
+                <span className="splash-progress-percent text-[10px] font-bold text-slate-500 font-mono">
+                  0%
+                </span>
+                <span className="splash-progress-status text-[10px] text-[#00F29D] font-mono leading-normal max-w-xs text-center transition-all duration-300">
+                  Initializing calculations...
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
