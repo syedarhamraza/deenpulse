@@ -16,7 +16,8 @@ import {
 import { IconButton } from './ui/IconButton';
 import { PremiumButton } from './ui/PremiumButton';
 
-import { useState, ComponentType } from 'react';
+import { useState, ComponentType, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 
 type SectionId = 'app-guide' | 'installation' | 'wireless-debugging' | 'geminiman';
 
@@ -31,6 +32,43 @@ interface DocSection {
 export function Docs() {
   const [activeSection, setActiveSection] = useState<SectionId>('app-guide');
   const [copiedText, setCopiedText] = useState<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ delay: 0.15 });
+
+      // Animate header elements
+      tl.fromTo('.docs-header-reveal > *',
+        { y: 25, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.65, stagger: 0.1, ease: 'power3.out' }
+      );
+
+      // Animate sidebar nav
+      tl.fromTo('.docs-sidebar-reveal',
+        { x: -30, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.75, ease: 'power3.out' },
+        '-=0.4'
+      );
+
+      // Animate main container panel
+      tl.fromTo('.docs-main-reveal',
+        { y: 35, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
+        '-=0.65'
+      );
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  useEffect(() => {
+    // Stagger animate current section content whenever active section changes
+    gsap.fromTo('.docs-content-animate > *',
+      { y: 15, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: 'power2.out', overwrite: 'auto' }
+    );
+  }, [activeSection]);
 
   const sections: DocSection[] = [
     {
@@ -70,10 +108,10 @@ export function Docs() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 pt-28 pb-16 relative z-10 min-h-screen">
+    <div ref={containerRef} className="max-w-7xl mx-auto px-6 pt-28 pb-16 relative z-10 min-h-screen">
       
       {/* Page Header */}
-      <div className="mb-12 text-center md:text-left">
+      <div className="mb-12 text-center md:text-left docs-header-reveal">
         <h1 className="font-heading font-extrabold text-4xl md:text-5xl text-white tracking-tight leading-tight">
           Technical <span className="bg-gradient-to-r from-[#00F29D] to-[#3DD1C4] bg-clip-text text-transparent">Documentation</span>
         </h1>
@@ -86,7 +124,7 @@ export function Docs() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         {/* Navigation Sidebar (Desktop) / Tab Bar (Mobile) */}
-        <aside className="lg:col-span-3 lg:sticky lg:top-24 bg-[#060a0a]/60 backdrop-blur-xl border border-white/[0.05] rounded-2xl p-2.5 flex flex-col gap-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
+        <aside className="lg:col-span-3 lg:sticky lg:top-24 bg-[#060a0a]/60 backdrop-blur-xl border border-white/[0.05] rounded-2xl p-2.5 flex flex-col gap-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.3)] docs-sidebar-reveal">
           <div className="hidden lg:block px-4.5 py-3 border-b border-white/[0.05] mb-2">
             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Navigation Table</span>
           </div>
@@ -115,11 +153,11 @@ export function Docs() {
         </aside>
 
         {/* Content Panel */}
-        <main className="lg:col-span-9 bg-[#060a0a]/40 backdrop-blur-md border border-white/[0.05] rounded-2xl p-6 md:p-8 shadow-[0_15px_45px_rgba(0,0,0,0.4)]">
+        <main className="lg:col-span-9 bg-[#060a0a]/40 backdrop-blur-md border border-white/[0.05] rounded-2xl p-6 md:p-8 shadow-[0_15px_45px_rgba(0,0,0,0.4)] docs-main-reveal">
           
           {/* 1. APP GUIDE SECTION */}
           {activeSection === 'app-guide' && (
-            <div className="space-y-8 animate-fadeIn">
+            <div className="space-y-8 docs-content-animate">
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                   <BookOpenIcon className="w-6 h-6 text-[#00F29D]" />
@@ -199,7 +237,7 @@ export function Docs() {
 
           {/* 2. STANDARD INSTALLATION */}
           {activeSection === 'installation' && (
-            <div className="space-y-6 animate-fadeIn">
+            <div className="space-y-6 docs-content-animate">
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                   <DownloadArrowIcon className="w-6 h-6 text-[#00F29D]" />
@@ -259,7 +297,7 @@ export function Docs() {
 
           {/* 3. WIRELESS DEBUGGING SETUP */}
           {activeSection === 'wireless-debugging' && (
-            <div className="space-y-6 animate-fadeIn">
+            <div className="space-y-6 docs-content-animate">
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                   <WifiIcon className="w-6 h-6 text-[#00F29D]" />
@@ -398,7 +436,7 @@ export function Docs() {
 
           {/* 4. GEMINIMAN SETUP */}
           {activeSection === 'geminiman' && (
-            <div className="space-y-6 animate-fadeIn">
+            <div className="space-y-6 docs-content-animate">
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                   <WatchIcon className="w-6 h-6 text-[#00F29D]" />

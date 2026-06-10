@@ -75,6 +75,7 @@ export default function App() {
       if (targetIsDifferent) {
         // Smooth slide-up transition overlay
         gsap.timeline()
+          .set('.page-transition-curtain', { display: 'flex', pointerEvents: 'auto', y: '100%' })
           .to('.page-transition-curtain', {
             y: '0%',
             duration: 0.5,
@@ -92,7 +93,12 @@ export default function App() {
             ease: 'power3.inOut'
           })
           .set('.page-transition-curtain', {
+            display: 'none',
+            pointerEvents: 'none',
             y: '100%' // reset below view
+          })
+          .call(() => {
+            ScrollTrigger.refresh();
           });
       } else {
         // Standard scrolling inside the same view
@@ -125,7 +131,12 @@ export default function App() {
         delay: 0.15
       })
       .set('.page-transition-curtain', {
+        display: 'none',
+        pointerEvents: 'none',
         y: '100%' // reset
+      })
+      .call(() => {
+        ScrollTrigger.refresh();
       });
   }, []);
 
@@ -200,6 +211,7 @@ export default function App() {
       ) as HTMLElement | null;
 
       if (!target) return;
+      if (target.classList.contains('prevent-gsap-hover')) return;
       if (target === currentHovered) return;
 
       currentHovered = target;
@@ -268,7 +280,7 @@ export default function App() {
     <div className="min-h-screen bg-[#030606] text-[#A6B2B2] selection:bg-[#00F29D]/30 selection:text-[#00F29D] font-sans antialiased relative pb-16 overflow-x-hidden">
 
       {/* Page Transition Curtain Overlay */}
-      <div className="page-transition-curtain fixed inset-0 bg-[#060a0a] z-[9999] pointer-events-none flex flex-col items-center justify-center border-y border-white/[0.04]" style={{ transform: 'translateY(0%)' }}>
+      <div className="page-transition-curtain fixed inset-0 bg-[#060a0a] z-[9999] flex flex-col items-center justify-center border-y border-white/[0.04]" style={{ transform: 'translateY(0%)' }}>
         <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-[#00F29D]/10 via-[#00F29D] to-[#3DD1C4]/10" />
         <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-[#00F29D]/10 via-[#00F29D] to-[#3DD1C4]/10" />
         <span className="font-heading font-extrabold text-2xl tracking-tight text-white select-none animate-pulse">
@@ -342,7 +354,7 @@ export default function App() {
         </>
       )}
 
-      <Footer isDocsPage={isDocsPage} />
+      <Footer key={isDocsPage ? 'docs' : isPrivacyPage ? 'privacy' : 'main'} isDocsPage={isDocsPage} />
 
       <ScrollToTop />
     </div>

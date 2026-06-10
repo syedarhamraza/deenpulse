@@ -1,12 +1,44 @@
 import { ShieldIcon, LockIcon, EyeOffIcon, FileTextIcon, CpuIcon, GlobeIcon } from './ui/icons';
 import { PremiumButton } from './ui/PremiumButton';
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 
 export function PrivacyAgreement() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ delay: 0.15 });
+
+      // Animate header elements
+      tl.fromTo('.privacy-header-reveal > *',
+        { y: 25, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.65, stagger: 0.1, ease: 'power3.out' }
+      );
+
+      // Animate main container card
+      tl.fromTo('.privacy-card-reveal',
+        { y: 35, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
+        '-=0.4'
+      );
+
+      // Animate inner sections sequentially
+      tl.fromTo('.privacy-item-reveal',
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.55, stagger: 0.08, ease: 'power2.out' },
+        '-=0.55'
+      );
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="max-w-4xl mx-auto px-6 pt-28 pb-16 relative z-10 min-h-screen">
+    <div ref={containerRef} className="max-w-4xl mx-auto px-6 pt-28 pb-16 relative z-10 min-h-screen">
 
       {/* Header */}
-      <div className="mb-12 text-center md:text-left">
+      <div className="mb-12 text-center md:text-left privacy-header-reveal">
         <h1 className="font-heading font-extrabold text-4xl md:text-5xl text-white tracking-tight leading-tight">
           Privacy <span className="bg-gradient-to-r from-[#00F29D] to-[#3DD1C4] bg-clip-text text-transparent">Agreement</span>
         </h1>
@@ -19,10 +51,10 @@ export function PrivacyAgreement() {
       </div>
 
       {/* Content Container */}
-      <div className="bg-[#060a0a]/40 backdrop-blur-md border border-white/[0.05] rounded-2xl p-6 md:p-8 shadow-[0_15px_45px_rgba(0,0,0,0.4)] space-y-8">
+      <div className="bg-[#060a0a]/40 backdrop-blur-md border border-white/[0.05] rounded-2xl p-6 md:p-8 shadow-[0_15px_45px_rgba(0,0,0,0.4)] space-y-8 privacy-card-reveal">
 
         {/* Intro */}
-        <div className="flex gap-4 items-start">
+        <div className="flex gap-4 items-start privacy-item-reveal">
           <div className="w-10 h-10 rounded-xl bg-[#00F29D]/10 flex items-center justify-center text-[#00F29D] shrink-0">
             <ShieldIcon className="w-5.5 h-5.5" />
           </div>
@@ -34,10 +66,10 @@ export function PrivacyAgreement() {
           </div>
         </div>
 
-        <div className="h-px bg-white/[0.05]" />
+        <div className="h-px bg-white/[0.05] privacy-item-reveal" />
 
         {/* Section 1: Location Data */}
-        <div className="space-y-4">
+        <div className="space-y-4 privacy-item-reveal">
           <h3 className="text-lg font-bold text-white flex items-center gap-2.5">
             <LockIcon className="w-5 h-5 text-[#3DD1C4]" />
             1. Geolocation and Location Calculation
@@ -57,7 +89,7 @@ export function PrivacyAgreement() {
         </div>
 
         {/* Section 2: Zero Trackers */}
-        <div className="space-y-4">
+        <div className="space-y-4 privacy-item-reveal">
           <h3 className="text-lg font-bold text-white flex items-center gap-2.5">
             <EyeOffIcon className="w-5 h-5 text-[#3DD1C4]" />
             2. Ad and Tracker Free Policy
@@ -73,7 +105,7 @@ export function PrivacyAgreement() {
         </div>
 
         {/* Section 3: Wear OS Companion */}
-        <div className="space-y-4">
+        <div className="space-y-4 privacy-item-reveal">
           <h3 className="text-lg font-bold text-white flex items-center gap-2.5">
             <GlobeIcon className="w-5 h-5 text-[#3DD1C4]" />
             3. Smartwatch Companion Synchronization
@@ -88,7 +120,7 @@ export function PrivacyAgreement() {
         </div>
 
         {/* Section 4: GNU GPL License */}
-        <div className="space-y-4">
+        <div className="space-y-4 privacy-item-reveal">
           <h3 className="text-lg font-bold text-white flex items-center gap-2.5">
             <FileTextIcon className="w-5 h-5 text-[#3DD1C4]" />
             4. Licensing and Source Code Verification
