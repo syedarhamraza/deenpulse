@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { Bell, Compass, WifiOff, Layers, Activity, RefreshCw } from 'lucide-react';
+import { BellIcon, CompassIcon, WifiOffIcon, LayersIcon, ActivityIcon } from './ui/icons';
 import { gsap } from 'gsap';
+import { PremiumButton } from './ui/PremiumButton';
 
 interface FeaturesProps {
   simCapsuleFormat: 'name' | 'name_time' | 'time' | 'name_countdown';
@@ -174,7 +175,7 @@ export function Features({
           <div>
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-[#00F29D]/10 border border-[#00F29D]/25 flex items-center justify-center text-[#00F29D]">
-                <Bell className="w-5 h-5" />
+                <BellIcon className="w-5 h-5" />
               </div>
               <div className="text-left">
                 <h3 className="font-heading text-xl font-extrabold text-white">Live Status Bar Capsule</h3>
@@ -199,7 +200,7 @@ export function Features({
               
               {/* Simulated Notch / Dynamic Capsule Pill */}
               <div ref={capsuleRef} className="absolute left-1/2 -translate-x-1/2 bg-[#0c1212] border border-white/15 h-7 sm:h-8 px-2.5 sm:px-4 rounded-full flex items-center justify-center gap-1.5 sm:gap-2 shadow-[0_0_15px_rgba(0,242,157,0.1)]">
-                <Compass className="w-3.5 h-3.5 text-[#00F29D] animate-spin-slow flex-shrink-0" />
+                <CompassIcon className="w-3.5 h-3.5 text-[#00F29D] animate-spin-slow flex-shrink-0" />
                 <span ref={capsuleTextRef} className="text-[10px] sm:text-xs font-bold text-white font-mono whitespace-nowrap inline-block">
                   {simCapsuleFormat === 'name' && 'Fajr'}
                   {simCapsuleFormat === 'name_time' && 'Fajr at 04:15 AM'}
@@ -209,7 +210,7 @@ export function Features({
               </div>
 
               <div className="flex items-center gap-1 sm:gap-1.5 text-white/50 text-[10px] sm:text-xs">
-                <WifiOff className="w-3.5 h-3.5 text-white/30" />
+                <WifiOffIcon className="w-3.5 h-3.5 text-white/30" />
                 <span className="font-mono">82%</span>
               </div>
             </div>
@@ -239,7 +240,7 @@ export function Features({
           <div>
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-[#3DD1C4]/10 border border-[#3DD1C4]/25 flex items-center justify-center text-[#3DD1C4]">
-                <Layers className="w-5 h-5" />
+                <LayersIcon className="w-5 h-5" />
               </div>
               <div className="text-left">
                 <h3 className="font-heading text-xl font-extrabold text-white">Wear OS Companion</h3>
@@ -272,13 +273,16 @@ export function Features({
               ))}
             </div>
 
-            <button
+            <PremiumButton
+              variant="secondary"
               onClick={triggerMockSync}
-              className="btn-hover w-full mt-2 py-2 bg-[#0c1212] hover:bg-[#3DD1C4]/10 hover:text-[#3DD1C4] border border-white/[0.05] hover:border-[#3DD1C4]/30 text-slate-300 font-bold rounded-lg transition-colors flex items-center justify-center gap-2 text-xs"
+              icon="sync"
+              size="sm"
+              fullWidth
+              className="mt-2"
             >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>Simulate Sync Broadcast</span>
-            </button>
+              Simulate Sync Broadcast
+            </PremiumButton>
           </div>
         </div>
 
@@ -289,7 +293,7 @@ export function Features({
           <div>
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-amber-400/10 border border-amber-400/25 flex items-center justify-center text-amber-400">
-                <Activity className="w-5 h-5" />
+                <ActivityIcon className="w-5 h-5" />
               </div>
               <div className="text-left">
                 <h3 className="font-heading text-xl font-extrabold text-white">OEM Custom Styles Handling</h3>
@@ -354,7 +358,7 @@ export function Features({
           <div>
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-[#00F29D]/10 border border-[#00F29D]/25 flex items-center justify-center text-[#00F29D]">
-                <WifiOff className="w-5 h-5" />
+                <WifiOffIcon className="w-5 h-5" />
               </div>
               <div className="text-left">
                 <h3 className="font-heading text-xl font-extrabold text-white">Fetch & Kill Geolocation</h3>

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { ChevronDown, ChevronRight, Code, Copy, Check } from 'lucide-react';
+import { ChevronDownIcon, ChevronRightIcon, CodeIcon, CopyIcon, CheckIcon } from './ui/icons';
 import { gsap } from 'gsap';
 import { highlightCode } from '../utils/codeHighlighter';
 import { fileContents } from '../constants';
@@ -126,7 +126,7 @@ export function CodeBrowser({
                 onClick={() => toggleNode('android')}
                 className="flex items-center gap-1.5 hover:bg-white/[0.03] p-1.5 rounded-lg cursor-pointer transition-colors"
               >
-                {expandedNodes['android'] ? <ChevronDown className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRight className="w-3.5 h-3.5 text-slate-500" />}
+                {expandedNodes['android'] ? <ChevronDownIcon className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRightIcon className="w-3.5 h-3.5 text-slate-500" />}
                 <span className="text-amber-400 text-xs">📁</span>
                 <span className="font-bold text-slate-200">android</span>
               </div>
@@ -140,7 +140,7 @@ export function CodeBrowser({
                       onClick={() => toggleNode('android/app')}
                       className="flex items-center gap-1.5 hover:bg-white/[0.03] p-1.5 rounded-lg cursor-pointer transition-colors"
                     >
-                      {expandedNodes['android/app'] ? <ChevronDown className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRight className="w-3.5 h-3.5 text-slate-500" />}
+                      {expandedNodes['android/app'] ? <ChevronDownIcon className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRightIcon className="w-3.5 h-3.5 text-slate-500" />}
                       <span className="text-amber-400 text-xs">📁</span>
                       <span className="text-slate-300">app</span>
                     </div>
@@ -175,7 +175,7 @@ export function CodeBrowser({
                 onClick={() => toggleNode('src')}
                 className="flex items-center gap-1.5 hover:bg-white/[0.03] p-1.5 rounded-lg cursor-pointer transition-colors"
               >
-                {expandedNodes['src'] ? <ChevronDown className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRight className="w-3.5 h-3.5 text-slate-500" />}
+                {expandedNodes['src'] ? <ChevronDownIcon className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRightIcon className="w-3.5 h-3.5 text-slate-500" />}
                 <span className="text-amber-400 text-xs">📁</span>
                 <span className="font-bold text-slate-200">src</span>
               </div>
@@ -188,7 +188,7 @@ export function CodeBrowser({
                       onClick={() => toggleNode('src/hooks')}
                       className="flex items-center gap-1.5 hover:bg-white/[0.03] p-1.5 rounded-lg cursor-pointer transition-colors"
                     >
-                      {expandedNodes['src/hooks'] ? <ChevronDown className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRight className="w-3.5 h-3.5 text-slate-500" />}
+                      {expandedNodes['src/hooks'] ? <ChevronDownIcon className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRightIcon className="w-3.5 h-3.5 text-slate-500" />}
                       <span className="text-amber-400 text-xs">📁</span>
                       <span className="text-slate-300">hooks</span>
                     </div>
@@ -218,7 +218,7 @@ export function CodeBrowser({
                       onClick={() => toggleNode('src/utils')}
                       className="flex items-center gap-1.5 hover:bg-white/[0.03] p-1.5 rounded-lg cursor-pointer transition-colors"
                     >
-                      {expandedNodes['src/utils'] ? <ChevronDown className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRight className="w-3.5 h-3.5 text-slate-500" />}
+                      {expandedNodes['src/utils'] ? <ChevronDownIcon className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRightIcon className="w-3.5 h-3.5 text-slate-500" />}
                       <span className="text-amber-400 text-xs">📁</span>
                       <span className="text-slate-300">utils</span>
                     </div>
@@ -256,7 +256,7 @@ export function CodeBrowser({
           <div className="bg-[#050808]/70 px-4 border-b border-white/[0.05] flex items-center justify-between h-12">
             <div className="flex gap-1">
               <div className="bg-[#090D0D] border-x border-t border-white/[0.06] px-4 h-12 flex items-center gap-2 text-xs font-mono text-white font-semibold rounded-t-lg">
-                <Code className="w-3.5 h-3.5 text-[#00F29D]" />
+                <CodeIcon className="w-3.5 h-3.5 text-[#00F29D]" />
                 <span>{activeFile}</span>
               </div>
             </div>
@@ -266,7 +266,7 @@ export function CodeBrowser({
                 onClick={copyToClipboard}
                 className="btn-hover px-2.5 py-1 bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.05] text-slate-400 hover:text-white rounded-lg flex items-center gap-1.5 text-[10px] font-mono transition-colors uppercase font-semibold"
               >
-                {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copied ? <CheckIcon className="w-3.5 h-3.5 text-emerald-400" /> : <CopyIcon className="w-3.5 h-3.5" />}
                 <span>{copied ? 'Copied' : 'Copy'}</span>
               </button>
               <span className="text-[10px] font-mono text-slate-500 bg-white/[0.04] px-2 py-1 rounded">

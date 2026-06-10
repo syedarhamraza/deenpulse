@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUpIcon } from './ui/icons';
 import { motion, AnimatePresence } from 'motion/react';
 
 export function ScrollToTop() {
@@ -47,6 +47,8 @@ export function ScrollToTop() {
               damping: 18
             }
           }}
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.96 }}
           exit={{ 
             opacity: 0, 
             scale: 0.7, 
@@ -56,7 +58,7 @@ export function ScrollToTop() {
             }
           }}
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 w-12 h-12 rounded-2xl bg-[#0c1212]/80 backdrop-blur-md border border-white/[0.08] hover:border-[#00F29D]/40 text-[#00F29D] hover:text-white flex items-center justify-center shadow-[0_15px_35px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] transition-colors z-50 btn-hover group"
+          className="fixed bottom-6 right-6 w-12 h-12 rounded-2xl bg-[#0c1212]/80 backdrop-blur-md border border-white/[0.08] hover:border-[#00F29D]/40 text-[#00F29D] hover:text-white flex items-center justify-center shadow-[0_15px_35px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] transition-colors z-50 prevent-gsap-hover group"
           title="Scroll to Top"
         >
           {/* Squircle Scroll Progress Ring */}
@@ -82,7 +84,7 @@ export function ScrollToTop() {
             />
           </svg>
           
-          <ArrowUp className="w-4.5 h-4.5 group-hover:-translate-y-1 transition-transform duration-300 relative z-10" />
+          <ArrowUpIcon className="w-4.5 h-4.5 group-hover:-translate-y-1 transition-transform duration-300 relative z-10" />
         </motion.button>
       )}
     </AnimatePresence>

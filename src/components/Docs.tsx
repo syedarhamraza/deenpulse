@@ -1,21 +1,24 @@
-import { useState, ComponentType } from 'react';
 import { 
-  BookOpen, 
-  Download, 
-  Wifi, 
-  Smartphone, 
-  Watch, 
-  Settings, 
-  Terminal, 
-  ExternalLink, 
-  AlertTriangle, 
-  CheckCircle, 
-  Copy, 
-  Check, 
-  Info, 
-  Cpu, 
-  Lock 
-} from 'lucide-react';
+  BookOpenIcon, 
+  DownloadArrowIcon, 
+  WifiIcon, 
+  SmartphoneIcon, 
+  WatchIcon, 
+  SettingsIcon, 
+  TerminalIcon, 
+  AlertTriangleIcon, 
+  CheckCircleIcon, 
+  CheckIcon, 
+  InfoIcon, 
+  CpuIcon, 
+  LockIcon 
+} from './ui/icons';
+import { IconButton } from './ui/IconButton';
+import { PremiumButton } from './ui/PremiumButton';
+
+import { useState, ComponentType, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { motion } from 'motion/react';
 
 type SectionId = 'app-guide' | 'installation' | 'wireless-debugging' | 'geminiman';
 
@@ -30,34 +33,71 @@ interface DocSection {
 export function Docs() {
   const [activeSection, setActiveSection] = useState<SectionId>('app-guide');
   const [copiedText, setCopiedText] = useState<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ delay: 0.15 });
+
+      // Animate header elements
+      tl.fromTo('.docs-header-reveal > *',
+        { y: 25, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.65, stagger: 0.1, ease: 'power3.out' }
+      );
+
+      // Animate sidebar nav
+      tl.fromTo('.docs-sidebar-reveal',
+        { x: -30, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.75, ease: 'power3.out' },
+        '-=0.4'
+      );
+
+      // Animate main container panel
+      tl.fromTo('.docs-main-reveal',
+        { y: 35, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
+        '-=0.65'
+      );
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  useEffect(() => {
+    // Stagger animate current section content whenever active section changes
+    gsap.fromTo('.docs-content-animate > *',
+      { y: 15, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: 'power2.out', overwrite: 'auto' }
+    );
+  }, [activeSection]);
 
   const sections: DocSection[] = [
     {
       id: 'app-guide',
       title: 'DeenPulse Application Guide',
       shortTitle: 'App Guide',
-      icon: BookOpen,
+      icon: BookOpenIcon,
       description: 'Understand the main features, offline calculation engine, and system permissions.'
     },
     {
       id: 'installation',
       title: 'Standard Installation Guide',
       shortTitle: 'Install Phone APK',
-      icon: Download,
+      icon: DownloadArrowIcon,
       description: 'How to download and install DeenPulse on your Android mobile device.'
     },
     {
       id: 'wireless-debugging',
       title: 'Wear OS Sideloading via Wireless Debugging',
       shortTitle: 'Install Watch APK',
-      icon: Wifi,
+      icon: WifiIcon,
       description: 'Step-by-step instructions to pair and sideload the watch companion via Wi-Fi ADB.'
     },
     {
       id: 'geminiman',
       title: 'Wear OS Sideloading via Geminiman App',
       shortTitle: 'Geminiman Manager',
-      icon: Smartphone,
+      icon: SmartphoneIcon,
       description: 'Install the companion watch app directly from your phone using Geminiman.'
     }
   ];
@@ -69,10 +109,10 @@ export function Docs() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 pt-28 pb-16 relative z-10 min-h-screen">
+    <div ref={containerRef} className="max-w-7xl mx-auto px-6 pt-28 pb-16 relative z-10 min-h-screen">
       
       {/* Page Header */}
-      <div className="mb-12 text-center md:text-left">
+      <div className="mb-12 text-center md:text-left docs-header-reveal">
         <h1 className="font-heading font-extrabold text-4xl md:text-5xl text-white tracking-tight leading-tight">
           Technical <span className="bg-gradient-to-r from-[#00F29D] to-[#3DD1C4] bg-clip-text text-transparent">Documentation</span>
         </h1>
@@ -85,13 +125,13 @@ export function Docs() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         {/* Navigation Sidebar (Desktop) / Tab Bar (Mobile) */}
-        <aside className="lg:col-span-3 lg:sticky lg:top-24 bg-[#060a0a]/60 backdrop-blur-xl border border-white/[0.05] rounded-2xl p-2.5 flex flex-col gap-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
+        <aside className="lg:col-span-3 lg:sticky lg:top-24 bg-[#060a0a]/60 backdrop-blur-xl border border-white/[0.05] rounded-2xl p-2.5 flex flex-col gap-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.3)] docs-sidebar-reveal">
           <div className="hidden lg:block px-4.5 py-3 border-b border-white/[0.05] mb-2">
             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Navigation Table</span>
           </div>
           
           {/* Menu Items */}
-          <div className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 gap-1.5 scrollbar-none">
+          <div className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 gap-1.5 scrollbar-none relative">
             {sections.map((sec) => {
               const Icon = sec.icon;
               const isActive = activeSection === sec.id;
@@ -99,14 +139,19 @@ export function Docs() {
                 <button
                   key={sec.id}
                   onClick={() => setActiveSection(sec.id)}
-                  className={`flex items-center gap-3 px-4 py-3 text-xs md:text-sm font-semibold rounded-xl text-left whitespace-nowrap lg:whitespace-normal transition-all duration-300 ${
-                    isActive 
-                      ? 'bg-gradient-to-r from-[#00F29D]/10 to-[#3DD1C4]/10 border border-[#00F29D]/20 text-[#00F29D] shadow-[0_0_15px_rgba(0,242,157,0.05)]' 
-                      : 'border border-transparent text-slate-400 hover:text-white hover:bg-white/[0.02]'
+                  className={`relative flex items-center gap-3 px-4 py-3 text-xs md:text-sm font-semibold rounded-xl text-left whitespace-nowrap lg:whitespace-normal transition-colors duration-300 ${
+                    isActive ? 'text-[#00F29D]' : 'text-slate-400 hover:text-white hover:bg-white/[0.02]'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#00F29D]' : 'text-slate-500'}`} />
-                  <span>{sec.shortTitle}</span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeDocSection"
+                      className="absolute inset-0 bg-gradient-to-r from-[#00F29D]/10 to-[#3DD1C4]/10 border border-[#00F29D]/20 rounded-xl shadow-[0_0_15px_rgba(0,242,157,0.05)]"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <Icon className={`w-4 h-4 shrink-0 relative z-10 transition-colors duration-300 ${isActive ? 'text-[#00F29D]' : 'text-slate-500'}`} />
+                  <span className="relative z-10">{sec.shortTitle}</span>
                 </button>
               );
             })}
@@ -114,14 +159,14 @@ export function Docs() {
         </aside>
 
         {/* Content Panel */}
-        <main className="lg:col-span-9 bg-[#060a0a]/40 backdrop-blur-md border border-white/[0.05] rounded-2xl p-6 md:p-8 shadow-[0_15px_45px_rgba(0,0,0,0.4)]">
+        <main className="lg:col-span-9 bg-[#060a0a]/40 backdrop-blur-md border border-white/[0.05] rounded-2xl p-4 sm:p-6 md:p-8 shadow-[0_15px_45px_rgba(0,0,0,0.4)] docs-main-reveal">
           
           {/* 1. APP GUIDE SECTION */}
           {activeSection === 'app-guide' && (
-            <div className="space-y-8 animate-fadeIn">
+            <div className="space-y-8 docs-content-animate">
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <BookOpen className="w-6 h-6 text-[#00F29D]" />
+                  <BookOpenIcon className="w-6 h-6 text-[#00F29D]" />
                   DeenPulse Application Guide
                 </h2>
                 <div className="h-px bg-gradient-to-r from-[#00F29D]/30 to-transparent my-4" />
@@ -134,7 +179,7 @@ export function Docs() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="bg-[#0c1212]/50 border border-white/[0.04] p-5 rounded-xl space-y-3">
                   <div className="w-8 h-8 rounded-lg bg-[#00F29D]/10 flex items-center justify-center text-[#00F29D]">
-                    <Cpu className="w-4.5 h-4.5" />
+                    <CpuIcon className="w-4.5 h-4.5" />
                   </div>
                   <h3 className="font-semibold text-white text-base">Offline Calculation Engine</h3>
                   <p className="text-slate-400 text-xs md:text-sm leading-relaxed">
@@ -144,7 +189,7 @@ export function Docs() {
 
                 <div className="bg-[#0c1212]/50 border border-white/[0.04] p-5 rounded-xl space-y-3">
                   <div className="w-8 h-8 rounded-lg bg-[#3DD1C4]/10 flex items-center justify-center text-[#3DD1C4]">
-                    <Settings className="w-4.5 h-4.5" />
+                    <SettingsIcon className="w-4.5 h-4.5" />
                   </div>
                   <h3 className="font-semibold text-white text-base">Flexible Configurations</h3>
                   <p className="text-slate-400 text-xs md:text-sm leading-relaxed">
@@ -180,7 +225,7 @@ export function Docs() {
 
               {/* Battery Optimizations */}
               <div className="bg-[#241c10]/20 border border-amber-500/20 p-5 rounded-xl flex items-start gap-4">
-                <AlertTriangle className="w-6 h-6 text-amber-500 shrink-0 mt-0.5" />
+                <AlertTriangleIcon className="w-6 h-6 text-amber-500 shrink-0 mt-0.5" />
                 <div className="space-y-2">
                   <h4 className="font-bold text-amber-300 text-sm md:text-base">OEM Battery Whitelisting (Critical)</h4>
                   <p className="text-slate-300 text-xs md:text-sm leading-relaxed">
@@ -198,10 +243,10 @@ export function Docs() {
 
           {/* 2. STANDARD INSTALLATION */}
           {activeSection === 'installation' && (
-            <div className="space-y-6 animate-fadeIn">
+            <div className="space-y-6 docs-content-animate">
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <Download className="w-6 h-6 text-[#00F29D]" />
+                  <DownloadArrowIcon className="w-6 h-6 text-[#00F29D]" />
                   Standard Installation Guide
                 </h2>
                 <div className="h-px bg-gradient-to-r from-[#00F29D]/30 to-transparent my-4" />
@@ -245,7 +290,7 @@ export function Docs() {
 
               {/* Companion Tip Info */}
               <div className="bg-[#0c1212]/50 border border-white/[0.05] p-5 rounded-xl flex items-start gap-4">
-                <Info className="w-5 h-5 text-[#3DD1C4] shrink-0 mt-0.5" />
+                <InfoIcon className="w-5 h-5 text-[#3DD1C4] shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <h4 className="font-semibold text-white text-sm">Need the Companion Watch App?</h4>
                   <p className="text-slate-400 text-xs md:text-sm leading-relaxed">
@@ -258,10 +303,10 @@ export function Docs() {
 
           {/* 3. WIRELESS DEBUGGING SETUP */}
           {activeSection === 'wireless-debugging' && (
-            <div className="space-y-6 animate-fadeIn">
+            <div className="space-y-6 docs-content-animate">
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <Wifi className="w-6 h-6 text-[#00F29D]" />
+                  <WifiIcon className="w-6 h-6 text-[#00F29D]" />
                   Wear OS Installation via Wireless Debugging
                 </h2>
                 <div className="h-px bg-gradient-to-r from-[#00F29D]/30 to-transparent my-4" />
@@ -301,15 +346,22 @@ export function Docs() {
                     <p>Open your command line/terminal on your PC (ensure Android SDK Platform Tools are installed) and run the pairing command:</p>
                     
                     {/* Command Box */}
-                    <div className="bg-[#030606] border border-white/[0.05] rounded-xl p-3.5 flex items-center justify-between font-mono text-xs text-slate-300 select-all relative group">
-                      <span className="overflow-x-auto whitespace-nowrap pr-4">adb pair 192.168.1.100:41235 123456</span>
-                      <button 
-                        onClick={() => handleCopy('adb pair 192.168.1.100:41235 123456', 'pair')}
-                        className="p-1.5 bg-white/5 hover:bg-[#00F29D] border border-white/10 hover:border-transparent text-slate-400 hover:text-black rounded-lg transition-all absolute right-3"
-                        title="Copy Command"
-                      >
-                        {copiedText === 'pair' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                      </button>
+                    <div className="bg-[#030606] border border-white/[0.05] rounded-xl p-3 sm:p-3.5 flex items-center justify-between font-mono text-xs text-slate-300 select-all relative group overflow-hidden">
+                      <span className="overflow-x-auto whitespace-nowrap pr-14 scrollbar-none">adb pair 192.168.1.100:41235 123456</span>
+                      <div className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 bg-[#030606] pl-2 py-1 flex items-center justify-center">
+                        {copiedText === 'pair' ? (
+                          <span className="flex w-8 h-8 items-center justify-center text-[#00F29D]">
+                            <CheckIcon className="w-3.5 h-3.5" />
+                          </span>
+                        ) : (
+                          <IconButton
+                            onClick={() => handleCopy('adb pair 192.168.1.100:41235 123456', 'pair')}
+                            icon="copy"
+                            size="sm"
+                            title="Copy Command"
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -322,15 +374,22 @@ export function Docs() {
                     <p>Connect your PC via ADB command:</p>
 
                     {/* Command Box */}
-                    <div className="bg-[#030606] border border-white/[0.05] rounded-xl p-3.5 flex items-center justify-between font-mono text-xs text-slate-300 select-all relative group">
-                      <span className="overflow-x-auto whitespace-nowrap pr-4">adb connect 192.168.1.100:34567</span>
-                      <button 
-                        onClick={() => handleCopy('adb connect 192.168.1.100:34567', 'connect')}
-                        className="p-1.5 bg-white/5 hover:bg-[#00F29D] border border-white/10 hover:border-transparent text-slate-400 hover:text-black rounded-lg transition-all absolute right-3"
-                        title="Copy Command"
-                      >
-                        {copiedText === 'connect' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                      </button>
+                    <div className="bg-[#030606] border border-white/[0.05] rounded-xl p-3 sm:p-3.5 flex items-center justify-between font-mono text-xs text-slate-300 select-all relative group overflow-hidden">
+                      <span className="overflow-x-auto whitespace-nowrap pr-14 scrollbar-none">adb connect 192.168.1.100:34567</span>
+                      <div className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 bg-[#030606] pl-2 py-1 flex items-center justify-center">
+                        {copiedText === 'connect' ? (
+                          <span className="flex w-8 h-8 items-center justify-center text-[#00F29D]">
+                            <CheckIcon className="w-3.5 h-3.5" />
+                          </span>
+                        ) : (
+                          <IconButton
+                            onClick={() => handleCopy('adb connect 192.168.1.100:34567', 'connect')}
+                            icon="copy"
+                            size="sm"
+                            title="Copy Command"
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -342,19 +401,26 @@ export function Docs() {
                     <p>Download <code className="font-mono text-slate-300 bg-white/5 px-1 py-0.5 rounded">wear-release.apk</code> to your PC. In your terminal, run the installer command pointing to your downloaded file path:</p>
 
                     {/* Command Box */}
-                    <div className="bg-[#030606] border border-white/[0.05] rounded-xl p-3.5 flex items-center justify-between font-mono text-xs text-slate-300 select-all relative group">
-                      <span className="overflow-x-auto whitespace-nowrap pr-4">adb install wear-release.apk</span>
-                      <button 
-                        onClick={() => handleCopy('adb install wear-release.apk', 'install')}
-                        className="p-1.5 bg-white/5 hover:bg-[#00F29D] border border-white/10 hover:border-transparent text-slate-400 hover:text-black rounded-lg transition-all absolute right-3"
-                        title="Copy Command"
-                      >
-                        {copiedText === 'install' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                      </button>
+                    <div className="bg-[#030606] border border-white/[0.05] rounded-xl p-3 sm:p-3.5 flex items-center justify-between font-mono text-xs text-slate-300 select-all relative group overflow-hidden">
+                      <span className="overflow-x-auto whitespace-nowrap pr-14 scrollbar-none">adb install wear-release.apk</span>
+                      <div className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 bg-[#030606] pl-2 py-1 flex items-center justify-center">
+                        {copiedText === 'install' ? (
+                          <span className="flex w-8 h-8 items-center justify-center text-[#00F29D]">
+                            <CheckIcon className="w-3.5 h-3.5" />
+                          </span>
+                        ) : (
+                          <IconButton
+                            onClick={() => handleCopy('adb install wear-release.apk', 'install')}
+                            icon="copy"
+                            size="sm"
+                            title="Copy Command"
+                          />
+                        )}
+                      </div>
                     </div>
 
                     <p className="text-emerald-400 font-semibold flex items-center gap-1.5 text-xs pt-1.5">
-                      <CheckCircle className="w-4 h-4 shrink-0" />
+                      <CheckCircleIcon className="w-4 h-4 shrink-0" />
                       Once terminal outputs "Success", the app is on your watch!
                     </p>
                   </div>
@@ -363,7 +429,7 @@ export function Docs() {
 
               {/* Clean up Warning */}
               <div className="bg-[#241c10]/20 border border-amber-500/20 p-5 rounded-xl flex items-start gap-4">
-                <AlertTriangle className="w-6 h-6 text-amber-500 shrink-0 mt-0.5" />
+                <AlertTriangleIcon className="w-6 h-6 text-amber-500 shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <h4 className="font-bold text-amber-300 text-sm">Conserve Watch Battery</h4>
                   <p className="text-slate-300 text-xs md:text-sm leading-relaxed">
@@ -376,10 +442,10 @@ export function Docs() {
 
           {/* 4. GEMINIMAN SETUP */}
           {activeSection === 'geminiman' && (
-            <div className="space-y-6 animate-fadeIn">
+            <div className="space-y-6 docs-content-animate">
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <Watch className="w-6 h-6 text-[#00F29D]" />
+                  <WatchIcon className="w-6 h-6 text-[#00F29D]" />
                   Wear OS Sideloading via Geminiman Manager
                 </h2>
                 <div className="h-px bg-gradient-to-r from-[#00F29D]/30 to-transparent my-4" />
@@ -397,15 +463,17 @@ export function Docs() {
                     <p className="text-slate-400 text-xs md:text-sm leading-relaxed">
                       Download the watch companion package <code className="font-mono text-xs text-[#3DD1C4] bg-white/5 px-1 py-0.5 rounded">wear-release.apk</code> onto your phone's downloads folder. Then, search and install <strong className="text-white">Geminiman WearOS Manager</strong> from the Google Play Store on your smartphone.
                     </p>
-                    <a 
-                      href="https://play.google.com/store/apps/details?id=com.geminiman.wearosmanager" 
-                      target="_blank" 
-                      rel="noreferrer" 
-                      className="inline-flex items-center gap-1.5 text-xs text-[#00F29D] hover:underline pt-1"
+                    <PremiumButton
+                      variant="secondary"
+                      href="https://play.google.com/store/apps/details?id=com.geminiman.wearosmanager"
+                      target="_blank"
+                      rel="noreferrer"
+                      icon="external"
+                      size="sm"
+                      className="inline-block mt-2"
                     >
-                      <span>Get Geminiman on Play Store</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
+                      Get Geminiman on Play Store
+                    </PremiumButton>
                   </div>
                 </div>
 
@@ -453,7 +521,7 @@ export function Docs() {
 
               {/* Clean up Info */}
               <div className="bg-[#0c1212]/50 border border-white/[0.05] p-5 rounded-xl flex items-start gap-4">
-                <Info className="w-5 h-5 text-[#3DD1C4] shrink-0 mt-0.5" />
+                <InfoIcon className="w-5 h-5 text-[#3DD1C4] shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <h4 className="font-semibold text-white text-sm">Turn Off Wireless Debugging</h4>
                   <p className="text-slate-400 text-xs md:text-sm leading-relaxed">

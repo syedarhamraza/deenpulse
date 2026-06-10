@@ -10,6 +10,18 @@ export interface PrayerTimes {
   Isha: string;
 }
 
+export interface GitHubRelease {
+  version: string;
+  publishedAt: string | null;
+  body: string | null;
+  mobileUrl: string;
+  mobileSize: string | null;
+  mobileName: string;
+  watchUrl: string;
+  watchSize: string | null;
+  watchName: string;
+}
+
 export interface ReleaseInfo {
   version: string | null;
   publishedAt: string | null;
@@ -21,6 +33,8 @@ export interface ReleaseInfo {
   watchName: string;
   loading: boolean;
   error: boolean;
+  body?: string | null;
+  releases: GitHubRelease[];
 }
 
 export interface FileContent {

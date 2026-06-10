@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type FC } from 'react';
 import iconImg from '../assets/icon.png';
 import { gsap } from 'gsap';
 
-export function Footer({ isDocsPage = false }: { isDocsPage?: boolean }) {
+export const Footer: FC<{ isDocsPage?: boolean }> = function Footer({ isDocsPage = false }) {
   const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {

@@ -78,3 +78,25 @@ h1, h2, h3, h4, .font-heading {
   display: none !important;
 }
 
+/* Hide scrollbars for chrome/safari/firefox/edge */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Custom Cursor Hiding on Desktops with fine pointers */
+@media (hover: hover) and (pointer: fine) {
+  body, 
+  a, 
+  button, 
+  [role="button"],
+  .btn-hover,
+  .interactive-hover {
+    cursor: none !important;
+  }
+}
+
+

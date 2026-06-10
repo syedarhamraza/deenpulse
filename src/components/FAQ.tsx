@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { CheckCircle2, ChevronDown } from 'lucide-react';
+import { CheckCircleIcon, ChevronDownIcon } from './ui/icons';
 import { motion, AnimatePresence } from 'motion/react';
 import { gsap } from 'gsap';
 
@@ -52,7 +52,7 @@ export function FAQ({ openFaq, setOpenFaq }: FAQProps) {
     <section ref={sectionRef} id="faq" className="py-24 px-6 max-w-4xl mx-auto relative z-10 scroll-mt-20 text-left">
       <div className="faq-header-reveal text-center max-w-3xl mx-auto mb-16">
         <div className="inline-flex items-center gap-2 bg-[#3DD1C4]/10 text-[#3DD1C4] font-bold text-xs uppercase px-3 py-1.5 rounded-full mb-4 border border-[#3DD1C4]/20 font-mono">
-          <CheckCircle2 className="w-3.5 h-3.5" />
+          <CheckCircleIcon className="w-3.5 h-3.5" />
           <span>FAQ</span>
         </div>
         <h2 className="font-heading text-4xl sm:text-5xl font-black text-white mb-4 tracking-tight">
@@ -96,7 +96,7 @@ export function FAQ({ openFaq, setOpenFaq }: FAQProps) {
             >
               <span className="font-heading font-bold text-white text-base md:text-lg">{item.q}</span>
               <span className="flex-shrink-0 ml-4 p-1 rounded-lg bg-white/[0.02] border border-white/[0.05] text-[#00F29D] transition-transform duration-300">
-                <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${openFaq === idx ? 'transform rotate-180' : ''}`} />
+                <ChevronDownIcon className={`w-5 h-5 transition-transform duration-300 ${openFaq === idx ? 'transform rotate-180' : ''}`} />
               </span>
             </button>
             <AnimatePresence initial={false}>

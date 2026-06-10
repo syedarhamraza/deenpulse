@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { Download, Github, Menu, X } from 'lucide-react';
+import { MenuIcon, XIcon } from './ui/icons';
 import { motion, AnimatePresence } from 'motion/react';
 import { gsap } from 'gsap';
 import iconImg from '../assets/icon.png';
+import { PremiumButton } from './ui/PremiumButton';
+import { IconButton } from './ui/IconButton';
 
 interface NavbarProps {
   scrolled: boolean;
@@ -164,22 +166,23 @@ export function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen, isDocsPage
 
           {/* Download CTAs */}
           <div className="hidden md:flex items-center gap-3">
-            <a 
-              href="#downloads" 
-              className="nav-animate-item btn-hover h-10 px-4 bg-white/[0.03] hover:bg-[#00F29D] text-slate-300 hover:text-[#060a0a] border border-white/[0.06] hover:border-transparent text-xs font-bold uppercase tracking-wider rounded-xl transition-colors flex items-center gap-2"
+            <PremiumButton
+              variant="primary"
+              href="#downloads"
+              icon="phone-download"
+              size="sm"
+              className="nav-animate-item uppercase tracking-wider"
             >
-              <Download className="w-3.5 h-3.5" />
-              <span>Get APK</span>
-            </a>
-            <a 
-              href="https://github.com/syedarhamraza/deen-pulse" 
-              target="_blank" 
-              rel="noreferrer" 
-              className="nav-animate-item btn-hover w-10 h-10 bg-white/[0.03] border border-white/[0.06] hover:border-[#00F29D]/40 text-slate-300 hover:text-[#00F29D] rounded-xl transition-colors flex items-center justify-center"
+              Get APK
+            </PremiumButton>
+            <IconButton
+              href="https://github.com/syedarhamraza/deen-pulse"
+              target="_blank"
+              rel="noreferrer"
+              icon="github"
               title="GitHub Repository"
-            >
-              <Github className="w-4 h-4" />
-            </a>
+              className="nav-animate-item"
+            />
           </div>
 
           {/* Mobile menu trigger */}
@@ -187,7 +190,7 @@ export function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen, isDocsPage
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
             className="btn-hover md:hidden w-10 h-10 bg-white/[0.03] border border-white/[0.06] rounded-xl flex items-center justify-center text-slate-300 transition-colors"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? <XIcon className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
           </button>
         </header>
       </div>
@@ -246,22 +249,23 @@ export function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen, isDocsPage
             </motion.a>
             <motion.div variants={itemVariants} className="h-px bg-white/[0.08] my-2" />
             <motion.div variants={itemVariants} className="flex gap-4">
-              <a 
-                href="#downloads" 
-                onClick={() => setMobileMenuOpen(false)} 
-                className="btn-hover flex-1 py-3 text-center bg-[#111616] border border-white/[0.08] text-xs font-bold uppercase tracking-wider rounded-xl text-white flex items-center justify-center gap-2 transition-colors"
+              <PremiumButton
+                variant="primary"
+                href="#downloads"
+                icon="phone-download"
+                size="sm"
+                className="flex-1 uppercase tracking-wider"
+                onClick={() => setMobileMenuOpen(false)}
               >
-                <Download className="w-4 h-4" />
-                <span>Get APK</span>
-              </a>
-              <a 
-                href="https://github.com/syedarhamraza/deen-pulse" 
-                target="_blank" 
-                rel="noreferrer" 
-                className="btn-hover p-3 bg-[#111616] border border-white/[0.08] rounded-xl text-slate-300 flex items-center justify-center transition-colors"
-              >
-                <Github className="w-4 h-4" />
-              </a>
+                Get APK
+              </PremiumButton>
+              <IconButton
+                href="https://github.com/syedarhamraza/deen-pulse"
+                target="_blank"
+                rel="noreferrer"
+                icon="github"
+                title="GitHub Repository"
+              />
             </motion.div>
           </motion.div>
         )}
