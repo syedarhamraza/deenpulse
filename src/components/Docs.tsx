@@ -1,21 +1,22 @@
-import { useState, ComponentType } from 'react';
 import { 
-  BookOpen, 
-  Download, 
-  Wifi, 
-  Smartphone, 
-  Watch, 
-  Settings, 
-  Terminal, 
-  AlertTriangle, 
-  CheckCircle, 
-  Check, 
-  Info, 
-  Cpu, 
-  Lock 
-} from 'lucide-react';
+  BookOpenIcon, 
+  DownloadArrowIcon, 
+  WifiIcon, 
+  SmartphoneIcon, 
+  WatchIcon, 
+  SettingsIcon, 
+  TerminalIcon, 
+  AlertTriangleIcon, 
+  CheckCircleIcon, 
+  CheckIcon, 
+  InfoIcon, 
+  CpuIcon, 
+  LockIcon 
+} from './ui/icons';
 import { IconButton } from './ui/IconButton';
 import { PremiumButton } from './ui/PremiumButton';
+
+import { useState, ComponentType } from 'react';
 
 type SectionId = 'app-guide' | 'installation' | 'wireless-debugging' | 'geminiman';
 
@@ -36,28 +37,28 @@ export function Docs() {
       id: 'app-guide',
       title: 'DeenPulse Application Guide',
       shortTitle: 'App Guide',
-      icon: BookOpen,
+      icon: BookOpenIcon,
       description: 'Understand the main features, offline calculation engine, and system permissions.'
     },
     {
       id: 'installation',
       title: 'Standard Installation Guide',
       shortTitle: 'Install Phone APK',
-      icon: Download,
+      icon: DownloadArrowIcon,
       description: 'How to download and install DeenPulse on your Android mobile device.'
     },
     {
       id: 'wireless-debugging',
       title: 'Wear OS Sideloading via Wireless Debugging',
       shortTitle: 'Install Watch APK',
-      icon: Wifi,
+      icon: WifiIcon,
       description: 'Step-by-step instructions to pair and sideload the watch companion via Wi-Fi ADB.'
     },
     {
       id: 'geminiman',
       title: 'Wear OS Sideloading via Geminiman App',
       shortTitle: 'Geminiman Manager',
-      icon: Smartphone,
+      icon: SmartphoneIcon,
       description: 'Install the companion watch app directly from your phone using Geminiman.'
     }
   ];
@@ -121,7 +122,7 @@ export function Docs() {
             <div className="space-y-8 animate-fadeIn">
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <BookOpen className="w-6 h-6 text-[#00F29D]" />
+                  <BookOpenIcon className="w-6 h-6 text-[#00F29D]" />
                   DeenPulse Application Guide
                 </h2>
                 <div className="h-px bg-gradient-to-r from-[#00F29D]/30 to-transparent my-4" />
@@ -134,7 +135,7 @@ export function Docs() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="bg-[#0c1212]/50 border border-white/[0.04] p-5 rounded-xl space-y-3">
                   <div className="w-8 h-8 rounded-lg bg-[#00F29D]/10 flex items-center justify-center text-[#00F29D]">
-                    <Cpu className="w-4.5 h-4.5" />
+                    <CpuIcon className="w-4.5 h-4.5" />
                   </div>
                   <h3 className="font-semibold text-white text-base">Offline Calculation Engine</h3>
                   <p className="text-slate-400 text-xs md:text-sm leading-relaxed">
@@ -144,7 +145,7 @@ export function Docs() {
 
                 <div className="bg-[#0c1212]/50 border border-white/[0.04] p-5 rounded-xl space-y-3">
                   <div className="w-8 h-8 rounded-lg bg-[#3DD1C4]/10 flex items-center justify-center text-[#3DD1C4]">
-                    <Settings className="w-4.5 h-4.5" />
+                    <SettingsIcon className="w-4.5 h-4.5" />
                   </div>
                   <h3 className="font-semibold text-white text-base">Flexible Configurations</h3>
                   <p className="text-slate-400 text-xs md:text-sm leading-relaxed">
@@ -180,7 +181,7 @@ export function Docs() {
 
               {/* Battery Optimizations */}
               <div className="bg-[#241c10]/20 border border-amber-500/20 p-5 rounded-xl flex items-start gap-4">
-                <AlertTriangle className="w-6 h-6 text-amber-500 shrink-0 mt-0.5" />
+                <AlertTriangleIcon className="w-6 h-6 text-amber-500 shrink-0 mt-0.5" />
                 <div className="space-y-2">
                   <h4 className="font-bold text-amber-300 text-sm md:text-base">OEM Battery Whitelisting (Critical)</h4>
                   <p className="text-slate-300 text-xs md:text-sm leading-relaxed">
@@ -201,7 +202,7 @@ export function Docs() {
             <div className="space-y-6 animate-fadeIn">
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <Download className="w-6 h-6 text-[#00F29D]" />
+                  <DownloadArrowIcon className="w-6 h-6 text-[#00F29D]" />
                   Standard Installation Guide
                 </h2>
                 <div className="h-px bg-gradient-to-r from-[#00F29D]/30 to-transparent my-4" />
@@ -245,7 +246,7 @@ export function Docs() {
 
               {/* Companion Tip Info */}
               <div className="bg-[#0c1212]/50 border border-white/[0.05] p-5 rounded-xl flex items-start gap-4">
-                <Info className="w-5 h-5 text-[#3DD1C4] shrink-0 mt-0.5" />
+                <InfoIcon className="w-5 h-5 text-[#3DD1C4] shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <h4 className="font-semibold text-white text-sm">Need the Companion Watch App?</h4>
                   <p className="text-slate-400 text-xs md:text-sm leading-relaxed">
@@ -261,7 +262,7 @@ export function Docs() {
             <div className="space-y-6 animate-fadeIn">
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <Wifi className="w-6 h-6 text-[#00F29D]" />
+                  <WifiIcon className="w-6 h-6 text-[#00F29D]" />
                   Wear OS Installation via Wireless Debugging
                 </h2>
                 <div className="h-px bg-gradient-to-r from-[#00F29D]/30 to-transparent my-4" />
@@ -306,7 +307,7 @@ export function Docs() {
                       <div className="absolute right-3">
                         {copiedText === 'pair' ? (
                           <span className="flex w-9 h-9 items-center justify-center text-[#00F29D]">
-                            <Check className="w-3.5 h-3.5" />
+                            <CheckIcon className="w-3.5 h-3.5" />
                           </span>
                         ) : (
                           <IconButton
@@ -334,7 +335,7 @@ export function Docs() {
                       <div className="absolute right-3">
                         {copiedText === 'connect' ? (
                           <span className="flex w-9 h-9 items-center justify-center text-[#00F29D]">
-                            <Check className="w-3.5 h-3.5" />
+                            <CheckIcon className="w-3.5 h-3.5" />
                           </span>
                         ) : (
                           <IconButton
@@ -361,7 +362,7 @@ export function Docs() {
                       <div className="absolute right-3">
                         {copiedText === 'install' ? (
                           <span className="flex w-9 h-9 items-center justify-center text-[#00F29D]">
-                            <Check className="w-3.5 h-3.5" />
+                            <CheckIcon className="w-3.5 h-3.5" />
                           </span>
                         ) : (
                           <IconButton
@@ -375,7 +376,7 @@ export function Docs() {
                     </div>
 
                     <p className="text-emerald-400 font-semibold flex items-center gap-1.5 text-xs pt-1.5">
-                      <CheckCircle className="w-4 h-4 shrink-0" />
+                      <CheckCircleIcon className="w-4 h-4 shrink-0" />
                       Once terminal outputs "Success", the app is on your watch!
                     </p>
                   </div>
@@ -384,7 +385,7 @@ export function Docs() {
 
               {/* Clean up Warning */}
               <div className="bg-[#241c10]/20 border border-amber-500/20 p-5 rounded-xl flex items-start gap-4">
-                <AlertTriangle className="w-6 h-6 text-amber-500 shrink-0 mt-0.5" />
+                <AlertTriangleIcon className="w-6 h-6 text-amber-500 shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <h4 className="font-bold text-amber-300 text-sm">Conserve Watch Battery</h4>
                   <p className="text-slate-300 text-xs md:text-sm leading-relaxed">
@@ -400,7 +401,7 @@ export function Docs() {
             <div className="space-y-6 animate-fadeIn">
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <Watch className="w-6 h-6 text-[#00F29D]" />
+                  <WatchIcon className="w-6 h-6 text-[#00F29D]" />
                   Wear OS Sideloading via Geminiman Manager
                 </h2>
                 <div className="h-px bg-gradient-to-r from-[#00F29D]/30 to-transparent my-4" />
@@ -476,7 +477,7 @@ export function Docs() {
 
               {/* Clean up Info */}
               <div className="bg-[#0c1212]/50 border border-white/[0.05] p-5 rounded-xl flex items-start gap-4">
-                <Info className="w-5 h-5 text-[#3DD1C4] shrink-0 mt-0.5" />
+                <InfoIcon className="w-5 h-5 text-[#3DD1C4] shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <h4 className="font-semibold text-white text-sm">Turn Off Wireless Debugging</h4>
                   <p className="text-slate-400 text-xs md:text-sm leading-relaxed">

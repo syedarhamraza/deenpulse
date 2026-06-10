@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Download, Smartphone, Watch, CheckCircle2 } from 'lucide-react';
+import { DownloadArrowIcon, SmartphoneIcon, WatchIcon, CheckCircleIcon } from './ui/icons';
 import { ReleaseInfo } from '../types';
 import { gsap } from 'gsap';
 import { PremiumButton } from './ui/PremiumButton';
@@ -85,7 +85,7 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
     <section ref={sectionRef} id="downloads" className="py-24 px-6 max-w-7xl mx-auto relative z-10 scroll-mt-20">
       <div className="downloads-header-reveal text-center max-w-3xl mx-auto mb-16">
         <div className="inline-flex items-center gap-2 bg-[#00F29D]/10 text-[#00F29D] font-bold text-xs uppercase px-3 py-1.5 rounded-full mb-4 border border-[#00F29D]/20 font-mono">
-          <Download className="w-3.5 h-3.5" />
+          <DownloadArrowIcon className="w-3.5 h-3.5" />
           <span>Direct Downloads</span>
         </div>
         <h2 className="font-heading text-4xl sm:text-5xl font-black text-white mb-4 tracking-tight">
@@ -102,7 +102,7 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
         
         <div className="flex items-center gap-4 flex-1 text-left">
           <div className="w-12 h-12 rounded-2xl bg-[#00F29D]/10 border border-[#00F29D]/20 flex items-center justify-center text-[#00F29D] flex-shrink-0 shadow-[0_0_15px_rgba(0,242,157,0.15)]">
-            <CheckCircle2 className="w-6 h-6" />
+            <CheckCircleIcon className="w-6 h-6" />
           </div>
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
@@ -131,7 +131,7 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
           <div className="text-left">
             <div className="flex items-start justify-between mb-6">
               <div className="p-4 bg-[#00F29D]/10 rounded-2xl text-[#00F29D] border border-[#00F29D]/20">
-                <Smartphone className="w-8 h-8" />
+                <SmartphoneIcon className="w-8 h-8" />
               </div>
               <div className="text-right">
                 <span className="text-xs font-bold text-[#00F29D] bg-[#00F29D]/10 px-2.5 py-1 rounded-full border border-[#00F29D]/20">
@@ -150,15 +150,15 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
 
             <div className="space-y-3 mb-8 border-t border-white/[0.05] pt-6 text-xs text-slate-300">
               <div className="flex items-center gap-2.5">
-                <CheckCircle2 className="w-4.5 h-4.5 text-[#00F29D] flex-shrink-0" />
+                <CheckCircleIcon className="w-4.5 h-4.5 text-[#00F29D] flex-shrink-0" />
                 <span>Integrated OEM background battery profiles</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <CheckCircle2 className="w-4.5 h-4.5 text-[#00F29D] flex-shrink-0" />
+                <CheckCircleIcon className="w-4.5 h-4.5 text-[#00F29D] flex-shrink-0" />
                 <span>Persistent status bar capsule or local alarm notifications</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <CheckCircle2 className="w-4.5 h-4.5 text-[#00F29D] flex-shrink-0" />
+                <CheckCircleIcon className="w-4.5 h-4.5 text-[#00F29D] flex-shrink-0" />
                 <span>Zero continuous tracking or external coordinate sharing</span>
               </div>
             </div>
@@ -190,7 +190,7 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
           <div>
             <div className="flex items-start justify-between mb-6">
               <div className="p-4 bg-[#3DD1C4]/15 rounded-2xl text-[#3DD1C4] border border-[#3DD1C4]/20">
-                <Watch className="w-8 h-8" />
+                <WatchIcon className="w-8 h-8" />
               </div>
               <div className="text-right">
                 <span className="text-xs font-bold text-[#3DD1C4] bg-[#3DD1C4]/10 px-2.5 py-1 rounded-full border border-[#3DD1C4]/20">
@@ -209,15 +209,15 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
 
             <div className="space-y-3 mb-8 border-t border-white/[0.05] pt-6 text-xs text-slate-300">
               <div className="flex items-center gap-2.5">
-                <CheckCircle2 className="w-4.5 h-4.5 text-[#3DD1C4] flex-shrink-0" />
+                <CheckCircleIcon className="w-4.5 h-4.5 text-[#3DD1C4] flex-shrink-0" />
                 <span>Standalone mode or auto-synced complication feeds</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <CheckCircle2 className="w-4.5 h-4.5 text-[#3DD1C4] flex-shrink-0" />
+                <CheckCircleIcon className="w-4.5 h-4.5 text-[#3DD1C4] flex-shrink-0" />
                 <span>Lightweight layouts designed for circular watches</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <CheckCircle2 className="w-4.5 h-4.5 text-[#3DD1C4] flex-shrink-0" />
+                <CheckCircleIcon className="w-4.5 h-4.5 text-[#3DD1C4] flex-shrink-0" />
                 <span>Minimal data sync frequency to preserve watch battery</span>
               </div>
             </div>

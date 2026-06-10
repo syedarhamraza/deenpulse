@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Compass, Cpu } from 'lucide-react';
+import { CompassIcon, CpuIcon } from './ui/icons';
 import { gsap } from 'gsap';
 import { Location, JuristicMethod, CalcMethod, PrayerTimes } from '../types';
 import { locationData } from '../constants';
@@ -97,7 +97,7 @@ export function Simulator({
         
         <div className="simulator-left-reveal lg:col-span-6 text-left">
           <div className="inline-flex items-center gap-2 bg-[#00F29D]/10 text-[#00F29D] font-bold text-xs uppercase px-3 py-1.5 rounded-full mb-6 border border-[#00F29D]/20 font-mono">
-            <Compass className="w-3.5 h-3.5 animate-spin-slow" />
+            <CompassIcon className="w-3.5 h-3.5 animate-spin-slow" />
             <span>Offline Calculation Engine</span>
           </div>
           
@@ -188,7 +188,7 @@ export function Simulator({
             
             <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/[0.05]">
               <div className="flex items-center gap-2.5">
-                <Cpu className="text-[#00F29D] w-5 h-5 animate-pulse" />
+                <CpuIcon className="text-[#00F29D] w-5 h-5 animate-pulse" />
                 <span className="font-heading font-bold text-lg text-white">On-Device Timetable</span>
               </div>
               <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 uppercase tracking-widest">

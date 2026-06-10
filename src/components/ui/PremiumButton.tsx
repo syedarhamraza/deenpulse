@@ -25,17 +25,17 @@ const sizeClasses: Record<ButtonSize, { wrapper: string; face: string; icon: str
   sm: {
     wrapper: 'h-10',
     face: 'px-4 py-2 text-xs',
-    icon: 'w-3.5 h-3.5',
+    icon: 'w-5 h-5',
   },
   md: {
     wrapper: '',
     face: 'px-8 py-4 text-sm',
-    icon: 'w-5 h-5',
+    icon: 'w-6 h-6',
   },
   lg: {
     wrapper: '',
-    face: 'px-10 py-4.5 text-base',
-    icon: 'w-5 h-5',
+    face: 'px-10 py-5 text-base',
+    icon: 'w-7 h-7',
   },
 };
 
@@ -76,7 +76,7 @@ export const PremiumButton = forwardRef<HTMLAnchorElement | HTMLButtonElement, P
     const iconEl = icon ? (
       <PremiumIcon
         name={icon}
-        className={`${sizes.icon} transition-transform duration-300 group-hover:scale-105 shrink-0`}
+        className={`${sizes.icon} transition-transform duration-300 group-hover:scale-105 shrink-0 relative z-10`}
       />
     ) : null;
 

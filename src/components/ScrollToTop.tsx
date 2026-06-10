@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUpIcon } from './ui/icons';
 import { motion, AnimatePresence } from 'motion/react';
 
 export function ScrollToTop() {
@@ -82,7 +82,7 @@ export function ScrollToTop() {
             />
           </svg>
           
-          <ArrowUp className="w-4.5 h-4.5 group-hover:-translate-y-1 transition-transform duration-300 relative z-10" />
+          <ArrowUpIcon className="w-4.5 h-4.5 group-hover:-translate-y-1 transition-transform duration-300 relative z-10" />
         </motion.button>
       )}
     </AnimatePresence>

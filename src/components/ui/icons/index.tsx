@@ -4,71 +4,75 @@ type IconProps = SVGProps<SVGSVGElement> & {
   className?: string;
 };
 
+// 1. Phone Download Icon — bold filled body with chunky download arrow
 export function PhoneDownloadIcon({ className, ...props }: IconProps) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
-      <rect x="6" y="2" width="12" height="20" rx="2.5" strokeWidth="2" />
-      <line x1="10" y1="4.5" x2="14" y2="4.5" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
-      <line x1="10" y1="19.5" x2="14" y2="19.5" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
-      <path
-        className="dp-icon-phone-arrow"
-        d="M12 7 v7 M9 11.5 l3 3 l3 -3"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      {/* Phone body – filled rounded rect */}
+      <rect x="5.5" y="1.5" width="13" height="21" rx="3" stroke="currentColor" strokeWidth="2" fill="none"/>
+      {/* Speaker slot */}
+      <rect x="9.5" y="4" width="5" height="1.5" rx="0.75" fill="currentColor" opacity="0.45"/>
+      {/* Download arrow shaft */}
+      <line className="dp-icon-phone-particle" x1="12" y1="8.5" x2="12" y2="14.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+      {/* Download arrow head */}
+      <path className="dp-icon-phone-arrow-head" d="M8.5 12 L12 15.5 L15.5 12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      {/* Home indicator */}
+      <rect x="9.5" y="18.5" width="5" height="1.5" rx="0.75" fill="currentColor" opacity="0.45"/>
     </svg>
   );
 }
 
+// 2. Watch Sync Icon — clean circular watch + dual-arc sync symbol
 export function WatchSyncIcon({ className, ...props }: IconProps) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
-      <path d="M9 5.5 V2.5 h6 v3" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
-      <path d="M9 18.5 v3 h6 v-3" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
-      <circle cx="12" cy="12" r="6.5" strokeWidth="2" />
-      <path d="M18.5 11 h0.8 v2 H18.5" strokeWidth="1.5" />
-      <g className="dp-icon-watch-sync">
-        <path d="M12 9 A3 3 0 0 1 15 12" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M13 11 L15 12 L16 10" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M12 15 A3 3 0 0 1 9 12" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M11 13 L9 12 L8 14" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      {/* Top strap */}
+      <path d="M9 6.5V3.5C9 3.22 9.22 3 9.5 3h5c.28 0 .5.22.5.5V6.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" opacity="0.5"/>
+      {/* Bottom strap */}
+      <path d="M9 17.5v3c0 .28.22.5.5.5h5c.28 0 .5-.22.5-.5v-3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" opacity="0.5"/>
+      {/* Watch case circle */}
+      <circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="2.2" fill="none"/>
+      {/* Crown button */}
+      <path d="M18 11.5h1.5v1H18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+      {/* Sync arc top-right */}
+      <g className="dp-icon-watch-sync-group">
+        <path d="M12 9a3 3 0 0 1 3 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/>
+        <path d="M14.5 9.5 L15 12 L17.5 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+        {/* Sync arc bottom-left */}
+        <path d="M12 15a3 3 0 0 1-3-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/>
+        <path d="M9.5 14.5 L9 12 L6.5 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
       </g>
     </svg>
   );
 }
 
+// 3. Download Arrow Icon — bold shaft + arrowhead + tray
 export function DownloadArrowIcon({ className, ...props }: IconProps) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
-      <path d="M12 3 v12" strokeWidth="2" strokeLinecap="round" />
-      <path
-        className="dp-icon-download-arrow"
-        d="M7 10 l5 5 l5 -5"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path d="M4 20 h16" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      {/* Tray / inbox base */}
+      <path d="M3 16.5v3A1.5 1.5 0 0 0 4.5 21h15A1.5 1.5 0 0 0 21 19.5v-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.55"/>
+      {/* Arrow shaft */}
+      <line className="dp-icon-download-shaft" x1="12" y1="3" x2="12" y2="15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+      {/* Arrow head */}
+      <path className="dp-icon-download-tip" d="M7.5 11 L12 15.5 L16.5 11" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
     </svg>
   );
 }
 
+// 4. GitHub Icon — official filled octocat mark
 export function GithubIcon({ className, ...props }: IconProps) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
-        d="M9 19 c-4 1.5 -4 -2 -4 -2 s-1 -3 1 -4.5 c-1 -2.5 0.5 -2.5 0.5 -2.5 s1 -0.5 1.5 0 c1 0 2 0 3 0 s2 0 3 0 c0.5 -0.5 1.5 0 1.5 0 s1.5 0 0.5 2.5 c2 1.5 1 4.5 1 4.5 s0 3.5 -4 2"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        className="dp-icon-github-cat"
+        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.409.678 1.217.678 2.452 0 1.772-.012 3.203-.012 3.639 0 .267.18.577.688.479C19.14 20.165 22 16.418 22 12.017 22 6.484 17.522 2 12 2z"
       />
-      <circle className="dp-icon-github-dot" cx="9.5" cy="9.5" r="0.8" fill="currentColor" stroke="none" />
-      <circle className="dp-icon-github-dot" cx="14.5" cy="9.5" r="0.8" fill="currentColor" stroke="none" />
     </svg>
   );
 }
 
+// 5. Arrow Up Icon
 export function ArrowUpIcon({ className, ...props }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
@@ -84,6 +88,7 @@ export function ArrowUpIcon({ className, ...props }: IconProps) {
   );
 }
 
+// 6. Sync / Rotate Icon
 export function SyncIcon({ className, ...props }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
@@ -97,6 +102,7 @@ export function SyncIcon({ className, ...props }: IconProps) {
   );
 }
 
+// 7. Copy Clipboard Icon
 export function CopyIcon({ className, ...props }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
@@ -106,6 +112,7 @@ export function CopyIcon({ className, ...props }: IconProps) {
   );
 }
 
+// 8. External Link Icon
 export function ExternalLinkIcon({ className, ...props }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
@@ -122,6 +129,7 @@ export function ExternalLinkIcon({ className, ...props }: IconProps) {
   );
 }
 
+// 9. Docs / File Icon
 export function DocsIcon({ className, ...props }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
@@ -129,6 +137,278 @@ export function DocsIcon({ className, ...props }: IconProps) {
       <path d="M14 4 v4 h4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
       <path className="dp-icon-docs-line" d="M8 12 h8" strokeWidth="1.8" strokeLinecap="round" />
       <path className="dp-icon-docs-line" d="M8 16 h5" strokeWidth="1.8" strokeLinecap="round" opacity="0.6" />
+    </svg>
+  );
+}
+
+// 10. Smartphone Icon (Static Custom)
+export function SmartphoneIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <rect x="5" y="2" width="14" height="20" rx="3" />
+      <line x1="12" y1="18" x2="12.01" y2="18" strokeWidth="2.5" />
+    </svg>
+  );
+}
+
+// 11. Watch Icon (Static Custom)
+export function WatchIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M9 5.5 V2.5 h6 v3" strokeWidth="1.5" opacity="0.4" />
+      <path d="M9 18.5 v3 h6 v-3" strokeWidth="1.5" opacity="0.4" />
+      <circle cx="12" cy="12" r="6.5" />
+      <path d="M18.5 11 h0.8 v2 H18.5" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+// 12. Bell / Alerts Icon
+export function BellIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+      <path className="dp-icon-bell-clapper" d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+    </svg>
+  );
+}
+
+// 13. Compass / Qibla Icon
+export function CompassIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <circle cx="12" cy="12" r="10" />
+      <path className="dp-icon-compass-needle" d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z" />
+    </svg>
+  );
+}
+
+// 14. Wifi Off Icon
+export function WifiOffIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.5M5 12.5a10.94 10.94 0 0 1 5.83-2.84M8.58 4.7A16.94 16.94 0 0 1 19 8.5M5 8.5A16.9 16.9 0 0 1 9.7 6.7M12 18.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" />
+    </svg>
+  );
+}
+
+// 15. Layers / Modular Icon
+export function LayersIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+    </svg>
+  );
+}
+
+// 16. Activity / Pulse Icon
+export function ActivityIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+    </svg>
+  );
+}
+
+// 17. Cpu Icon
+export function CpuIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <rect x="4" y="4" width="16" height="16" rx="2" />
+      <rect className="dp-icon-cpu-inner" x="9" y="9" width="6" height="6" />
+      <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3" />
+    </svg>
+  );
+}
+
+// 18. Check Circle Icon
+export function CheckCircleIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+      <path className="dp-icon-checkmark" d="M22 4L12 14.01l-3-3" />
+    </svg>
+  );
+}
+
+// 19. Chevron Down Icon
+export function ChevronDownIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M6 9l6 6 6-6" />
+    </svg>
+  );
+}
+
+// 20. Chevron Right Icon
+export function ChevronRightIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M9 18l6-6-6-6" />
+    </svg>
+  );
+}
+
+// 21. Code Icon
+export function CodeIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <polyline points="16 18 22 12 16 6" />
+      <polyline points="8 6 2 12 8 18" />
+    </svg>
+  );
+}
+
+// 22. Check Icon
+export function CheckIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+// 23. Book Open Icon
+export function BookOpenIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+    </svg>
+  );
+}
+
+// 24. Settings Icon
+export function SettingsIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+    </svg>
+  );
+}
+
+// 25. Play Icon
+export function PlayIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <polygon points="5 3 19 12 5 21 5 3" />
+    </svg>
+  );
+}
+
+// 26. Menu Hamburger Icon
+export function MenuIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <line className="dp-icon-menu-top" x1="5" y1="6" x2="19" y2="6" />
+      <line className="dp-icon-menu-bottom" x1="5" y1="18" x2="19" y2="18" />
+    </svg>
+  );
+}
+
+// 27. Close X Icon
+export function XIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
+// 28. Shield Icon
+export function ShieldIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    </svg>
+  );
+}
+
+// 29. Lock Icon
+export function LockIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    </svg>
+  );
+}
+
+// 30. Eye Off Icon
+export function EyeOffIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22" />
+    </svg>
+  );
+}
+
+// 31. File Text Icon
+export function FileTextIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <polyline points="14 2 14 8 20 8" />
+      <line x1="16" y1="13" x2="8" y2="13" />
+      <line x1="16" y1="17" x2="8" y2="17" />
+      <polyline points="10 9 9 9 8 9" />
+    </svg>
+  );
+}
+
+// 32. Globe Icon
+export function GlobeIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <circle cx="12" cy="12" r="10" />
+      <line x1="2" y1="12" x2="22" y2="12" />
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    </svg>
+  );
+}
+
+// 33. WiFi / Online Connection Icon
+export function WifiIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M5 13a10 10 0 0 1 14 0" />
+      <path d="M8.5 16.5a5 5 0 0 1 7 0" />
+      <path d="M2 9a15 15 0 0 1 20 0" />
+      <line x1="12" y1="20" x2="12.01" y2="20" strokeWidth="2.5" />
+    </svg>
+  );
+}
+
+// 34. Terminal Command Line Icon
+export function TerminalIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <polyline points="4 17 10 11 4 5" />
+      <line x1="12" y1="19" x2="20" y2="19" />
+    </svg>
+  );
+}
+
+// 35. Alert Triangle / Warning Icon
+export function AlertTriangleIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+      <line x1="12" y1="9" x2="12" y2="13" />
+      <line x1="12" y1="17" x2="12.01" y2="17" />
+    </svg>
+  );
+}
+
+// 36. Info Circle Icon
+export function InfoIcon({ className, ...props }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="16" x2="12" y2="12" />
+      <line x1="12" y1="8" x2="12.01" y2="8" />
     </svg>
   );
 }
@@ -142,7 +422,34 @@ export type PremiumIconName =
   | 'sync'
   | 'copy'
   | 'external'
-  | 'docs';
+  | 'docs'
+  | 'phone'
+  | 'watch'
+  | 'bell'
+  | 'compass'
+  | 'wifi-off'
+  | 'layers'
+  | 'activity'
+  | 'cpu'
+  | 'check-circle'
+  | 'chevron-down'
+  | 'chevron-right'
+  | 'code'
+  | 'check'
+  | 'book-open'
+  | 'settings'
+  | 'play'
+  | 'menu'
+  | 'x'
+  | 'shield'
+  | 'lock'
+  | 'eye-off'
+  | 'file-text'
+  | 'globe'
+  | 'wifi'
+  | 'terminal'
+  | 'alert-triangle'
+  | 'info';
 
 const iconMap = {
   'phone-download': PhoneDownloadIcon,
@@ -154,6 +461,33 @@ const iconMap = {
   copy: CopyIcon,
   external: ExternalLinkIcon,
   docs: DocsIcon,
+  phone: SmartphoneIcon,
+  watch: WatchIcon,
+  bell: BellIcon,
+  compass: CompassIcon,
+  'wifi-off': WifiOffIcon,
+  layers: LayersIcon,
+  activity: ActivityIcon,
+  cpu: CpuIcon,
+  'check-circle': CheckCircleIcon,
+  'chevron-down': ChevronDownIcon,
+  'chevron-right': ChevronRightIcon,
+  code: CodeIcon,
+  check: CheckIcon,
+  'book-open': BookOpenIcon,
+  settings: SettingsIcon,
+  play: PlayIcon,
+  menu: MenuIcon,
+  x: XIcon,
+  shield: ShieldIcon,
+  lock: LockIcon,
+  'eye-off': EyeOffIcon,
+  'file-text': FileTextIcon,
+  globe: GlobeIcon,
+  wifi: WifiIcon,
+  terminal: TerminalIcon,
+  'alert-triangle': AlertTriangleIcon,
+  info: InfoIcon,
 } as const;
 
 export function PremiumIcon({

@@ -1,4 +1,4 @@
-import { Shield, Lock, EyeOff, FileText, Cpu, Globe } from 'lucide-react';
+import { ShieldIcon, LockIcon, EyeOffIcon, FileTextIcon, CpuIcon, GlobeIcon } from './ui/icons';
 import { PremiumButton } from './ui/PremiumButton';
 
 export function PrivacyAgreement() {
@@ -24,7 +24,7 @@ export function PrivacyAgreement() {
         {/* Intro */}
         <div className="flex gap-4 items-start">
           <div className="w-10 h-10 rounded-xl bg-[#00F29D]/10 flex items-center justify-center text-[#00F29D] shrink-0">
-            <Shield className="w-5.5 h-5.5" />
+            <ShieldIcon className="w-5.5 h-5.5" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-white">Sovereignty Over Your Personal Data</h2>
@@ -39,7 +39,7 @@ export function PrivacyAgreement() {
         {/* Section 1: Location Data */}
         <div className="space-y-4">
           <h3 className="text-lg font-bold text-white flex items-center gap-2.5">
-            <Lock className="w-5 h-5 text-[#3DD1C4]" />
+            <LockIcon className="w-5 h-5 text-[#3DD1C4]" />
             1. Geolocation and Location Calculation
           </h3>
           <p className="text-slate-300 text-sm leading-relaxed">
@@ -47,7 +47,7 @@ export function PrivacyAgreement() {
           </p>
           <div className="bg-[#0c1212]/50 border border-white/[0.04] p-4.5 rounded-xl space-y-2.5">
             <div className="flex items-center gap-2 text-xs font-bold text-[#00F29D] uppercase tracking-wider">
-              <Cpu className="w-4 h-4 text-[#00F29D]" />
+              <CpuIcon className="w-4 h-4 text-[#00F29D]" />
               On-Device Calculation Loop
             </div>
             <p className="text-slate-400 text-xs md:text-sm leading-relaxed">
@@ -59,7 +59,7 @@ export function PrivacyAgreement() {
         {/* Section 2: Zero Trackers */}
         <div className="space-y-4">
           <h3 className="text-lg font-bold text-white flex items-center gap-2.5">
-            <EyeOff className="w-5 h-5 text-[#3DD1C4]" />
+            <EyeOffIcon className="w-5 h-5 text-[#3DD1C4]" />
             2. Ad and Tracker Free Policy
           </h3>
           <p className="text-slate-300 text-sm leading-relaxed">
@@ -75,7 +75,7 @@ export function PrivacyAgreement() {
         {/* Section 3: Wear OS Companion */}
         <div className="space-y-4">
           <h3 className="text-lg font-bold text-white flex items-center gap-2.5">
-            <Globe className="w-5 h-5 text-[#3DD1C4]" />
+            <GlobeIcon className="w-5 h-5 text-[#3DD1C4]" />
             3. Smartwatch Companion Synchronization
           </h3>
           <p className="text-slate-300 text-sm leading-relaxed">
@@ -90,7 +90,7 @@ export function PrivacyAgreement() {
         {/* Section 4: GNU GPL License */}
         <div className="space-y-4">
           <h3 className="text-lg font-bold text-white flex items-center gap-2.5">
-            <FileText className="w-5 h-5 text-[#3DD1C4]" />
+            <FileTextIcon className="w-5 h-5 text-[#3DD1C4]" />
             4. Licensing and Source Code Verification
           </h3>
           <p className="text-slate-300 text-sm leading-relaxed">

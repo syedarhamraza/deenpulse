@@ -41,8 +41,8 @@ export const IconButton = forwardRef<HTMLAnchorElement | HTMLButtonElement, Icon
 
     usePremiumButtonAnimation(internalRef, icon, animated);
 
-    const dim = size === 'sm' ? 'w-9 h-9' : 'w-10 h-10';
-    const iconSize = size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4';
+    const dim = size === 'sm' ? 'w-10 h-10' : 'w-11 h-11';
+    const iconSize = size === 'sm' ? 'w-5 h-5' : 'w-6 h-6';
     const sharedClass = `btn-hover group relative ${dim} block ${className}`;
 
     const inner = (

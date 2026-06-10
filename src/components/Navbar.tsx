@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Menu, X } from 'lucide-react';
+import { MenuIcon, XIcon } from './ui/icons';
 import { motion, AnimatePresence } from 'motion/react';
 import { gsap } from 'gsap';
 import iconImg from '../assets/icon.png';
@@ -190,7 +190,7 @@ export function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen, isDocsPage
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
             className="btn-hover md:hidden w-10 h-10 bg-white/[0.03] border border-white/[0.06] rounded-xl flex items-center justify-center text-slate-300 transition-colors"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? <XIcon className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
           </button>
         </header>
       </div>
