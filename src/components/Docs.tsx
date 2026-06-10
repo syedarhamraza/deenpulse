@@ -18,6 +18,7 @@ import { PremiumButton } from './ui/PremiumButton';
 
 import { useState, ComponentType, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { motion } from 'motion/react';
 
 type SectionId = 'app-guide' | 'installation' | 'wireless-debugging' | 'geminiman';
 
@@ -130,7 +131,7 @@ export function Docs() {
           </div>
           
           {/* Menu Items */}
-          <div className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 gap-1.5 scrollbar-none">
+          <div className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 gap-1.5 scrollbar-none relative">
             {sections.map((sec) => {
               const Icon = sec.icon;
               const isActive = activeSection === sec.id;
@@ -138,14 +139,19 @@ export function Docs() {
                 <button
                   key={sec.id}
                   onClick={() => setActiveSection(sec.id)}
-                  className={`flex items-center gap-3 px-4 py-3 text-xs md:text-sm font-semibold rounded-xl text-left whitespace-nowrap lg:whitespace-normal transition-all duration-300 ${
-                    isActive 
-                      ? 'bg-gradient-to-r from-[#00F29D]/10 to-[#3DD1C4]/10 border border-[#00F29D]/20 text-[#00F29D] shadow-[0_0_15px_rgba(0,242,157,0.05)]' 
-                      : 'border border-transparent text-slate-400 hover:text-white hover:bg-white/[0.02]'
+                  className={`relative flex items-center gap-3 px-4 py-3 text-xs md:text-sm font-semibold rounded-xl text-left whitespace-nowrap lg:whitespace-normal transition-colors duration-300 ${
+                    isActive ? 'text-[#00F29D]' : 'text-slate-400 hover:text-white hover:bg-white/[0.02]'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#00F29D]' : 'text-slate-500'}`} />
-                  <span>{sec.shortTitle}</span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeDocSection"
+                      className="absolute inset-0 bg-gradient-to-r from-[#00F29D]/10 to-[#3DD1C4]/10 border border-[#00F29D]/20 rounded-xl shadow-[0_0_15px_rgba(0,242,157,0.05)]"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <Icon className={`w-4 h-4 shrink-0 relative z-10 transition-colors duration-300 ${isActive ? 'text-[#00F29D]' : 'text-slate-500'}`} />
+                  <span className="relative z-10">{sec.shortTitle}</span>
                 </button>
               );
             })}
@@ -153,7 +159,7 @@ export function Docs() {
         </aside>
 
         {/* Content Panel */}
-        <main className="lg:col-span-9 bg-[#060a0a]/40 backdrop-blur-md border border-white/[0.05] rounded-2xl p-6 md:p-8 shadow-[0_15px_45px_rgba(0,0,0,0.4)] docs-main-reveal">
+        <main className="lg:col-span-9 bg-[#060a0a]/40 backdrop-blur-md border border-white/[0.05] rounded-2xl p-4 sm:p-6 md:p-8 shadow-[0_15px_45px_rgba(0,0,0,0.4)] docs-main-reveal">
           
           {/* 1. APP GUIDE SECTION */}
           {activeSection === 'app-guide' && (
@@ -340,11 +346,11 @@ export function Docs() {
                     <p>Open your command line/terminal on your PC (ensure Android SDK Platform Tools are installed) and run the pairing command:</p>
                     
                     {/* Command Box */}
-                    <div className="bg-[#030606] border border-white/[0.05] rounded-xl p-3.5 flex items-center justify-between font-mono text-xs text-slate-300 select-all relative group">
-                      <span className="overflow-x-auto whitespace-nowrap pr-4">adb pair 192.168.1.100:41235 123456</span>
-                      <div className="absolute right-3">
+                    <div className="bg-[#030606] border border-white/[0.05] rounded-xl p-3 sm:p-3.5 flex items-center justify-between font-mono text-xs text-slate-300 select-all relative group overflow-hidden">
+                      <span className="overflow-x-auto whitespace-nowrap pr-14 scrollbar-none">adb pair 192.168.1.100:41235 123456</span>
+                      <div className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 bg-[#030606] pl-2 py-1 flex items-center justify-center">
                         {copiedText === 'pair' ? (
-                          <span className="flex w-9 h-9 items-center justify-center text-[#00F29D]">
+                          <span className="flex w-8 h-8 items-center justify-center text-[#00F29D]">
                             <CheckIcon className="w-3.5 h-3.5" />
                           </span>
                         ) : (
@@ -368,11 +374,11 @@ export function Docs() {
                     <p>Connect your PC via ADB command:</p>
 
                     {/* Command Box */}
-                    <div className="bg-[#030606] border border-white/[0.05] rounded-xl p-3.5 flex items-center justify-between font-mono text-xs text-slate-300 select-all relative group">
-                      <span className="overflow-x-auto whitespace-nowrap pr-4">adb connect 192.168.1.100:34567</span>
-                      <div className="absolute right-3">
+                    <div className="bg-[#030606] border border-white/[0.05] rounded-xl p-3 sm:p-3.5 flex items-center justify-between font-mono text-xs text-slate-300 select-all relative group overflow-hidden">
+                      <span className="overflow-x-auto whitespace-nowrap pr-14 scrollbar-none">adb connect 192.168.1.100:34567</span>
+                      <div className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 bg-[#030606] pl-2 py-1 flex items-center justify-center">
                         {copiedText === 'connect' ? (
-                          <span className="flex w-9 h-9 items-center justify-center text-[#00F29D]">
+                          <span className="flex w-8 h-8 items-center justify-center text-[#00F29D]">
                             <CheckIcon className="w-3.5 h-3.5" />
                           </span>
                         ) : (
@@ -395,11 +401,11 @@ export function Docs() {
                     <p>Download <code className="font-mono text-slate-300 bg-white/5 px-1 py-0.5 rounded">wear-release.apk</code> to your PC. In your terminal, run the installer command pointing to your downloaded file path:</p>
 
                     {/* Command Box */}
-                    <div className="bg-[#030606] border border-white/[0.05] rounded-xl p-3.5 flex items-center justify-between font-mono text-xs text-slate-300 select-all relative group">
-                      <span className="overflow-x-auto whitespace-nowrap pr-4">adb install wear-release.apk</span>
-                      <div className="absolute right-3">
+                    <div className="bg-[#030606] border border-white/[0.05] rounded-xl p-3 sm:p-3.5 flex items-center justify-between font-mono text-xs text-slate-300 select-all relative group overflow-hidden">
+                      <span className="overflow-x-auto whitespace-nowrap pr-14 scrollbar-none">adb install wear-release.apk</span>
+                      <div className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 bg-[#030606] pl-2 py-1 flex items-center justify-center">
                         {copiedText === 'install' ? (
-                          <span className="flex w-9 h-9 items-center justify-center text-[#00F29D]">
+                          <span className="flex w-8 h-8 items-center justify-center text-[#00F29D]">
                             <CheckIcon className="w-3.5 h-3.5" />
                           </span>
                         ) : (
