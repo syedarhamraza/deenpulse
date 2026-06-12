@@ -94,10 +94,19 @@ export function FAQ({ openFaq, setOpenFaq }: FAQProps) {
               onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
               className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none"
             >
-              <span className="font-heading font-bold text-white text-base md:text-lg">{item.q}</span>
-              <span className="flex-shrink-0 ml-4 p-1 rounded-lg bg-white/[0.02] border border-white/[0.05] text-[#00F29D] transition-transform duration-300">
-                <ChevronDownIcon className={`w-5 h-5 transition-transform duration-300 ${openFaq === idx ? 'transform rotate-180' : ''}`} />
+              <span className="font-heading font-bold text-white text-base md:text-lg flex items-center gap-4">
+                <span className={`font-mono text-sm transition-colors duration-300 ${openFaq === idx ? 'text-[#00F29D] font-bold' : 'text-slate-600'}`}>
+                  {(idx + 1).toString().padStart(2, '0')}
+                </span>
+                <span>{item.q}</span>
               </span>
+              <motion.span 
+                animate={{ rotate: openFaq === idx ? 180 : 0 }}
+                transition={{ type: 'spring', stiffness: 260, damping: 18 }}
+                className="flex-shrink-0 ml-4 p-1 rounded-lg bg-white/[0.02] border border-white/[0.05] text-[#00F29D]"
+              >
+                <ChevronDownIcon className="w-5 h-5" />
+              </motion.span>
             </button>
             <AnimatePresence initial={false}>
               {openFaq === idx && (

@@ -1,4 +1,4 @@
-import { forwardRef, useRef } from 'react';
+import { forwardRef, useRef, useEffect } from 'react';
 import { PremiumIcon, PremiumIconName } from './icons';
 import { usePremiumButtonAnimation } from './usePremiumButtonAnimation';
 
@@ -40,6 +40,38 @@ export const IconButton = forwardRef<HTMLAnchorElement | HTMLButtonElement, Icon
     };
 
     usePremiumButtonAnimation(internalRef, icon, animated);
+
+    useEffect(() => {
+      const button = internalRef.current;
+      if (!button) return;
+
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) return;
+
+      const onPress = () => {
+        gsap.to(button, { scale: 0.96, duration: 0.15, ease: 'power1.out', overwrite: 'auto' });
+      };
+
+      const onRelease = () => {
+        gsap.to(button, { scale: 1, duration: 0.45, ease: 'back.out(2)', overwrite: 'auto' });
+      };
+
+      button.addEventListener('mousedown', onPress);
+      button.addEventListener('mouseup', onRelease);
+      button.addEventListener('mouseleave', onRelease);
+      button.addEventListener('touchstart', onPress, { passive: true });
+      button.addEventListener('touchend', onRelease, { passive: true });
+      button.addEventListener('touchcancel', onRelease, { passive: true });
+
+      return () => {
+        button.removeEventListener('mousedown', onPress);
+        button.removeEventListener('mouseup', onRelease);
+        button.removeEventListener('mouseleave', onRelease);
+        button.removeEventListener('touchstart', onPress);
+        button.removeEventListener('touchend', onRelease);
+        button.removeEventListener('touchcancel', onRelease);
+      };
+    }, []);
 
     const dim = size === 'sm' ? 'w-10 h-10' : 'w-11 h-11';
     const iconSize = size === 'sm' ? 'w-5 h-5' : 'w-6 h-6';

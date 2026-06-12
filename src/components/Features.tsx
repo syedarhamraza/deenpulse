@@ -73,7 +73,11 @@ export function Features({
   }, [selectedOemProfile]);
 
   useEffect(() => {
+    const cleanups: Array<() => void> = [];
+
     const ctx = gsap.context(() => {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
       // Header block reveal
       gsap.fromTo('.features-header-reveal',
         { y: 30, opacity: 0 },
@@ -88,6 +92,11 @@ export function Features({
           }
         }
       );
+
+      if (prefersReducedMotion) {
+        gsap.set('.feature-card, .battery-chart-path', { y: 0, opacity: 1, scale: 1, strokeDashoffset: 0 });
+        return;
+      }
 
       // Staggered bento cards entrance
       gsap.fromTo('.feature-card',
@@ -106,15 +115,44 @@ export function Features({
         }
       );
 
+      // Battery chart line drawing
+      gsap.fromTo('.battery-chart-path',
+        { strokeDashoffset: 500 },
+        {
+          strokeDashoffset: 0,
+          duration: 1.8,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.battery-chart-path',
+            start: 'top 90%'
+          }
+        }
+      );
+
+      // Red dashed line breathing alert pulse
+      gsap.fromTo('.red-dashed-line',
+        { opacity: 0.25 },
+        {
+          opacity: 0.7,
+          duration: 1.5,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut'
+        }
+      );
+
       const cards = gsap.utils.toArray('.feature-card') as HTMLElement[];
 
       cards.forEach((card) => {
         const handleMouseMove = (e: MouseEvent) => {
-          if (window.innerWidth < 1024) return;
           const rect = card.getBoundingClientRect();
           const x = e.clientX - rect.left;
           const y = e.clientY - rect.top;
 
+          card.style.setProperty('--mouse-x', `${x}px`);
+          card.style.setProperty('--mouse-y', `${y}px`);
+
+          if (window.innerWidth < 1024) return;
           const centerX = rect.width / 2;
           const centerY = rect.height / 2;
 
@@ -146,14 +184,17 @@ export function Features({
         card.addEventListener('mousemove', handleMouseMove);
         card.addEventListener('mouseleave', handleMouseLeave);
 
-        return () => {
+        cleanups.push(() => {
           card.removeEventListener('mousemove', handleMouseMove);
           card.removeEventListener('mouseleave', handleMouseLeave);
-        };
+        });
       });
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      cleanups.forEach((cb) => cb());
+    };
   }, []);
 
   return (
@@ -169,7 +210,13 @@ export function Features({
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* Card 1: Interactive Status Capsule Simulator (Col 7) */}
-        <div className="feature-card md:col-span-7 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-colors duration-300 group">
+        <div className="feature-card mobile-card-ripple md:col-span-7 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-colors duration-300 group">
+          <div 
+            className="absolute inset-0 pointer-events-none -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={{
+              background: 'radial-gradient(600px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(0, 242, 157, 0.05), transparent 40%)'
+            }}
+          />
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#00F29D]/5 to-transparent rounded-tr-3xl pointer-events-none" />
           
           <div>
@@ -234,7 +281,13 @@ export function Features({
         </div>
 
         {/* Card 2: WearSync Data Layer Terminal (Col 5) */}
-        <div className="feature-card md:col-span-5 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-colors duration-300 group">
+        <div className="feature-card mobile-card-ripple md:col-span-5 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-colors duration-300 group">
+          <div 
+            className="absolute inset-0 pointer-events-none -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={{
+              background: 'radial-gradient(600px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(0, 242, 157, 0.05), transparent 40%)'
+            }}
+          />
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#3DD1C4]/5 to-transparent rounded-tr-3xl pointer-events-none" />
           
           <div>
@@ -287,7 +340,13 @@ export function Features({
         </div>
 
         {/* Card 3: OEM Battery Tier Profiler (Col 6) */}
-        <div className="feature-card md:col-span-6 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-colors duration-300 group">
+        <div className="feature-card mobile-card-ripple md:col-span-6 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-colors duration-300 group">
+          <div 
+            className="absolute inset-0 pointer-events-none -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={{
+              background: 'radial-gradient(600px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(0, 242, 157, 0.05), transparent 40%)'
+            }}
+          />
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-500/5 to-transparent rounded-tr-3xl pointer-events-none" />
           
           <div>
@@ -352,7 +411,13 @@ export function Features({
         </div>
 
         {/* Card 4: Geolocation Fetch & Kill (Col 6) */}
-        <div className="feature-card md:col-span-6 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-colors duration-300 group">
+        <div className="feature-card mobile-card-ripple md:col-span-6 bg-[#0c1212]/90 border border-white/[0.05] hover:border-white/[0.1] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-colors duration-300 group">
+          <div 
+            className="absolute inset-0 pointer-events-none -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={{
+              background: 'radial-gradient(600px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(0, 242, 157, 0.05), transparent 40%)'
+            }}
+          />
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#00F29D]/5 to-transparent rounded-tr-3xl pointer-events-none" />
           
           <div>
@@ -383,7 +448,7 @@ export function Features({
             {/* Graphic line chart */}
             <div className="h-20 flex items-end gap-1 border-b border-l border-white/10 p-2 relative">
               {/* Standard app line */}
-              <div className="absolute inset-x-0 bottom-1/2 h-0.5 bg-red-500/30 border-t border-dashed border-red-500" />
+              <div className="red-dashed-line absolute inset-x-0 bottom-1/2 h-0.5 bg-red-500/30 border-t border-dashed border-red-500" />
               <span className="absolute right-4 top-2 text-[9px] font-mono text-red-400">Standard apps (constant polling)</span>
 
               {/* DeenPulse Line */}
@@ -394,7 +459,9 @@ export function Features({
                   stroke="#00F29D" 
                   strokeWidth="2.5" 
                   strokeLinecap="round"
-                  className="shadow-[0_0_10px_rgba(0,242,157,0.3)]"
+                  className="battery-chart-path shadow-[0_0_10px_rgba(0,242,157,0.3)]"
+                  strokeDasharray="500"
+                  strokeDashoffset="500"
                 />
               </svg>
               <span className="absolute left-32 bottom-2 text-[9px] font-mono text-emerald-400 font-bold">DeenPulse: Fetch & Kill (500ms)</span>

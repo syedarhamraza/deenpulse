@@ -1,9 +1,30 @@
 import { useEffect, useRef } from 'react';
 import { ChevronDownIcon, ChevronRightIcon, CodeIcon, CopyIcon, CheckIcon } from './ui/icons';
 import { gsap } from 'gsap';
+import { motion, AnimatePresence } from 'motion/react';
 import { highlightCode } from '../utils/codeHighlighter';
 import { fileContents } from '../constants';
 import { ReleaseInfo } from '../types';
+
+const fileTreeVariants = {
+  hidden: { height: 0, opacity: 0 },
+  visible: { 
+    height: 'auto', 
+    opacity: 1,
+    transition: {
+      height: { type: 'spring', stiffness: 220, damping: 26 },
+      opacity: { duration: 0.2 }
+    }
+  },
+  exit: { 
+    height: 0, 
+    opacity: 0,
+    transition: {
+      height: { type: 'spring', stiffness: 220, damping: 26 },
+      opacity: { duration: 0.15 }
+    }
+  }
+};
 
 interface CodeBrowserProps {
   activeFile: string;
@@ -33,6 +54,16 @@ export function CodeBrowser({
     // Reset scroll positions to top-left on active file switch
     codeContainerRef.current.scrollTop = 0;
     codeContainerRef.current.scrollLeft = 0;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!prefersReducedMotion) {
+      // Flash the first line to simulate file load highlight
+      gsap.fromTo('.first-code-line',
+        { backgroundColor: 'rgba(0, 242, 157, 0.2)' },
+        { backgroundColor: 'rgba(0, 242, 157, 0)', duration: 1.2, ease: 'power2.out', overwrite: 'auto' }
+      );
+    }
 
     gsap.fromTo(codeContainerRef.current,
       { x: 15, opacity: 0 },
@@ -131,42 +162,58 @@ export function CodeBrowser({
                 <span className="font-bold text-slate-200">android</span>
               </div>
 
-              {expandedNodes['android'] && (
-                <div className="pl-4 border-l border-white/[0.05] ml-3 mt-1 space-y-1.5">
-                  
-                  {/* node: android/app */}
-                  <div>
-                    <div 
-                      onClick={() => toggleNode('android/app')}
-                      className="flex items-center gap-1.5 hover:bg-white/[0.03] p-1.5 rounded-lg cursor-pointer transition-colors"
-                    >
-                      {expandedNodes['android/app'] ? <ChevronDownIcon className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRightIcon className="w-3.5 h-3.5 text-slate-500" />}
-                      <span className="text-amber-400 text-xs">📁</span>
-                      <span className="text-slate-300">app</span>
-                    </div>
+              <AnimatePresence initial={false}>
+                {expandedNodes['android'] && (
+                  <motion.div 
+                    variants={fileTreeVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="pl-4 border-l border-white/[0.05] ml-3 mt-1 space-y-1.5 overflow-hidden"
+                  >
                     
-                    {expandedNodes['android/app'] && (
-                      <div className="pl-4 border-l border-white/[0.05] ml-3 mt-1 space-y-1">
-                        <div 
-                          onClick={() => setActiveFile('PrayerCapsuleForegroundService.kt')}
-                          className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'PrayerCapsuleForegroundService.kt' ? 'bg-[#3DD1C4]/10 text-[#3DD1C4]' : 'hover:bg-white/[0.02] text-slate-500'}`}
-                        >
-                          <span className="text-[#3DD1C4] text-[10px] font-bold">KT</span>
-                          <span>PrayerCapsuleForegroundService.kt</span>
-                        </div>
-                        <div 
-                          onClick={() => setActiveFile('WearDataSyncService.kt')}
-                          className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'WearDataSyncService.kt' ? 'bg-[#3DD1C4]/10 text-[#3DD1C4]' : 'hover:bg-white/[0.02] text-slate-500'}`}
-                        >
-                          <span className="text-[#3DD1C4] text-[10px] font-bold">KT</span>
-                          <span>WearDataSyncService.kt</span>
-                        </div>
+                    {/* node: android/app */}
+                    <div>
+                      <div 
+                        onClick={() => toggleNode('android/app')}
+                        className="flex items-center gap-1.5 hover:bg-white/[0.03] p-1.5 rounded-lg cursor-pointer transition-colors"
+                      >
+                        {expandedNodes['android/app'] ? <ChevronDownIcon className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRightIcon className="w-3.5 h-3.5 text-slate-500" />}
+                        <span className="text-amber-400 text-xs">📁</span>
+                        <span className="text-slate-300">app</span>
                       </div>
-                    )}
-                  </div>
+                      
+                      <AnimatePresence initial={false}>
+                        {expandedNodes['android/app'] && (
+                          <motion.div 
+                            variants={fileTreeVariants}
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
+                            className="pl-4 border-l border-white/[0.05] ml-3 mt-1 space-y-1 overflow-hidden"
+                          >
+                            <div 
+                              onClick={() => setActiveFile('PrayerCapsuleForegroundService.kt')}
+                              className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'PrayerCapsuleForegroundService.kt' ? 'bg-[#3DD1C4]/10 text-[#3DD1C4]' : 'hover:bg-white/[0.02] text-slate-500'}`}
+                            >
+                              <span className="text-[#3DD1C4] text-[10px] font-bold">KT</span>
+                              <span>PrayerCapsuleForegroundService.kt</span>
+                            </div>
+                            <div 
+                              onClick={() => setActiveFile('WearDataSyncService.kt')}
+                              className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'WearDataSyncService.kt' ? 'bg-[#3DD1C4]/10 text-[#3DD1C4]' : 'hover:bg-white/[0.02] text-slate-500'}`}
+                            >
+                              <span className="text-[#3DD1C4] text-[10px] font-bold">KT</span>
+                              <span>WearDataSyncService.kt</span>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
 
-                </div>
-              )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* node: src */}
@@ -179,71 +226,98 @@ export function CodeBrowser({
                 <span className="text-amber-400 text-xs">📁</span>
                 <span className="font-bold text-slate-200">src</span>
               </div>
-              {expandedNodes['src'] && (
-                <div className="pl-4 border-l border-white/[0.05] ml-3 mt-1 space-y-1.5">
-                  
-                  {/* node: src/hooks */}
-                  <div>
-                    <div 
-                      onClick={() => toggleNode('src/hooks')}
-                      className="flex items-center gap-1.5 hover:bg-white/[0.03] p-1.5 rounded-lg cursor-pointer transition-colors"
-                    >
-                      {expandedNodes['src/hooks'] ? <ChevronDownIcon className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRightIcon className="w-3.5 h-3.5 text-slate-500" />}
-                      <span className="text-amber-400 text-xs">📁</span>
-                      <span className="text-slate-300">hooks</span>
-                    </div>
-                    {expandedNodes['src/hooks'] && (
-                      <div className="pl-4 border-l border-white/[0.05] ml-3 mt-1 space-y-1">
-                        <div 
-                          onClick={() => setActiveFile('usePrayerTimes.ts')}
-                          className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'usePrayerTimes.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
-                        >
-                          <span className="text-[#00F29D] text-[10px] font-bold">TS</span>
-                          <span>usePrayerTimes.ts</span>
-                        </div>
-                        <div 
-                          onClick={() => setActiveFile('usePrayerCountdown.ts')}
-                          className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'usePrayerCountdown.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
-                        >
-                          <span className="text-[#00F29D] text-[10px] font-bold">TS</span>
-                          <span>usePrayerCountdown.ts</span>
-                        </div>
+              
+              <AnimatePresence initial={false}>
+                {expandedNodes['src'] && (
+                  <motion.div 
+                    variants={fileTreeVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="pl-4 border-l border-white/[0.05] ml-3 mt-1 space-y-1.5 overflow-hidden"
+                  >
+                    
+                    {/* node: src/hooks */}
+                    <div>
+                      <div 
+                        onClick={() => toggleNode('src/hooks')}
+                        className="flex items-center gap-1.5 hover:bg-white/[0.03] p-1.5 rounded-lg cursor-pointer transition-colors"
+                      >
+                        {expandedNodes['src/hooks'] ? <ChevronDownIcon className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRightIcon className="w-3.5 h-3.5 text-slate-500" />}
+                        <span className="text-amber-400 text-xs">📁</span>
+                        <span className="text-slate-300">hooks</span>
                       </div>
-                    )}
-                  </div>
-
-                  {/* node: src/utils */}
-                  <div>
-                    <div 
-                      onClick={() => toggleNode('src/utils')}
-                      className="flex items-center gap-1.5 hover:bg-white/[0.03] p-1.5 rounded-lg cursor-pointer transition-colors"
-                    >
-                      {expandedNodes['src/utils'] ? <ChevronDownIcon className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRightIcon className="w-3.5 h-3.5 text-slate-500" />}
-                      <span className="text-amber-400 text-xs">📁</span>
-                      <span className="text-slate-300">utils</span>
+                      
+                      <AnimatePresence initial={false}>
+                        {expandedNodes['src/hooks'] && (
+                          <motion.div 
+                            variants={fileTreeVariants}
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
+                            className="pl-4 border-l border-white/[0.05] ml-3 mt-1 space-y-1 overflow-hidden"
+                          >
+                            <div 
+                              onClick={() => setActiveFile('usePrayerTimes.ts')}
+                              className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'usePrayerTimes.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
+                            >
+                              <span className="text-[#00F29D] text-[10px] font-bold">TS</span>
+                              <span>usePrayerTimes.ts</span>
+                            </div>
+                            <div 
+                              onClick={() => setActiveFile('usePrayerCountdown.ts')}
+                              className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'usePrayerCountdown.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
+                            >
+                              <span className="text-[#00F29D] text-[10px] font-bold">TS</span>
+                              <span>usePrayerCountdown.ts</span>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
-                    {expandedNodes['src/utils'] && (
-                      <div className="pl-4 border-l border-white/[0.05] ml-3 mt-1 space-y-1">
-                        <div 
-                          onClick={() => setActiveFile('prayerEngine.ts')}
-                          className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'prayerEngine.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
-                        >
-                          <span className="text-[#00F29D] text-[10px] font-bold">TS</span>
-                          <span>prayerEngine.ts</span>
-                        </div>
-                        <div 
-                          onClick={() => setActiveFile('deviceProfiles.ts')}
-                          className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'deviceProfiles.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
-                        >
-                          <span className="text-[#00F29D] text-[10px] font-bold">TS</span>
-                          <span>deviceProfiles.ts</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
 
-                </div>
-              )}
+                    {/* node: src/utils */}
+                    <div>
+                      <div 
+                        onClick={() => toggleNode('src/utils')}
+                        className="flex items-center gap-1.5 hover:bg-white/[0.03] p-1.5 rounded-lg cursor-pointer transition-colors"
+                      >
+                        {expandedNodes['src/utils'] ? <ChevronDownIcon className="w-3.5 h-3.5 text-slate-500" /> : <ChevronRightIcon className="w-3.5 h-3.5 text-slate-500" />}
+                        <span className="text-amber-400 text-xs">📁</span>
+                        <span className="text-slate-300">utils</span>
+                      </div>
+                      
+                      <AnimatePresence initial={false}>
+                        {expandedNodes['src/utils'] && (
+                          <motion.div 
+                            variants={fileTreeVariants}
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
+                            className="pl-4 border-l border-white/[0.05] ml-3 mt-1 space-y-1 overflow-hidden"
+                          >
+                            <div 
+                              onClick={() => setActiveFile('prayerEngine.ts')}
+                              className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'prayerEngine.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
+                            >
+                              <span className="text-[#00F29D] text-[10px] font-bold">TS</span>
+                              <span>prayerEngine.ts</span>
+                            </div>
+                            <div 
+                              onClick={() => setActiveFile('deviceProfiles.ts')}
+                              className={`btn-hover flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-colors ${activeFile === 'deviceProfiles.ts' ? 'bg-[#00F29D]/10 text-[#00F29D]' : 'hover:bg-white/[0.02] text-slate-500'}`}
+                            >
+                              <span className="text-[#00F29D] text-[10px] font-bold">TS</span>
+                              <span>deviceProfiles.ts</span>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
           </div>
@@ -281,19 +355,35 @@ export function CodeBrowser({
           </div>
 
           {/* Code lines container */}
-          <div ref={codeContainerRef} className="flex-1 overflow-auto p-5 text-left font-mono text-xs leading-relaxed text-slate-300 bg-[#090D0D]/40 custom-scrollbar flex">
-            
-            {/* Fake line numbers */}
-            <div className="pr-4 border-r border-white/[0.04] text-slate-600 text-right select-none space-y-0.5">
-              {fileContents[activeFile].code.split('\n').map((_, i) => (
-                <div key={i}>{i + 1}</div>
-              ))}
+          <div ref={codeContainerRef} className="flex-1 overflow-auto p-5 text-left font-mono text-xs leading-relaxed text-slate-300 bg-[#090D0D]/40 custom-scrollbar flex flex-col">
+            <div className="w-full flex-1">
+              {highlightCode(fileContents[activeFile].code).__html.split('\n').map((lineHtml, i) => {
+                const isFirstLine = i === 0;
+                return (
+                  <div 
+                    key={i} 
+                    className={`code-line-hover flex w-full min-h-[1.5rem] px-2 py-0.5 rounded transition-all duration-300 font-mono text-xs ${
+                      isFirstLine ? 'first-code-line' : ''
+                    }`}
+                  >
+                    {/* Line number */}
+                    <span className="w-8 text-slate-600 text-right select-none pr-3 border-r border-white/[0.04] shrink-0 inline-block font-mono">
+                      {i + 1}
+                    </span>
+                    {/* Line content */}
+                    <span 
+                      className="pl-4 whitespace-pre flex-1 inline-block font-mono text-slate-300 relative"
+                    >
+                      <span dangerouslySetInnerHTML={{ __html: lineHtml || ' ' }} />
+                      {/* Blinking cursor at the end of the very last line */}
+                      {i === fileContents[activeFile].code.split('\n').length - 1 && (
+                        <span className="animate-cursor-blink text-[#00F29D] font-bold select-none ml-1">_</span>
+                      )}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
-
-            {/* Code */}
-            <pre className="pl-4 whitespace-pre select-text flex-1">
-              <code dangerouslySetInnerHTML={highlightCode(fileContents[activeFile].code)} />
-            </pre>
           </div>
         </div>
 

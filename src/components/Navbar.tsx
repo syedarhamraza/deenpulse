@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MenuIcon, XIcon } from './ui/icons';
 import { motion, AnimatePresence } from 'motion/react';
 import { gsap } from 'gsap';
@@ -57,6 +57,94 @@ const itemVariants = {
 export function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen, isDocsPage = false }: NavbarProps) {
   const headerRef = useRef<HTMLElement>(null);
   const isFirstRender = useRef(true);
+  const navRef = useRef<HTMLElement>(null);
+  const pillRef = useRef<HTMLDivElement>(null);
+  const [activeSection, setActiveSection] = useState<string>('');
+
+  // Track active section on scroll
+  useEffect(() => {
+    if (isDocsPage) {
+      setActiveSection('docs');
+      return;
+    }
+
+    const sectionIds = ['features', 'simulator', 'structure', 'faq'];
+    const elements = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+
+    if (elements.length === 0) return;
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-30% 0px -50% 0px',
+      threshold: 0.1,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, observerOptions);
+
+    elements.forEach((el) => el && observer.observe(el));
+
+    const handleScroll = () => {
+      if (window.scrollY < 200) {
+        setActiveSection('');
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isDocsPage]);
+
+  // Animate pill highlight
+  useEffect(() => {
+    const navEl = navRef.current;
+    const pillEl = pillRef.current;
+    if (!navEl || !pillEl) return;
+
+    const updatePill = () => {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (!activeSection) {
+        gsap.to(pillEl, {
+          opacity: 0,
+          scale: 0.8,
+          duration: prefersReducedMotion ? 0 : 0.3,
+          ease: 'power2.out',
+        });
+        return;
+      }
+
+      const activeLink = navEl.querySelector(`a[href="#${activeSection}"]`) as HTMLAnchorElement;
+      if (!activeLink) return;
+
+      const left = activeLink.offsetLeft;
+      const width = activeLink.offsetWidth;
+
+      gsap.to(pillEl, {
+        left,
+        width,
+        opacity: 1,
+        scale: 1,
+        duration: prefersReducedMotion ? 0 : 0.5,
+        ease: 'elastic.out(1.1, 0.75)',
+        overwrite: 'auto',
+      });
+    };
+
+    updatePill();
+
+    window.addEventListener('resize', updatePill);
+    return () => {
+      window.removeEventListener('resize', updatePill);
+    };
+  }, [activeSection]);
 
   // Smooth stagger intro on mount
   useEffect(() => {
@@ -149,19 +237,46 @@ export function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen, isDocsPage
           </a>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center gap-7">
-            <a href="#features" className="nav-animate-item text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white transition-colors">Features</a>
-            <a href="#simulator" className="nav-animate-item text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white transition-colors">Local Simulator</a>
-            <a href="#structure" className="nav-animate-item text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white transition-colors">Architecture</a>
-            <a href="#faq" className="nav-animate-item text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white transition-colors">FAQ</a>
+          <nav ref={navRef} className="hidden md:flex items-center gap-4 relative">
+            <div 
+              ref={pillRef} 
+              className="absolute h-8 bg-[#00F29D]/8 border border-[#00F29D]/15 rounded-full pointer-events-none -z-10 opacity-0"
+              style={{ top: '50%', transform: 'translateY(-50%)' }}
+            />
+            
             <a 
-              href="#docs" 
-              className={`nav-animate-item text-xs font-semibold uppercase tracking-wider transition-colors ${
-                isDocsPage ? 'text-[#00F29D] font-bold' : 'text-slate-400 hover:text-white'
+              href="#features" 
+              className={`nav-animate-item text-xs font-semibold uppercase tracking-wider px-3.5 py-1.5 rounded-full transition-colors relative z-10 ${
+                activeSection === 'features' ? 'text-[#00F29D]' : 'text-slate-400 hover:text-white'
               }`}
             >
-              Docs
+              Features
             </a>
+            <a 
+              href="#simulator" 
+              className={`nav-animate-item text-xs font-semibold uppercase tracking-wider px-3.5 py-1.5 rounded-full transition-colors relative z-10 ${
+                activeSection === 'simulator' ? 'text-[#00F29D]' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Local Simulator
+            </a>
+            <a 
+              href="#structure" 
+              className={`nav-animate-item text-xs font-semibold uppercase tracking-wider px-3.5 py-1.5 rounded-full transition-colors relative z-10 ${
+                activeSection === 'structure' ? 'text-[#00F29D]' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Architecture
+            </a>
+            <a 
+              href="#faq" 
+              className={`nav-animate-item text-xs font-semibold uppercase tracking-wider px-3.5 py-1.5 rounded-full transition-colors relative z-10 ${
+                activeSection === 'faq' ? 'text-[#00F29D]' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              FAQ
+            </a>
+
           </nav>
 
           {/* Download CTAs */}
@@ -237,16 +352,7 @@ export function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen, isDocsPage
             >
               FAQ
             </motion.a>
-            <motion.a 
-              variants={itemVariants}
-              href="#docs" 
-              onClick={() => setMobileMenuOpen(false)} 
-              className={`text-sm font-semibold uppercase tracking-wider transition-colors ${
-                isDocsPage ? 'text-[#00F29D] font-bold' : 'text-slate-200 hover:text-[#00F29D]'
-              }`}
-            >
-              Docs
-            </motion.a>
+
             <motion.div variants={itemVariants} className="h-px bg-white/[0.08] my-2" />
             <motion.div variants={itemVariants} className="flex gap-4">
               <PremiumButton

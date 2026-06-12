@@ -13,6 +13,8 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
       // Header block entrance
       gsap.fromTo('.downloads-header-reveal',
         { y: 35, opacity: 0 },
@@ -43,6 +45,16 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
         }
       );
 
+      if (prefersReducedMotion) {
+        gsap.set('.downloads-card-mobile-reveal, .downloads-card-watch-reveal, .mobile-feature-item, .watch-feature-item', {
+          opacity: 1,
+          x: 0,
+          scale: 1,
+          rotate: 0
+        });
+        return;
+      }
+
       // Mobile APK card slides in from left (restored layout sliding)
       gsap.fromTo('.downloads-card-mobile-reveal',
         { x: -50, opacity: 0, rotate: -1 },
@@ -56,6 +68,12 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
             trigger: '.downloads-cards-grid',
             start: 'top 95%', // Trigger sooner to eliminate delay
             toggleActions: 'play none none none'
+          },
+          onComplete: () => {
+            gsap.fromTo('.mobile-feature-item',
+              { opacity: 0, scale: 0.8, x: -8 },
+              { opacity: 1, scale: 1, x: 0, duration: 0.4, stagger: 0.08, ease: 'back.out(1.5)' }
+            );
           }
         }
       );
@@ -73,6 +91,12 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
             trigger: '.downloads-cards-grid',
             start: 'top 95%', // Trigger sooner to eliminate delay
             toggleActions: 'play none none none'
+          },
+          onComplete: () => {
+            gsap.fromTo('.watch-feature-item',
+              { opacity: 0, scale: 0.8, x: -8 },
+              { opacity: 1, scale: 1, x: 0, duration: 0.4, stagger: 0.08, ease: 'back.out(1.5)' }
+            );
           }
         }
       );
@@ -86,6 +110,13 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
     if (releaseInfo.loading) return;
 
     const ctx = gsap.context(() => {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (prefersReducedMotion) {
+        gsap.set('.downloads-changelog-reveal, .changelog-item', { y: 0, opacity: 1, x: 0 });
+        return;
+      }
+
       gsap.fromTo('.downloads-changelog-reveal',
         { y: 30, opacity: 0 },
         {
@@ -96,6 +127,12 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
           scrollTrigger: {
             trigger: '.downloads-changelog-reveal',
             start: 'top 95%'
+          },
+          onComplete: () => {
+            gsap.fromTo('.changelog-item',
+              { opacity: 0, x: -10 },
+              { opacity: 1, x: 0, duration: 0.5, stagger: 0.06, ease: 'power2.out' }
+            );
           }
         }
       );
@@ -207,15 +244,15 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
             </p>
 
             <div className="space-y-3 mb-8 border-t border-white/[0.05] pt-6 text-xs text-slate-300">
-              <div className="flex items-center gap-2.5">
+              <div className="mobile-feature-item flex items-center gap-2.5 opacity-0">
                 <CheckCircleIcon className="w-4.5 h-4.5 text-[#00F29D] flex-shrink-0" />
                 <span>Integrated OEM background battery profiles</span>
               </div>
-              <div className="flex items-center gap-2.5">
+              <div className="mobile-feature-item flex items-center gap-2.5 opacity-0">
                 <CheckCircleIcon className="w-4.5 h-4.5 text-[#00F29D] flex-shrink-0" />
                 <span>Persistent status bar capsule or local alarm notifications</span>
               </div>
-              <div className="flex items-center gap-2.5">
+              <div className="mobile-feature-item flex items-center gap-2.5 opacity-0">
                 <CheckCircleIcon className="w-4.5 h-4.5 text-[#00F29D] flex-shrink-0" />
                 <span>Zero continuous tracking or external coordinate sharing</span>
               </div>
@@ -266,15 +303,15 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
             </p>
 
             <div className="space-y-3 mb-8 border-t border-white/[0.05] pt-6 text-xs text-slate-300">
-              <div className="flex items-center gap-2.5">
+              <div className="watch-feature-item flex items-center gap-2.5 opacity-0">
                 <CheckCircleIcon className="w-4.5 h-4.5 text-[#3DD1C4] flex-shrink-0" />
                 <span>Standalone mode or auto-synced complication feeds</span>
               </div>
-              <div className="flex items-center gap-2.5">
+              <div className="watch-feature-item flex items-center gap-2.5 opacity-0">
                 <CheckCircleIcon className="w-4.5 h-4.5 text-[#3DD1C4] flex-shrink-0" />
                 <span>Lightweight layouts designed for circular watches</span>
               </div>
-              <div className="flex items-center gap-2.5">
+              <div className="watch-feature-item flex items-center gap-2.5 opacity-0">
                 <CheckCircleIcon className="w-4.5 h-4.5 text-[#3DD1C4] flex-shrink-0" />
                 <span>Minimal data sync frequency to preserve watch battery</span>
               </div>
@@ -353,7 +390,7 @@ export function Downloads({ releaseInfo }: DownloadsProps) {
             <ul className="space-y-3.5 text-slate-300 text-sm pl-0.5">
               {changelogItems.length > 0 ? (
                 changelogItems.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3">
+                  <li key={idx} className="changelog-item flex items-start gap-3 opacity-0">
                     <span className="text-[#00F29D] font-black mt-0.5 select-none shrink-0">•</span>
                     <span className="leading-relaxed">{item}</span>
                   </li>
