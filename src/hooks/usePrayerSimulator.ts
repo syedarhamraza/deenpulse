@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Location, JuristicMethod, CalcMethod, PrayerTimes } from '../types';
 import { locationData } from '../constants';
+import { useAnimatedNumber } from './useAnimatedNumber';
 
 export function usePrayerSimulator(
   selectedLocation: Location,
@@ -80,7 +81,8 @@ export function usePrayerSimulator(
     return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, min, 0);
   };
 
-  const [countdown, setCountdown] = useState<string>('');
+  const [countdownSecs, setCountdownSecs] = useState<number>(0);
+  const animSecs = useAnimatedNumber(countdownSecs, { duration: 0.8, ease: 'power2.out' });
   const [nextPrayerName, setNextPrayerName] = useState<string>('');
   const [activePrayerName, setActivePrayerName] = useState<string | null>(null);
 
@@ -132,21 +134,9 @@ export function usePrayerSimulator(
       const diffMs = next.date.getTime() - now.getTime();
       const totalSecs = Math.floor(diffMs / 1000);
       if (totalSecs <= 0) {
-        setCountdown('Active');
+        setCountdownSecs(0);
       } else {
-        const hours = Math.floor(totalSecs / 3600);
-        const mins = Math.floor((totalSecs % 3600) / 60);
-        const secs = totalSecs % 60;
-
-        let str = '';
-        if (hours > 0) {
-          str += `${hours}h ${mins}m ${secs}s`;
-        } else if (mins > 0) {
-          str += `${mins}m ${secs}s`;
-        } else {
-          str += `${secs}s`;
-        }
-        setCountdown(str);
+        setCountdownSecs(totalSecs);
       }
     };
 
@@ -154,6 +144,26 @@ export function usePrayerSimulator(
     const interval = setInterval(updateCountdownTimer, 1000);
     return () => clearInterval(interval);
   }, [calculatedTimes]);
+
+  const formatCountdown = (secsValue: number) => {
+    if (secsValue <= 0) return 'Active';
+    const totalSecsInt = Math.round(secsValue);
+    const hours = Math.floor(totalSecsInt / 3600);
+    const mins = Math.floor((totalSecsInt % 3600) / 60);
+    const secs = totalSecsInt % 60;
+
+    let str = '';
+    if (hours > 0) {
+      str += `${hours}h ${mins}m ${secs}s`;
+    } else if (mins > 0) {
+      str += `${mins}m ${secs}s`;
+    } else {
+      str += `${secs}s`;
+    }
+    return str;
+  };
+
+  const countdown = formatCountdown(animSecs);
 
   return {
     calculatedTimes,

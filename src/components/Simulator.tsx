@@ -50,10 +50,60 @@ export function Simulator({
           overwrite: 'auto'
         }
       );
+
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) return;
+
+      const activeEl = timelineRef.current?.querySelector('.simulator-row-active');
+      const nextEl = timelineRef.current?.querySelector('.simulator-row-next');
+      const activeDot = timelineRef.current?.querySelector('.simulator-dot-active');
+      const nextDot = timelineRef.current?.querySelector('.simulator-dot-next');
+
+      if (activeEl) {
+        gsap.fromTo(activeEl, 
+          { boxShadow: '0 0 10px rgba(245, 158, 11, 0.05)' },
+          {
+            boxShadow: '0 0 25px rgba(245, 158, 11, 0.15)',
+            duration: 2,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+            overwrite: 'auto'
+          }
+        );
+      }
+      
+      if (nextEl) {
+        gsap.fromTo(nextEl, 
+          { boxShadow: '0 0 10px rgba(0, 242, 157, 0.05)' },
+          {
+            boxShadow: '0 0 25px rgba(0, 242, 157, 0.15)',
+            duration: 2,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+            overwrite: 'auto'
+          }
+        );
+      }
+
+      if (activeDot) {
+        gsap.fromTo(activeDot,
+          { scale: 0.95 },
+          { scale: 1.25, duration: 1.5, repeat: -1, yoyo: true, ease: 'sine.inOut' }
+        );
+      }
+
+      if (nextDot) {
+        gsap.fromTo(nextDot,
+          { scale: 0.95 },
+          { scale: 1.25, duration: 1.5, repeat: -1, yoyo: true, ease: 'sine.inOut' }
+        );
+      }
     }, timelineRef);
 
     return () => ctx.revert();
-  }, [selectedLocation, juristicMethod, calcMethod]);
+  }, [selectedLocation, juristicMethod, calcMethod, nextPrayerName, activePrayerName]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -206,14 +256,14 @@ export function Simulator({
                 
                 let label = 'Upcoming';
                 let borderClass = 'border-white/[0.02] bg-[#050808]/40';
-                let timelineDotClass = 'bg-slate-700 border-2 border-[#0c1212]';
+                let timelineDotClass = 'bg-slate-700 border-2 border-[#0c1212] transition-colors duration-300';
                 let timeColor = 'text-slate-400';
                 let glowPill = null;
 
                 if (isActive) {
                   label = 'Active Now';
-                  borderClass = 'border-amber-500/30 bg-amber-500/5 shadow-[0_0_20px_rgba(245,158,11,0.08)]';
-                  timelineDotClass = 'bg-amber-500 ring-4 ring-amber-500/20';
+                  borderClass = 'border-amber-500/30 bg-amber-500/5 simulator-row-active shadow-[0_0_20px_rgba(245,158,11,0.08)]';
+                  timelineDotClass = 'bg-amber-500 ring-4 ring-amber-500/20 simulator-dot-active transition-all duration-300';
                   timeColor = 'text-amber-400 font-extrabold';
                   glowPill = (
                     <span className="text-[8px] font-mono font-bold text-amber-400 bg-amber-400/15 border border-amber-400/20 px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse ml-2">
@@ -222,8 +272,8 @@ export function Simulator({
                   );
                 } else if (isNext) {
                   label = `Next • ${countdown}`;
-                  borderClass = 'border-[#00F29D]/30 bg-[#00F29D]/5 shadow-[0_0_20px_rgba(0,242,157,0.08)]';
-                  timelineDotClass = 'bg-[#00F29D] ring-4 ring-[#00F29D]/20';
+                  borderClass = 'border-[#00F29D]/30 bg-[#00F29D]/5 simulator-row-next shadow-[0_0_20px_rgba(0,242,157,0.08)]';
+                  timelineDotClass = 'bg-[#00F29D] ring-4 ring-[#00F29D]/20 simulator-dot-next transition-all duration-300';
                   timeColor = 'text-[#00F29D] font-extrabold';
                   glowPill = (
                     <span className="text-[8px] font-mono font-bold text-[#00F29D] bg-[#00F29D]/15 border border-[#00F29D]/20 px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse ml-2">
@@ -235,7 +285,7 @@ export function Simulator({
                   if (pDate <= new Date()) {
                     label = 'Passed';
                     borderClass = 'opacity-50 border-transparent bg-transparent';
-                    timelineDotClass = 'bg-slate-800 border border-white/10';
+                    timelineDotClass = 'bg-slate-800 border border-white/10 transition-all duration-300';
                     timeColor = 'text-slate-600 line-through';
                   }
                 }

@@ -1,9 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.config({ nullTargetWarn: false });
+
+function SectionDivider() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const target = ref.current;
+    if (!target) return;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      target.classList.add('visible');
+      return;
+    }
+    const trigger = ScrollTrigger.create({
+      trigger: target,
+      start: 'top 95%',
+      onEnter: () => target.classList.add('visible'),
+      once: true
+    });
+    return () => trigger.kill();
+  }, []);
+  return <div ref={ref} className="section-divider max-w-7xl mx-auto" />;
+}
+
 import { useLatestRelease } from './hooks/useLatestRelease';
 import { usePrayerSimulator } from './hooks/usePrayerSimulator';
 import { Location, JuristicMethod, CalcMethod } from './types';
@@ -572,7 +594,11 @@ export default function App() {
         <>
           <Hero releaseInfo={releaseInfo} />
 
+          <SectionDivider />
+
           <Downloads releaseInfo={releaseInfo} />
+
+          <SectionDivider />
 
           <Features
             simCapsuleFormat={simCapsuleFormat}
@@ -583,6 +609,8 @@ export default function App() {
             triggerMockSync={triggerMockSync}
             countdown={countdown}
           />
+
+          <SectionDivider />
 
           <Simulator
             selectedLocation={selectedLocation}
@@ -598,6 +626,8 @@ export default function App() {
             parseSimulatedTime={parseSimulatedTime}
           />
 
+          <SectionDivider />
+
           <CodeBrowser
             activeFile={activeFile}
             setActiveFile={setActiveFile}
@@ -608,8 +638,11 @@ export default function App() {
             copyToClipboard={copyToClipboard}
           />
 
+          <SectionDivider />
+
           <FAQ openFaq={openFaq} setOpenFaq={setOpenFaq} />
         </>
+
       )}
 
       <Footer key={isDocsPage ? 'docs' : isPrivacyPage ? 'privacy' : 'main'} isDocsPage={isDocsPage} />

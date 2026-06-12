@@ -1,23 +1,47 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ArrowUpIcon } from './ui/icons';
 import { motion, AnimatePresence } from 'motion/react';
 
 export function ScrollToTop() {
   const [visible, setVisible] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const pathRef = useRef<SVGPathElement>(null);
+
+  const width = 48;
+  const rx = 16;
+  const circumference = 4 * (width - 2 * rx) + 2 * Math.PI * rx;
+
+  // Callback ref to initialize styles immediately when element mounts
+  const setPathRef = (node: SVGPathElement | null) => {
+    (pathRef as any).current = node;
+    if (node) {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? Math.min(Math.max(scrollTop / docHeight, 0), 1) : 0;
+      const offset = circumference - pct * circumference;
+      node.style.strokeDasharray = `${circumference}px`;
+      node.style.strokeDashoffset = `${offset}px`;
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const pct = docHeight > 0 ? Math.min(Math.max(scrollTop / docHeight, 0), 1) : 0;
-      setProgress(pct);
-      setVisible(scrollTop > 300);
+      
+      // Update DOM directly to avoid React re-renders on every scroll pixel
+      if (pathRef.current) {
+        const offset = circumference - pct * circumference;
+        pathRef.current.style.strokeDashoffset = `${offset}px`;
+      }
+      
+      const isVisible = scrollTop > 300;
+      setVisible((prev) => (prev !== isVisible ? isVisible : prev));
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [circumference]);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -25,12 +49,6 @@ export function ScrollToTop() {
       behavior: 'smooth'
     });
   };
-
-  const width = 48;
-  const height = 48;
-  const rx = 16;
-  const circumference = 4 * (width - 2 * rx) + 2 * Math.PI * rx;
-  const strokeDashoffset = circumference - progress * circumference;
 
   return (
     <AnimatePresence>
@@ -71,15 +89,12 @@ export function ScrollToTop() {
               d="M 25 1 L 33 1 A 16 16 0 0 1 49 17 L 49 33 A 16 16 0 0 1 33 49 L 17 49 A 16 16 0 0 1 1 33 L 1 17 A 16 16 0 0 1 17 1 Z"
             />
             <path
+              ref={setPathRef}
               className="text-[#00F29D]"
               strokeWidth="2"
               strokeLinecap="round"
               stroke="currentColor"
               fill="transparent"
-              style={{
-                strokeDasharray: `${circumference}px`,
-                strokeDashoffset: `${strokeDashoffset}px`
-              }}
               d="M 25 1 L 33 1 A 16 16 0 0 1 49 17 L 49 33 A 16 16 0 0 1 33 49 L 17 49 A 16 16 0 0 1 1 33 L 1 17 A 16 16 0 0 1 17 1 Z"
             />
           </svg>
